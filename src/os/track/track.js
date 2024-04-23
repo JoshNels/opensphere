@@ -1,5 +1,15 @@
 goog.declareModuleId('os.track');
 
+import Feature from 'ol/src/Feature.js';
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import GeometryLayout from 'ol/src/geom/GeometryLayout.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import Point from 'ol/src/geom/Point.js';
+import {assign} from 'ol/src/obj.js';
+
 import * as osArray from '../array/array.js';
 import RecordField from '../data/recordfield.js';
 import EventType from '../events/eventtype.js';
@@ -33,15 +43,6 @@ const dispose = goog.require('goog.dispose');
 const log = goog.require('goog.log');
 const math = goog.require('goog.math');
 const googString = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const GeometryLayout = goog.require('ol.geom.GeometryLayout');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const LineString = goog.require('ol.geom.LineString');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const MultiPoint = goog.require('ol.geom.MultiPoint');
-const Point = goog.require('ol.geom.Point');
-const olObj = goog.require('ol.obj');
 
 const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
 const {default: ITime} = goog.requireType('os.time.ITime');
@@ -465,7 +466,7 @@ let addToTrack_ = function(options) {
         existing = {};
         track.set(TrackField.METADATA_MAP, existing);
       }
-      olObj.assign(existing, metadataMap);
+      assign(existing, metadataMap);
     }
   }
 

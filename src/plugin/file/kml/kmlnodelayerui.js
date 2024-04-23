@@ -5,6 +5,8 @@ import '../../../os/ui/layer/labelcontrols.js';
 import '../../../os/ui/layer/vectorstylecontrols.js';
 import '../../../os/ui/uiswitch.js';
 
+import {find} from 'ol/src/array.js';
+import UrlTile from 'ol/src/source/UrlTile.js';
 import EventType from '../../../os/action/eventtype.js';
 import * as osColor from '../../../os/color.js';
 import ColorChangeType from '../../../os/command/colorchangetype.js';
@@ -40,11 +42,7 @@ import {Controller as VectorLayerUICtrl, directive as vectorLayerUIDirective} fr
 import Module from '../../../os/ui/module.js';
 
 const googArray = goog.require('goog.array');
-const olArray = goog.require('ol.array');
-const UrlTile = goog.require('ol.source.UrlTile');
 
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
 
 
 /**
@@ -479,7 +477,7 @@ export class Controller extends VectorLayerUICtrl {
           if (config) {
             if (Array.isArray(config)) {
               // locate the label config in the array
-              var labelsConfig = olArray.find(config, osStyle.isLabelConfig);
+              var labelsConfig = find(config, osStyle.isLabelConfig);
               if (labelsConfig) {
                 labelColumns = labelsConfig[StyleField.LABELS];
               }
@@ -956,7 +954,7 @@ export class Controller extends VectorLayerUICtrl {
 
       if (refreshInterval != null) {
         // find the refresh interval by interval
-        this['refresh'] = olArray.find(this['refreshOptions'], function(option) {
+        this['refresh'] = find(this['refreshOptions'], function(option) {
           return option.interval == refreshInterval;
         });
       }

@@ -18,9 +18,6 @@ import {directiveTag as configUi} from './ui/featurestyleactionconfig.js';
 
 const math = goog.require('goog.math');
 
-const {default: ImportActionCallbackConfig} = goog.requireType('os.im.action.ImportActionCallbackConfig');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-
 
 /**
  * Tag names used for XML persistence.

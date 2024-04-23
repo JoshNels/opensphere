@@ -7,9 +7,6 @@ import SingleUrlProviderImportCtrl from '../../../os/ui/singleurlproviderimport.
 import GeoServer from '../geoserver.js';
 import * as GeoServerHelpUI from './geoserverhelp.js';
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  * The geoserver import directive
  *

@@ -1,10 +1,9 @@
 goog.declareModuleId('os.feature.DynamicFeature');
 
+import Feature from 'ol/src/Feature.js';
+
 import registerClass from '../registerclass.js';
 
-const Feature = goog.require('ol.Feature');
-
-const Geometry = goog.requireType('ol.geom.Geometry');
 
 
 /**

@@ -5,9 +5,6 @@ import ImportActionManager from '../../../os/im/action/importactionmanager.js';
 import * as osWindow from '../../../os/ui/window.js';
 import {directiveTag as editUi} from './editfeatureaction.js';
 
-const {default: FilterActionEntry} = goog.requireType('os.im.action.FilterActionEntry');
-
-
 /**
  * Create/edit a feature action entry. If no entry is provided, a new one will be created.
  *

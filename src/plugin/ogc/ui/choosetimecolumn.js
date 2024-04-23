@@ -9,9 +9,6 @@ import WindowEventType from '../../../os/ui/windoweventtype.js';
 
 const Disposable = goog.require('goog.Disposable');
 
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-const {default: OGCLayerDescriptor} = goog.requireType('plugin.ogc.OGCLayerDescriptor');
-
 
 /**
  * A spinner directive for a node that loads items

@@ -25,13 +25,6 @@ import PlacesManager from '../placesmanager.js';
 
 const Disposable = goog.require('goog.Disposable');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const {default: ExportOptions} = goog.requireType('os.ex.ExportOptions');
-const {default: OSFile} = goog.requireType('os.file.File');
-const {default: Menu} = goog.requireType('os.ui.menu.Menu');
-const {FolderOptions} = goog.requireType('plugin.file.kml.ui');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The places directive

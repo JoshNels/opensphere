@@ -1,13 +1,12 @@
 goog.declareModuleId('os.ui.search.place');
 
+import Feature from 'ol/src/Feature.js';
+import {getUid} from 'ol/src/util.js';
 import {unsafeClone} from '../../../object/object.js';
 import {setFeatureStyle} from '../../../style/style.js';
 import StyleField from '../../../style/stylefield.js';
 import StyleType from '../../../style/styletype.js';
 import {GOOGLE_EARTH_URL, GoogleEarthIcons} from '../../file/kml/kml.js';
-
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
 
 
 /**

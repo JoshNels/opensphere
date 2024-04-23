@@ -22,11 +22,6 @@ import AbstractKMLManager from '../file/kml/abstractkmlmanager.js';
 import * as places from './places.js';
 import PlacesLayerConfig from './placeslayerconfig.js';
 
-const {default: OsFile} = goog.requireType('os.file.File');
-const {default: KMLLayer} = goog.requireType('plugin.file.kml.KMLLayer');
-const {default: KMLSource} = goog.requireType('plugin.file.kml.KMLSource');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The Places storage location.

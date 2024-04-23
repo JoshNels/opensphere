@@ -1,5 +1,7 @@
 goog.declareModuleId('os.webgl.AbstractRootSynchronizer');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import Layer from 'ol/src/layer/Layer.js';
 import ZOrderEventType from '../data/zordereventtype.js';
 import * as dispatcher from '../dispatcher.js';
 import LayerEventType from '../events/layereventtype.js';
@@ -12,8 +14,6 @@ const Disposable = goog.require('goog.Disposable');
 const asserts = goog.require('goog.asserts');
 const Delay = goog.require('goog.async.Delay');
 const dispose = goog.require('goog.dispose');
-const events = goog.require('ol.events');
-const Layer = goog.require('ol.layer.Layer');
 
 const {default: LayerEvent} = goog.requireType('os.events.LayerEvent');
 const {default: ILayer} = goog.requireType('os.layer.ILayer');
@@ -80,7 +80,7 @@ export default class AbstractRootSynchronizer extends Disposable {
   disposeInternal() {
     super.disposeInternal();
 
-    this.listenKeys_.forEach(events.unlistenByKey);
+    this.listenKeys_.forEach(unlistenByKey);
     this.listenKeys_.length = 0;
 
     dispose(this.updateZDelay_);
@@ -101,9 +101,9 @@ export default class AbstractRootSynchronizer extends Disposable {
     for (var i = 0, n = groups.length; i < n; i++) {
       var group = groups[i];
       if (group instanceof Group) {
-        this.listenKeys_.push(events.listen(group, ZOrderEventType.UPDATE, this.onGroupZOrder_, this));
-        this.listenKeys_.push(events.listen(group, LayerEventType.ADD, this.onLayerAdd_, this));
-        this.listenKeys_.push(events.listen(group, LayerEventType.REMOVE, this.onLayerRemove_, this));
+        this.listenKeys_.push(listen(group, ZOrderEventType.UPDATE, this.onGroupZOrder_, this));
+        this.listenKeys_.push(listen(group, LayerEventType.ADD, this.onLayerAdd_, this));
+        this.listenKeys_.push(listen(group, LayerEventType.REMOVE, this.onLayerRemove_, this));
 
         this.synchronizeGroup_(group);
       }

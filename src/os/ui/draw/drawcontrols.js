@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.draw.DrawControlsUI');
 
+import {MAC} from 'ol/src/has.js';
+
 import Settings from '../../config/settings.js';
 import * as dispatcher from '../../dispatcher.js';
 import Measure from '../../interaction/measureinteraction.js';
@@ -16,7 +18,6 @@ import DrawEventType from './draweventtype.js';
 
 const googEvents = goog.require('goog.events');
 const log = goog.require('goog.log');
-const {MAC} = goog.require('ol.has');
 
 const Logger = goog.requireType('goog.log.Logger');
 const {default: DrawEvent} = goog.requireType('os.ui.draw.DrawEvent');

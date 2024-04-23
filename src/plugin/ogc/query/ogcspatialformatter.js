@@ -3,9 +3,6 @@ goog.declareModuleId('plugin.ogc.query.OGCSpatialFormatter');
 import * as interpolate from '../../../os/interpolate.js';
 import OSOGCSpatialFormatter from '../../../os/ogc/filter/ogcspatialformatter.js';
 
-const Geometry = goog.requireType('ol.geom.Geometry');
-
-
 /**
  * OGC spatial formatter that converts the geometry to EPSG:4326.
  */

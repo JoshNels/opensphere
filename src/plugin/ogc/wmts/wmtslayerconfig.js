@@ -1,11 +1,10 @@
 goog.declareModuleId('plugin.ogc.wmts.WMTSLayerConfig');
 
+import {equivalent, get} from 'ol/src/proj.js';
+import WMTSSource from 'ol/src/source/WMTS.js';
 import AnimatedTile from '../../../os/layer/animatedtile.js';
 import AbstractTileLayerConfig from '../../../os/layer/config/abstracttilelayerconfig.js';
 import {getTimeKey} from '../../../os/ogc/wmts/wmts.js';
-
-const olProj = goog.require('ol.proj');
-const WMTSSource = goog.require('ol.source.WMTS');
 
 
 /**
@@ -73,7 +72,7 @@ export default class WMTSLayerConfig extends AbstractTileLayerConfig {
 
     const projection = this.projection;
     const wmtsOptions = list.find((opts) => {
-      return olProj.equivalent(olProj.get(opts.projection), olProj.get(projection));
+      return equivalent(get(opts.projection), get(projection));
     });
 
     // ensure the time key in URL templates matches the case in the dimension set

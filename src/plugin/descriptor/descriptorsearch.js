@@ -18,11 +18,6 @@ const Promise = goog.require('goog.Promise');
 const googArray = goog.require('goog.array');
 const log = goog.require('goog.log');
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-const {default: AppliedFacets} = goog.requireType('os.search.AppliedFacets');
-const {default: BaseFacet} = goog.requireType('os.search.BaseFacet');
-const {default: FacetSet} = goog.requireType('os.search.FacetSet');
-
 
 /**
  * Searches descriptors

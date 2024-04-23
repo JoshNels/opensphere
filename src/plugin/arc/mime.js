@@ -7,9 +7,6 @@ import * as arc from './arc.js';
 
 const Promise = goog.require('goog.Promise');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-const {default: XMLContext} = goog.requireType('os.file.mime.xml.Context');
-
 
 /**
  * @param {ArrayBuffer} buffer

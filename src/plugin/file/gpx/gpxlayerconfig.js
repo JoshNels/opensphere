@@ -7,9 +7,6 @@ import GPXParser from './gpxparser.js';
 const ResponseType = goog.require('goog.net.XhrIo.ResponseType');
 const userAgent = goog.require('goog.userAgent');
 
-const {default: FeatureImporter} = goog.requireType('os.im.FeatureImporter');
-
-
 /**
  */
 export default class GPXLayerConfig extends AbstractDataSourceLayerConfig {

@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.ogc.OGCLayerDescriptor');
 
+import {intersects} from 'ol/src/extent.js';
+import {DEFAULT_WMS_VERSION} from 'ol/src/source/common.js';
 import AlertEventSeverity from '../../os/alert/alerteventseverity.js';
 import AlertManager from '../../os/alert/alertmanager.js';
 import * as osColor from '../../os/color.js';
@@ -36,13 +38,6 @@ import * as deprecated from '../../os/ui/util/deprecated.js';
 const QueryData = goog.require('goog.Uri.QueryData');
 const EventType = goog.require('goog.net.EventType');
 const googString = goog.require('goog.string');
-const ol = goog.require('ol');
-const olExtent = goog.require('ol.extent');
-
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-const {default: OGCServer} = goog.requireType('os.ui.ogc.OGCServer');
-
 
 /**
  * @implements {IOGCDescriptor}
@@ -674,7 +669,7 @@ export default class OGCLayerDescriptor extends LayerSyncDescriptor {
    * @inheritDoc
    */
   getWmsVersion() {
-    return this.wmsVersion_ || ol.DEFAULT_WMS_VERSION;
+    return this.wmsVersion_ || DEFAULT_WMS_VERSION;
   }
 
   /**
@@ -1280,7 +1275,7 @@ export default class OGCLayerDescriptor extends LayerSyncDescriptor {
       var layerBox = this.getBBox();
 
       if (areaBox && layerBox) {
-        result = olExtent.intersects(areaBox, layerBox);
+        result = intersects(areaBox, layerBox);
       }
     } catch (e) {
     }

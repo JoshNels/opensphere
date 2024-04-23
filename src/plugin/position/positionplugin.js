@@ -8,9 +8,6 @@ import * as mapMenu from '../../os/ui/menu/mapmenu.js';
 import {launchCopy} from './copyposition.js';
 import PositionInteraction from './positioninteraction.js';
 
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-
-
 /**
  * Plugin identifier.
  * @type {string}

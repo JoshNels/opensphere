@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.ogc.OGCDescriptor');
 
+import {DEFAULT_WMS_VERSION} from 'ol/src/source/common.js';
+
 import AlertEventSeverity from '../../alert/alerteventseverity.js';
 import AlertManager from '../../alert/alertmanager.js';
 import BaseDescriptor from '../../data/basedescriptor.js';
@@ -11,7 +13,6 @@ import {FILTER_KEY_DELIMITER} from '../filter/filter.js';
 import IOGCDescriptor from './iogcdescriptor.js';
 
 const EventType = goog.require('goog.net.EventType');
-const {DEFAULT_WMS_VERSION} = goog.require('ol');
 
 const {default: FeatureType} = goog.requireType('os.ogc.wfs.FeatureType');
 

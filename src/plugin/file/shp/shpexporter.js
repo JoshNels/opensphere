@@ -1,5 +1,9 @@
 goog.declareModuleId('plugin.file.shp.SHPExporter');
 
+import {clone, extend} from 'ol/src/extent.js';
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Point from 'ol/src/geom/Point.js';
 import AlertEventSeverity from '../../../os/alert/alerteventseverity.js';
 import AlertManager from '../../../os/alert/alertmanager.js';
 import * as osArray from '../../../os/array/array.js';
@@ -15,18 +19,12 @@ import * as mime from './mime.js';
 import {getFlatGroupCoordinates, getPartCoordinatesFromGeometry, getShapeTypeFromGeometry, TYPE} from './shp.js';
 import {directiveTag as shpExportUi} from './ui/shpexportui.js';
 
+
 const crypt = goog.require('goog.crypt');
 const log = goog.require('goog.log');
 const googObject = goog.require('goog.object');
 const googString = goog.require('goog.string');
-const olExtent = goog.require('ol.extent');
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Point = goog.require('ol.geom.Point');
 
-const Feature = goog.requireType('ol.Feature');
-const SimpleGeometry = goog.requireType('ol.geom.SimpleGeometry');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
 
 
 /**
@@ -714,9 +712,9 @@ export default class SHPExporter extends ZipExporter {
     // Make sure the global extent includes this extent
     if (extent) {
       if (this.extent_) {
-        this.extent_ = olExtent.extend(this.extent_, extent);
+        this.extent_ = extend(this.extent_, extent);
       } else {
-        this.extent_ = olExtent.clone(extent);
+        this.extent_ = clone(extent);
       }
     }
 

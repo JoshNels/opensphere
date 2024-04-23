@@ -1,5 +1,11 @@
 goog.declareModuleId('os.mixin.UrlTileSource');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {intersects} from 'ol/src/extent.js';
+import Tile from 'ol/src/source/Tile.js';
+import TileEventType from 'ol/src/source/TileEventType.js';
+import UrlTile from 'ol/src/source/UrlTile.js';
+
 import {alertAuth} from '../auth.js';
 import Settings from '../config/settings.js';
 import PropertyChangeEvent from '../events/propertychangeevent.js';
@@ -12,11 +18,6 @@ import {RefreshTimers} from '../source/source.js';
 const Timer = goog.require('goog.Timer');
 const Uri = goog.require('goog.Uri');
 const Delay = goog.require('goog.async.Delay');
-const {listen, unlistenByKey} = goog.require('ol.events');
-const {intersects} = goog.require('ol.extent');
-const Tile = goog.require('ol.source.Tile');
-const TileEventType = goog.require('ol.source.TileEventType');
-const UrlTile = goog.require('ol.source.UrlTile');
 
 
 // add support for providing custom URL parameters

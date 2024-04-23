@@ -11,11 +11,6 @@ import {editEntry, getColumns, getExportName} from '../featureaction.js';
 import FeatureActionManager from '../featureactionmanager.js';
 import * as node from '../featureactionnodemenu.js';
 
-const Feature = goog.requireType('ol.Feature');
-const {default: DataEvent} = goog.requireType('os.data.event.DataEvent');
-const {default: Menu} = goog.requireType('os.ui.menu.Menu');
-const layerMenu = goog.requireType('os.ui.menu.layer');
-
 
 /**
  * The featureactions directive

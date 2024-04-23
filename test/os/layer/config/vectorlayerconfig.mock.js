@@ -1,13 +1,13 @@
-goog.module('os.layer.config.MockVectorLayerConfig');
+goog.declareModuleId('os.layer.config.MockVectorLayerConfig');
 
-const {default: VectorLayer} = goog.require('os.layer.Vector');
-const {default: AbstractLayerConfig} = goog.require('os.layer.config.AbstractLayerConfig');
-const {default: VectorSource} = goog.require('os.source.Vector');
+import AbstractLayerConfig from '../../../../src/os/layer/config/abstractdatasourcelayerconfig.js';
+import VectorLayer from '../../../../src/os/layer/vector.js';
+import VectorSource from '../../../../src/os/source/vectorsource.js';
 
 
 /**
  */
-class MockVectorLayerConfig extends AbstractLayerConfig {
+export default class MockVectorLayerConfig extends AbstractLayerConfig {
   /**
    * Constructor.
    */
@@ -37,5 +37,3 @@ class MockVectorLayerConfig extends AbstractLayerConfig {
  * @const
  */
 MockVectorLayerConfig.TYPE = 'MockVectorLayerConfig';
-
-exports = MockVectorLayerConfig;

@@ -4,20 +4,18 @@
  */
 goog.declareModuleId('plugin.file.gpx.GPXParser');
 
+
+import Feature from 'ol/src/Feature.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import Point from 'ol/src/geom/Point.js';
+import SimpleGeometry from 'ol/src/geom/SimpleGeometry.js';
+import {isDocument, parse} from 'ol/src/xml.js';
 import * as text from '../../../os/file/mime/text.js';
 import * as osMap from '../../../os/map/map.js';
+import GPX from '../../../os/ol/format/GPX.js';
 
 const dom = goog.require('goog.dom');
-const Feature = goog.require('ol.Feature');
-const GPX = goog.require('ol.format.GPX');
-const XSD = goog.require('ol.format.XSD');
-const LineString = goog.require('ol.geom.LineString');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const Point = goog.require('ol.geom.Point');
-const SimpleGeometry = goog.require('ol.geom.SimpleGeometry');
-const xml = goog.require('ol.xml');
-
-const {default: IParser} = goog.requireType('os.parse.IParser');
 
 
 /**
@@ -59,10 +57,10 @@ export default class GPXParser {
       source = text.getText(source) || null;
     }
 
-    if (xml.isDocument(source)) {
+    if (isDocument(source)) {
       this.document_ = /** @type {Document} */ (source);
     } else if (typeof source === 'string') {
-      this.document_ = xml.parse(source);
+      this.document_ = parse(source);
     }
   }
 
@@ -169,38 +167,6 @@ export default class GPXParser {
     }
   }
 }
-
-
-/**
- * Basic overrides to the OL3 GPX parsing. These allow us to get metadata off of individual track and route points.
- */
-
-
-/**
- * Adds the extensions parser to the trkpt parser.
- * @type {Object.<string, Object.<string, ol.XmlParser>>}
- * @private
- */
-GPX.TRKPT_PARSERS_ = xml.makeStructureNS(
-    GPX.NAMESPACE_URIS_, {
-      'ele': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'time': xml.makeObjectPropertySetter(XSD.readDateTime),
-      'extensions': GPX.parseExtensions_
-    });
-
-
-/**
- * Adds the extensions parser to the trkpt parser.
- * @type {Object.<string, Object.<string, ol.XmlParser>>}
- * @private
- */
-GPX.TRKPT_PARSERS_ = xml.makeStructureNS(
-    GPX.NAMESPACE_URIS_, {
-      'ele': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'time': xml.makeObjectPropertySetter(XSD.readDateTime),
-      'extensions': GPX.parseExtensions_
-    });
-
 
 /**
  * This overrides the OL3 parsing to utilize the M part of the XYZM coordinate format they use. The 4th coordinate in

@@ -4,16 +4,16 @@
  */
 goog.declareModuleId('plugin.file.kml.tour.parseTour');
 
+import {readDecimal, readString} from 'ol/src/format/xsd.js';
+import {makeArrayPusher, makeObjectPropertySetter, makeStructureNS, pushParseAndPop} from 'ol/src/xml.js';
 import FlightMode from '../../../../os/map/flightmode.js';
+import {NAMESPACE_URIS, GX_NAMESPACE_URIS} from '../../../../os/ol/format/KML.js';
 import Tour from './tour.js';
 import TourControl from './tourcontrol.js';
 import FlyTo from './tourflyto.js';
 import SoundCue from './toursoundcue.js';
 import Wait from './tourwait.js';
 
-const KML = goog.require('ol.format.KML');
-const XSD = goog.require('ol.format.XSD');
-const xml = goog.require('ol.xml');
 
 
 /**
@@ -27,7 +27,7 @@ const parseTour = (el) => {
     return undefined;
   }
 
-  return xml.pushParseAndPop(new Tour(), TOUR_PARSERS, el, []);
+  return pushParseAndPop(new Tour(), TOUR_PARSERS, el, []);
 };
 
 
@@ -35,7 +35,7 @@ const parseTour = (el) => {
  * Support both KML 2.3 and `gx:` tour elements.
  * @type {Array<string>}
  */
-const tourNamespaceUris = KML.NAMESPACE_URIS_.concat(KML.GX_NAMESPACE_URIS_);
+const tourNamespaceUris = NAMESPACE_URIS.concat(GX_NAMESPACE_URIS);
 
 
 /**
@@ -45,7 +45,7 @@ const tourNamespaceUris = KML.NAMESPACE_URIS_.concat(KML.GX_NAMESPACE_URIS_);
  * @param {Array<*>} objectStack Object stack.
  */
 const parsePlaylist = function(node, objectStack) {
-  var playlist = xml.pushParseAndPop([], PLAYLIST_PARSERS, node, objectStack);
+  var playlist = pushParseAndPop([], PLAYLIST_PARSERS, node, objectStack);
   if (playlist) {
     var tour = objectStack[objectStack.length - 1];
     if (tour instanceof Tour) {
@@ -64,7 +64,7 @@ const parsePlaylist = function(node, objectStack) {
  */
 const parseFlyTo = function(node, objectStack) {
   var flyTo;
-  var flyToProps = xml.pushParseAndPop({}, FLYTO_PARSERS, node, objectStack);
+  var flyToProps = pushParseAndPop({}, FLYTO_PARSERS, node, objectStack);
   if (flyToProps) {
     var viewProps = /** @type {Object|undefined} */ (flyToProps['Camera']);
     if (!viewProps) {
@@ -119,7 +119,7 @@ const parseFlyTo = function(node, objectStack) {
  * @return {Object|undefined}
  */
 const parseCamera = function(node, objectStack) {
-  return xml.pushParseAndPop({}, CAMERA_PARSERS, node, objectStack);
+  return pushParseAndPop({}, CAMERA_PARSERS, node, objectStack);
 };
 
 
@@ -131,7 +131,7 @@ const parseCamera = function(node, objectStack) {
  * @return {Object|undefined}
  */
 const parseLookAt = function(node, objectStack) {
-  return xml.pushParseAndPop({}, LOOKAT_PARSERS, node, objectStack);
+  return pushParseAndPop({}, LOOKAT_PARSERS, node, objectStack);
 };
 
 
@@ -144,7 +144,7 @@ const parseLookAt = function(node, objectStack) {
  */
 const parseSoundCue = function(node, objectStack) {
   var soundCue;
-  var soundCueOptions = xml.pushParseAndPop({}, SOUNDCUE_PARSERS, node, objectStack);
+  var soundCueOptions = pushParseAndPop({}, SOUNDCUE_PARSERS, node, objectStack);
   if (soundCueOptions['href']) {
     var href = /** @type {string} */ (soundCueOptions['href']);
     var delayedStart = /** @type {number|undefined} */ (soundCueOptions['delayedStart'] || 0) * 1000;
@@ -179,7 +179,7 @@ const parseTourControl = function(node, objectStack) {
  * @return {Wait|undefined}
  */
 const parseWait = function(node, objectStack) {
-  var waitOptions = xml.pushParseAndPop({}, WAIT_PARSERS, node, objectStack);
+  var waitOptions = pushParseAndPop({}, WAIT_PARSERS, node, objectStack);
 
   // KML duration is in seconds, so convert to milliseconds
   var duration = (waitOptions.duration || 0) * 1000;
@@ -191,11 +191,11 @@ const parseWait = function(node, objectStack) {
  * Parsers for a KML Tour element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const TOUR_PARSERS = xml.makeStructureNS(
+const TOUR_PARSERS = makeStructureNS(
     tourNamespaceUris, {
       'Playlist': parsePlaylist,
-      'description': xml.makeObjectPropertySetter(XSD.readString),
-      'name': xml.makeObjectPropertySetter(XSD.readString)
+      'description': makeObjectPropertySetter(readString),
+      'name': makeObjectPropertySetter(readString)
     });
 
 
@@ -203,12 +203,12 @@ const TOUR_PARSERS = xml.makeStructureNS(
  * Parsers for a KML Playlist element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const PLAYLIST_PARSERS = xml.makeStructureNS(
+const PLAYLIST_PARSERS = makeStructureNS(
     tourNamespaceUris, {
-      'FlyTo': xml.makeArrayPusher(parseFlyTo),
-      'SoundCue': xml.makeArrayPusher(parseSoundCue),
-      'TourControl': xml.makeArrayPusher(parseTourControl),
-      'Wait': xml.makeArrayPusher(parseWait)
+      'FlyTo': makeArrayPusher(parseFlyTo),
+      'SoundCue': makeArrayPusher(parseSoundCue),
+      'TourControl': makeArrayPusher(parseTourControl),
+      'Wait': makeArrayPusher(parseWait)
     });
 
 
@@ -216,12 +216,12 @@ const PLAYLIST_PARSERS = xml.makeStructureNS(
  * Parsers for a KML FlyTo element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const FLYTO_PARSERS = xml.makeStructureNS(
+const FLYTO_PARSERS = makeStructureNS(
     tourNamespaceUris, {
-      'duration': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'flyToMode': xml.makeObjectPropertySetter(XSD.readString),
-      'Camera': xml.makeObjectPropertySetter(parseCamera),
-      'LookAt': xml.makeObjectPropertySetter(parseLookAt)
+      'duration': makeObjectPropertySetter(readDecimal),
+      'flyToMode': makeObjectPropertySetter(readString),
+      'Camera': makeObjectPropertySetter(parseCamera),
+      'LookAt': makeObjectPropertySetter(parseLookAt)
     });
 
 
@@ -229,15 +229,15 @@ const FLYTO_PARSERS = xml.makeStructureNS(
  * Parsers for a KML Camera element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const CAMERA_PARSERS = xml.makeStructureNS(
-    KML.NAMESPACE_URIS_, {
-      'longitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'latitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'altitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'heading': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'tilt': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'roll': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'altitudeMode': xml.makeObjectPropertySetter(XSD.readString)
+const CAMERA_PARSERS = makeStructureNS(
+    NAMESPACE_URIS, {
+      'longitude': makeObjectPropertySetter(readDecimal),
+      'latitude': makeObjectPropertySetter(readDecimal),
+      'altitude': makeObjectPropertySetter(readDecimal),
+      'heading': makeObjectPropertySetter(readDecimal),
+      'tilt': makeObjectPropertySetter(readDecimal),
+      'roll': makeObjectPropertySetter(readDecimal),
+      'altitudeMode': makeObjectPropertySetter(readString)
     });
 
 
@@ -245,15 +245,15 @@ const CAMERA_PARSERS = xml.makeStructureNS(
  * Parsers for a KML Camera element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const LOOKAT_PARSERS = xml.makeStructureNS(
-    KML.NAMESPACE_URIS_, {
-      'longitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'latitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'altitude': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'heading': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'tilt': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'range': xml.makeObjectPropertySetter(XSD.readDecimal),
-      'altitudeMode': xml.makeObjectPropertySetter(XSD.readString)
+const LOOKAT_PARSERS = makeStructureNS(
+    NAMESPACE_URIS, {
+      'longitude': makeObjectPropertySetter(readDecimal),
+      'latitude': makeObjectPropertySetter(readDecimal),
+      'altitude': makeObjectPropertySetter(readDecimal),
+      'heading': makeObjectPropertySetter(readDecimal),
+      'tilt': makeObjectPropertySetter(readDecimal),
+      'range': makeObjectPropertySetter(readDecimal),
+      'altitudeMode': makeObjectPropertySetter(readString)
     });
 
 
@@ -261,10 +261,10 @@ const LOOKAT_PARSERS = xml.makeStructureNS(
  * Parsers for a KML SoundCue element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const SOUNDCUE_PARSERS = xml.makeStructureNS(
+const SOUNDCUE_PARSERS = makeStructureNS(
     tourNamespaceUris, {
-      'href': xml.makeObjectPropertySetter(XSD.readString),
-      'delayedStart': xml.makeObjectPropertySetter(XSD.readDecimal)
+      'href': makeObjectPropertySetter(readString),
+      'delayedStart': makeObjectPropertySetter(readDecimal)
     });
 
 
@@ -272,9 +272,9 @@ const SOUNDCUE_PARSERS = xml.makeStructureNS(
  * Parsers for a KML Wait element.
  * @type {Object<string, Object<string, ol.XmlParser>>}
  */
-const WAIT_PARSERS = xml.makeStructureNS(
+const WAIT_PARSERS = makeStructureNS(
     tourNamespaceUris, {
-      'duration': xml.makeObjectPropertySetter(XSD.readDecimal)
+      'duration': makeObjectPropertySetter(readDecimal)
     });
 
 export default parseTour;

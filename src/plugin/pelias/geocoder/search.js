@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.pelias.geocoder.Search');
 
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+import {transformExtent, toLonLat} from 'ol/src/proj.js';
 import Settings from '../../../os/config/settings.js';
 import * as osExtent from '../../../os/extent.js';
 import * as osMap from '../../../os/map/map.js';
@@ -10,11 +12,6 @@ import {ID} from './geocoder.js';
 import Result from './result.js';
 
 const log = goog.require('goog.log');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-const olProj = goog.require('ol.proj');
-
-const Logger = goog.requireType('goog.log.Logger');
-const {default: Request} = goog.requireType('os.net.Request');
 
 
 /**
@@ -60,7 +57,7 @@ export default class Search extends AbstractUrlSearch {
       var extent = MapContainer.getInstance().getMap().getExtent();
 
       // translate to lon/lat
-      extent = olProj.transformExtent(extent, osMap.PROJECTION, osProj.EPSG4326);
+      extent = transformExtent(extent, osMap.PROJECTION, osProj.EPSG4326);
       extent = osExtent.normalize(extent, undefined, undefined, osProj.EPSG4326, extent);
       var distance = osasm.geodesicInverse(extent.slice(0, 2), extent.slice(2, 4)).distance;
 
@@ -81,7 +78,7 @@ export default class Search extends AbstractUrlSearch {
       if (currentZoom >= threshold) {
         var centre = MapContainer.getInstance().getMap().getView().getCenter();
         if (centre) {
-          var centreLonLat = olProj.toLonLat(centre, osMap.PROJECTION);
+          var centreLonLat = toLonLat(centre, osMap.PROJECTION);
           var focusPointText = '&focus.point.lat=' + centreLonLat[1] + '&focus.point.lon=' + centreLonLat[0];
           url += focusPointText;
         }

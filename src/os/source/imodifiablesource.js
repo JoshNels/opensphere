@@ -1,8 +1,5 @@
 goog.declareModuleId('os.source.IModifiableSource');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * @interface
  */

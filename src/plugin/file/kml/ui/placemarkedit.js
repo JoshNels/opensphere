@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.file.kml.ui.PlacemarkEditUI');
 
+import Feature from 'ol/src/Feature.js';
+import {getUid} from 'ol/src/util.js';
 import '../../../../os/annotation/annotationoptions.js';
 import * as annotation from '../../../../os/annotation/annotation.js';
 import FeatureAnnotation from '../../../../os/annotation/featureannotation.js';
@@ -17,11 +19,6 @@ import * as kml from '../kml.js';
 import * as kmlUI from './kmlui.js';
 
 const dispose = goog.require('goog.dispose');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Directive for editing a KML placemark.

@@ -7,9 +7,6 @@ import KMLParser from '../file/kml/kmlparser.js';
 import {getPlacesManager} from './places.js';
 import {saveKMLToPlaces} from './placessave.js';
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  */

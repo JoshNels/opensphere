@@ -5,8 +5,6 @@ import LayerGroup from '../../../../os/layer/layergroup.js';
 import * as ImageLayerUI from '../../../../os/ui/layer/imagelayerui.js';
 import Module from '../../../../os/ui/module.js';
 
-const {default: LayerNode} = goog.requireType('os.data.LayerNode');
-
 
 /**
  * A spinner directive for a node that loads items

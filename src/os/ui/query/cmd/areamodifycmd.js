@@ -5,8 +5,6 @@ import {ORIGINAL_GEOM_FIELD} from '../../../interpolate.js';
 import {getAreaManager} from '../../../query/queryinstance.js';
 import AbstractArea from './abstractareacmd.js';
 
-const Feature = goog.requireType('ol.Feature');
-const Geometry = goog.requireType('ol.geom.Geometry');
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 
 

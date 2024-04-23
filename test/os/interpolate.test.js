@@ -1,17 +1,13 @@
-goog.require('ol.Feature');
-goog.require('ol.geom.LineString');
-goog.require('ol.geom.MultiPoint');
-goog.require('ol.geom.Point');
-goog.require('ol.geom.Polygon');
 goog.require('os.interpolate');
 goog.require('os.osasm.wait');
 
+import Feature from 'ol/src/Feature.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+
 describe('os.interpolate', function() {
-  const Feature = goog.module.get('ol.Feature');
-  const LineString = goog.module.get('ol.geom.LineString');
-  const MultiPoint = goog.module.get('ol.geom.MultiPoint');
-  const Point = goog.module.get('ol.geom.Point');
-  const Polygon = goog.module.get('ol.geom.Polygon');
   const interpolate = goog.module.get('os.interpolate');
 
   // The accuracy of the calls should be tested in the opensphere-asm project itself.

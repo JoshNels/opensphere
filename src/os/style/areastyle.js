@@ -1,9 +1,9 @@
 goog.declareModuleId('os.style.area');
 
-const Circle = goog.require('ol.style.Circle');
-const Fill = goog.require('ol.style.Fill');
-const Stroke = goog.require('ol.style.Stroke');
-const Style = goog.require('ol.style.Style');
+import Circle from 'ol/src/style/Circle.js';
+import Fill from 'ol/src/style/Fill.js';
+import Stroke from 'ol/src/style/Stroke.js';
+import Style from 'ol/src/style/Style.js';
 
 
 /**

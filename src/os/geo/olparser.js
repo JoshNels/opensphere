@@ -1,16 +1,15 @@
 goog.declareModuleId('os.geo.jsts.OLParser');
 
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const LineString = goog.require('ol.geom.LineString');
-const LinearRing = goog.require('ol.geom.LinearRing');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const MultiPoint = goog.require('ol.geom.MultiPoint');
-const MultiPolygon = goog.require('ol.geom.MultiPolygon');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import LinearRing from 'ol/src/geom/LinearRing.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
 
-const Geometry = goog.requireType('ol.geom.Geometry');
 
 
 /**

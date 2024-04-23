@@ -1,5 +1,14 @@
 goog.declareModuleId('os.interaction.Measure');
 
+import LineString from 'ol/src/geom/LineString.js';
+import Point from 'ol/src/geom/Point.js';
+import {MAC} from 'ol/src/has.js';
+import {toLonLat} from 'ol/src/proj.js';
+import Fill from 'ol/src/style/Fill.js';
+import Stroke from 'ol/src/style/Stroke.js';
+import Style from 'ol/src/style/Style.js';
+import Text from 'ol/src/style/Text.js';
+
 import {getFormattedBearing, modifyBearing} from '../bearing/bearing.js';
 import BearingSettingsKeys from '../bearing/bearingsettingskeys.js';
 import Settings from '../config/settings.js';
@@ -16,14 +25,6 @@ import UnitManager from '../unit/unitmanager.js';
 import DrawPolygon from './drawpolygoninteraction.js';
 
 const GoogEventType = goog.require('goog.events.EventType');
-const LineString = goog.require('ol.geom.LineString');
-const Point = goog.require('ol.geom.Point');
-const {MAC} = goog.require('ol.has');
-const {toLonLat} = goog.require('ol.proj');
-const Fill = goog.require('ol.style.Fill');
-const Stroke = goog.require('ol.style.Stroke');
-const Style = goog.require('ol.style.Style');
-const Text = goog.require('ol.style.Text');
 
 const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
 

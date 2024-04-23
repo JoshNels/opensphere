@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.im.action.feature.Manager');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
 import DataManager from '../../os/data/datamanager.js';
 import DataEventType from '../../os/data/event/dataeventtype.js';
 import RecordField from '../../os/data/recordfield.js';
@@ -20,15 +21,6 @@ const Timer = goog.require('goog.Timer');
 const dispose = goog.require('goog.dispose');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
-const events = goog.require('ol.events');
-
-const Feature = goog.requireType('ol.Feature');
-const {default: DataEvent} = goog.requireType('os.data.event.DataEvent');
-const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
-const {default: ImportActionCallbackConfig} = goog.requireType('os.im.action.ImportActionCallbackConfig');
-const {default: ISource} = goog.requireType('os.source.ISource');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-
 
 /**
  * Manager for {@link Feature} import actions.
@@ -78,7 +70,7 @@ export default class Manager extends ImportActionManager {
     }
 
     for (var key in this.sourceListeners_) {
-      events.unlistenByKey(this.sourceListeners_[key]);
+      unlistenByKey(this.sourceListeners_[key]);
     }
 
     this.sourceListeners_ = {};
@@ -154,7 +146,7 @@ export default class Manager extends ImportActionManager {
     if (osImplements(source, IImportSource.ID)) {
       var id = source.getId();
       if (id && !this.sourceListeners_[id]) {
-        this.sourceListeners_[id] = events.listen(/** @type {events.EventTarget} */ (source),
+        this.sourceListeners_[id] = listen(/** @type {events.EventTarget} */ (source),
             GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
 
         var promise = LayerPresetManager.getInstance().getPresets(id, !state.isStateFile(id));
@@ -192,7 +184,7 @@ export default class Manager extends ImportActionManager {
     if (event && event.source) {
       var id = event.source.getId();
       if (id in this.sourceListeners_) {
-        events.unlistenByKey(this.sourceListeners_[id]);
+        unlistenByKey(this.sourceListeners_[id]);
         delete this.sourceListeners_[id];
       }
     }

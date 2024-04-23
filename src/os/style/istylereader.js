@@ -1,13 +1,5 @@
 goog.declareModuleId('os.style.IStyleReader');
 
-const Fill = goog.requireType('ol.style.Fill');
-const Icon = goog.requireType('ol.style.Icon');
-const Image = goog.requireType('ol.style.Image');
-const Stroke = goog.requireType('ol.style.Stroke');
-const Style = goog.requireType('ol.style.Style');
-const Text = goog.requireType('ol.style.Text');
-
-
 /**
  * @interface
  * @template T

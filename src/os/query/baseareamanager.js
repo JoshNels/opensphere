@@ -1,5 +1,11 @@
 goog.declareModuleId('os.query.BaseAreaManager');
 
+import Feature from 'ol/src/Feature.js';
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import {VectorSourceEvent} from 'ol/src/source/Vector.js';
+import VectorEventType from 'ol/src/source/VectorEventType.js';
+
 import AlertEventSeverity from '../alert/alerteventseverity.js';
 import AlertManager from '../alert/alertmanager.js';
 import * as osArray from '../array/array.js';
@@ -18,6 +24,7 @@ import {directiveTag as editArea} from '../ui/query/editarea.js';
 import {EDIT_WIN_LABEL, SAVE_WIN_LABEL} from '../ui/query/query.js';
 import {create} from '../ui/window.js';
 import {getAreaManager, setAreaManager, getQueryManager} from './queryinstance.js';
+import {isWorldQuery} from './queryutils.js';
 
 const {assert} = goog.require('goog.asserts');
 const Deferred = goog.require('goog.async.Deferred');
@@ -25,11 +32,6 @@ const Delay = goog.require('goog.async.Delay');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
 const {getRandomString} = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const OLVectorSource = goog.require('ol.source.Vector');
-const VectorEventType = goog.require('ol.source.VectorEventType');
 
 const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
 const {default: IMapContainer} = goog.requireType('os.map.IMapContainer');
@@ -581,7 +583,7 @@ export default class BaseAreaManager extends CollectionManager {
 
       if (source.getFeatureById(id)) {
         // 3D can take per feature updates
-        source.dispatchEvent(new OLVectorSource.Event(VectorEventType.CHANGEFEATURE, area));
+        source.dispatchEvent(new VectorSourceEvent(VectorEventType.CHANGEFEATURE, area));
         changed = true;
       }
     }
@@ -603,7 +605,7 @@ export default class BaseAreaManager extends CollectionManager {
     var source = /** @type {OLVectorSource} */ (this.getMap().getLayer(BaseAreaManager.DRAW_ID).getSource());
     var id = area.getId();
     if (id && source.getFeatureById(id)) {
-      source.dispatchEvent(new OLVectorSource.Event(VectorEventType.CHANGEFEATURE, area));
+      source.dispatchEvent(new VectorSourceEvent(VectorEventType.CHANGEFEATURE, area));
     }
     source.changed();
   }
@@ -635,7 +637,13 @@ export default class BaseAreaManager extends CollectionManager {
         var feature = new Feature(geometry.clone());
         // do not show a drawing layer node for this feature
         feature.set(RecordField.DRAWING_LAYER_NODE, false);
-        this.highlightFeature = this.getMap().addFeature(feature, osStyleArea.HIGHLIGHT_STYLE);
+        const highStyle = osStyleArea.HIGHLIGHT_STYLE;
+        const fill = highStyle.fill;
+        if (this.getMap().is3DEnabled() && isWorldQuery(feature.getGeometry())) {
+          highStyle.fill = null;
+        }
+        this.highlightFeature = this.getMap().addFeature(feature, highStyle);
+        highStyle.fill = fill;
       }
     }
   }

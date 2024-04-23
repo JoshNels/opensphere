@@ -1,24 +1,9 @@
 goog.declareModuleId('plugin.cesium.sync.shape');
 
-const {asColorLike} = goog.require('ol.colorlike');
-const {createCanvasContext2D} = goog.require('ol.dom');
-const has = goog.require('ol.has');
-const renderCanvas = goog.require('ol.render.canvas');
-const OLRegularShape = goog.require('ol.style.RegularShape');
-
-
-/**
- * @type {OLRegularShape}
- */
-const scratchFakeShape = /** @type {OLRegularShape} */ ({
-  points_: 0,
-  radius_: 0,
-  radius2_: 0,
-  angle_: 0,
-  fill_: null,
-  stroke_: null
-});
-
+import {asColorLike} from 'ol/src/colorlike.js';
+import {createCanvasContext2D} from 'ol/src/dom.js';
+import {defaultStrokeStyle, defaultLineWidth, defaultLineJoin, defaultLineCap, defaultMiterLimit} from 'ol/src/render/canvas.js';
+import RegularShape from 'ol/src/style/RegularShape.js';
 
 /**
  * @param {!OLRegularShape} style
@@ -36,16 +21,18 @@ export const drawShape = (style) => {
 
   const renderOptions = getRenderOptions(style);
 
-  scratchFakeShape.points_ = style.getPoints();
-  scratchFakeShape.radius_ = style.getRadius();
-  scratchFakeShape.radius2_ = style.getRadius2();
-  scratchFakeShape.angle_ = style.getAngle();
-  scratchFakeShape.fill_ = style.getFill();
-  scratchFakeShape.stroke_ = style.getStroke();
+  const scratchFakeShape = new RegularShape({
+    points: style.getPoints(),
+    radius: style.getRadius(),
+    radius2: style.getRadius2(),
+    angle: style.getAngle(),
+    fill: style.getFill(),
+    stroke: style.getStroke()
+  });
 
   const context = createCanvasContext2D(renderOptions.size, renderOptions.size);
   renderOptions.size = context.canvas.width;
-  OLRegularShape.prototype.draw_.call(scratchFakeShape, renderOptions, context, 0, 0);
+  RegularShape.prototype.draw_.call(scratchFakeShape, renderOptions, context, 1);
 
   if (fill) {
     fill.setColor(oldColor);
@@ -72,30 +59,30 @@ const getRenderOptions = (style) => {
   if (stroke) {
     strokeStyle = stroke.getColor();
     if (strokeStyle === null) {
-      strokeStyle = renderCanvas.defaultStrokeStyle;
+      strokeStyle = defaultStrokeStyle;
     }
     strokeStyle = asColorLike(strokeStyle);
     strokeWidth = stroke.getWidth();
     if (strokeWidth === undefined) {
-      strokeWidth = renderCanvas.defaultLineWidth;
+      strokeWidth = defaultLineWidth;
     }
     lineDash = stroke.getLineDash();
     lineDashOffset = stroke.getLineDashOffset();
-    if (!has.CANVAS_LINE_DASH) {
+    if (!stroke.setLineDash) {
       lineDash = null;
       lineDashOffset = 0;
     }
     lineJoin = stroke.getLineJoin();
     if (lineJoin === undefined) {
-      lineJoin = renderCanvas.defaultLineJoin;
+      lineJoin = defaultLineJoin;
     }
     lineCap = stroke.getLineCap();
     if (lineCap === undefined) {
-      lineCap = renderCanvas.defaultLineCap;
+      lineCap = defaultLineCap;
     }
     miterLimit = stroke.getMiterLimit();
     if (miterLimit === undefined) {
-      miterLimit = renderCanvas.defaultMiterLimit;
+      miterLimit = defaultMiterLimit;
     }
   }
 

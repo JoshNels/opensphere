@@ -1,15 +1,14 @@
 goog.declareModuleId('os.ui.query.AreaNode');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import {getAreaManager} from '../../query/queryinstance.js';
 import TriState from '../../structs/tristate.js';
 import {HOVER_STYLE} from '../../style/areastyle.js';
 import {tagsFromString} from '../../tag/tag.js';
 import SlickTreeNode from '../slick/slicktreenode.js';
 
-const {listen, unlisten} = goog.require('ol.events');
-
 const GoogEvent = goog.requireType('goog.events.Event');
-const Feature = goog.requireType('ol.Feature');
 const {default: ISearchable} = goog.requireType('os.data.ISearchable');
 
 
@@ -35,6 +34,8 @@ export default class AreaNode extends SlickTreeNode {
     if (opt_area) {
       this.setArea(opt_area);
     }
+
+    this.listenKey = null;
   }
 
   /**
@@ -59,14 +60,14 @@ export default class AreaNode extends SlickTreeNode {
    */
   setArea(area) {
     if (this.area) {
-      unlisten(this.area, 'toggle', this.onAreaToggled, this);
+      unlistenByKey(this.listenKey);
     }
 
     this.area = area;
     this.updateFromArea();
 
     if (this.area) {
-      listen(this.area, 'toggle', this.onAreaToggled, this);
+      this.listenKey = listen(this.area, 'toggle', this.onAreaToggled, this);
     }
   }
 

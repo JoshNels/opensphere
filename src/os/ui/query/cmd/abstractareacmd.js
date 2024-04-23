@@ -5,7 +5,6 @@ import {getQueryManager} from '../../../query/queryinstance.js';
 
 const Disposable = goog.require('goog.Disposable');
 
-const Feature = goog.requireType('ol.Feature');
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 
 

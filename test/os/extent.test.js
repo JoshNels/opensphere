@@ -1,16 +1,13 @@
-goog.require('ol.geom.Point');
-goog.require('ol.geom.Polygon');
-goog.require('ol.proj');
 goog.require('os.extent');
 goog.require('os.proj');
 
+import Point from 'ol/src/geom/Point.js';
+import {fromExtent} from 'ol/src/geom/Polygon.js';
+import {get} from 'ol/src/proj.js';
+
 describe('os.extent', function() {
-  const Point = goog.module.get('ol.geom.Point');
-  const Polygon = goog.module.get('ol.geom.Polygon');
-  const olProj = goog.module.get('ol.proj');
   const osExtent = goog.module.get('os.extent');
   const osProj = goog.module.get('os.proj');
-
   var expandExtent = function(extent) {
     return [extent[0], 0, extent[1], 0];
   };
@@ -28,7 +25,7 @@ describe('os.extent', function() {
 
   it('should normalize extents', function() {
     projections.forEach(function(config) {
-      var proj = olProj.get(config.code);
+      var proj = get(config.code);
       var projExtent = proj.getExtent();
       var left = projExtent[0];
       var right = projExtent[2];
@@ -89,7 +86,7 @@ describe('os.extent', function() {
 
   it('should normalize extents with alternate min/max values', function() {
     projections.forEach(function(config) {
-      var proj = olProj.get(config.code);
+      var proj = get(config.code);
       var projExtent = proj.getExtent();
       var left = projExtent[0];
       var right = projExtent[2];
@@ -157,7 +154,7 @@ describe('os.extent', function() {
     var result = [];
     var extent = [-180, -90, 180, 90];
 
-    osExtent.normalize(extent, undefined, undefined, olProj.get(osProj.EPSG4326), result);
+    osExtent.normalize(extent, undefined, undefined, get(osProj.EPSG4326), result);
 
     expect(result[1]).toBe(extent[1]);
     expect(result[3]).toBe(extent[3]);
@@ -166,7 +163,7 @@ describe('os.extent', function() {
 
   it('should determine whether or not extents cross the antimeridian', function() {
     projections.forEach(function(config) {
-      var proj = olProj.get(config.code);
+      var proj = get(config.code);
       var projExtent = proj.getExtent();
       var left = projExtent[0];
       var right = projExtent[2];
@@ -243,10 +240,10 @@ describe('os.extent', function() {
     const point = new Point([0, 0]);
     expect(osExtent.getFunctionalExtent(point, osProj.EPSG4326)).toBe(point.getExtent());
 
-    const poly = Polygon.fromExtent([-5, -5, 5, 5]);
+    const poly = fromExtent([-5, -5, 5, 5]);
     expect(osExtent.getFunctionalExtent(poly, osProj.EPSG4326)).toBe(poly.getExtent());
 
-    const polyCrossingAntimeridian = Polygon.fromExtent([-179, -5, 179, 5]);
+    const polyCrossingAntimeridian = fromExtent([-179, -5, 179, 5]);
     expect(osExtent.getFunctionalExtent(polyCrossingAntimeridian, osProj.EPSG4326)).toBe(
         polyCrossingAntimeridian.getAntiExtent());
   });

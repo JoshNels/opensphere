@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.track.menu');
 
+import OLVectorLayer from 'ol/src/layer/Vector.js';
 import Settings from '../../os/config/settings.js';
 import LayerNode from '../../os/data/layernode.js';
 import DynamicFeature from '../../os/feature/dynamicfeature.js';
@@ -22,13 +23,6 @@ import TrackManager from './trackmanager.js';
 import Metrics from './trackmetrics.js';
 
 const asserts = goog.require('goog.asserts');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-
-const OlFeature = goog.requireType('ol.Feature');
-const {default: CreateOptions} = goog.requireType('os.track.CreateOptions');
-const {default: ActionEvent} = goog.requireType('os.ui.action.ActionEvent');
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const {default: OsMenuItem} = goog.requireType('os.ui.menu.MenuItem');
 
 
 const settings = Settings.getInstance();

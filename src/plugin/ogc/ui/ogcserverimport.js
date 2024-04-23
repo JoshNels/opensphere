@@ -10,9 +10,6 @@ import * as OgcServerHelpUI from './ogcserverhelp.js';
 
 const xml = goog.require('goog.dom.xml');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  * The ogcserver import directive
  *

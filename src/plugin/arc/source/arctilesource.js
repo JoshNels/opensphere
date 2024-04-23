@@ -1,8 +1,6 @@
 goog.declareModuleId('plugin.arc.source.ArcTileSource');
 
-const TileArcGISRest = goog.require('ol.source.TileArcGISRest');
-const {default: ILoadingSource} = goog.requireType('os.ol.source.ILoadingSource');
-
+import TileArcGISRest from 'ol/src/source/TileArcGISRest.js';
 
 /**
  * Extension of the base OL3 Arc tile source. This implements ILoadingSource so that we have a loading spinner

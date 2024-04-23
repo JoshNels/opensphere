@@ -13,9 +13,6 @@ import LightStripSettings from './lightstripsettings.js';
 import {ID} from './suncalc.js';
 import {directiveTag as sunCalcEl} from './suncalcui.js';
 
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
-
 
 /**
  */

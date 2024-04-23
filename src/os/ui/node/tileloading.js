@@ -1,14 +1,14 @@
 goog.declareModuleId('os.ui.node.TileLoadingUI');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import TileImage from 'ol/src/source/TileImage.js';
+
 import LayerPropertyChange from '../../layer/propertychange.js';
 import PropertyChange from '../../source/propertychange.js';
 import Module from '../module.js';
 
 const GoogEventType = goog.require('goog.events.EventType');
-const {listen, unlisten} = goog.require('ol.events');
-const TileImage = goog.require('ol.source.TileImage');
 
-const Layer = goog.requireType('ol.layer.Layer');
 const {default: LayerNode} = goog.requireType('os.data.LayerNode');
 const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
 
@@ -67,7 +67,7 @@ export class Controller {
 
       if (src && src instanceof TileImage) {
         this.source_ = /** @type {TileImage} */ (src);
-        listen(this.source_, GoogEventType.PROPERTYCHANGE, this.onPropertyChange_, this);
+        this.listenKey = listen(this.source_, GoogEventType.PROPERTYCHANGE, this.onPropertyChange_, this);
       }
     }
 
@@ -82,7 +82,7 @@ export class Controller {
    */
   onDestroy_() {
     if (this.source_) {
-      unlisten(this.source_, GoogEventType.PROPERTYCHANGE, this.onPropertyChange_, this);
+      unlistenByKey(this.listenKey);
     }
 
     this.element_ = null;

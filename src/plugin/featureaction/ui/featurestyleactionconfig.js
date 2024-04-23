@@ -23,9 +23,6 @@ const googArray = goog.require('goog.array');
 const googObject = goog.require('goog.object');
 const googString = goog.require('goog.string');
 
-const {default: StyleAction} = goog.requireType('plugin.im.action.feature.StyleAction');
-
-
 /**
  * Directive to configure a feature style action.
  *

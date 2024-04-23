@@ -9,8 +9,6 @@ import AbstractDataSourceLayerConfig from '../../../os/layer/config/abstractdata
 import ImportManager from '../../../os/ui/im/importmanager.js';
 import GMLParserConfig from './gmlparserconfig.js';
 
-const {default: FeatureImporter} = goog.requireType('os.im.FeatureImporter');
-const {default: FileParserConfig} = goog.requireType('os.parse.FileParserConfig');
 
 
 /**

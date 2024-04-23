@@ -10,10 +10,6 @@ const log = goog.require('goog.log');
 const ResponseType = goog.require('goog.net.XhrIo.ResponseType');
 const userAgent = goog.require('goog.userAgent');
 
-const Logger = goog.requireType('goog.log.Logger');
-const {default: FeatureImporter} = goog.requireType('os.im.FeatureImporter');
-const {default: Request} = goog.requireType('os.net.Request');
-
 
 /**
  */

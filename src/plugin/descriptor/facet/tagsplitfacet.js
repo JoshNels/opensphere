@@ -2,9 +2,6 @@ goog.declareModuleId('plugin.descriptor.facet.TagSplit');
 
 import BaseFacet from '../../../os/search/basefacet.js';
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * @extends {BaseFacet<!IDataDescriptor>}
  */

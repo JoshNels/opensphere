@@ -1,12 +1,12 @@
 goog.declareModuleId('plugin.georss.GeoRSSParser');
 
-import {PROJECTION} from 'opensphere/src/os/map/map.js';
+import Feature from 'ol/src/Feature.js';
+import LineString from 'ol/src/geom/LineString.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import {isDocument, parse} from 'ol/src/xml.js';
 
-const Feature = goog.require('ol.Feature');
-const LineString = goog.require('ol.geom.LineString');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
-const {isDocument, parse} = goog.require('ol.xml');
+import {PROJECTION} from 'opensphere/src/os/map/map.js';
 
 const {default: IParser} = goog.requireType('os.parse.IParser');
 

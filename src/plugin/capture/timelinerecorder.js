@@ -7,9 +7,6 @@ import PropertyChange from '../../os/data/propertychange.js';
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
 
-const {CanvasFn, RenderFn} = goog.requireType('os.capture');
-const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
-
 
 /**
  * Records each frame of the timeline controller animation loop from a canvas.

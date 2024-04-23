@@ -3,15 +3,8 @@
  */
 goog.declareModuleId('os.ol.mixin.render');
 
-const Instruction = goog.require('ol.render.canvas.Instruction');
-const PolygonReplay = goog.require('ol.render.canvas.PolygonReplay');
-
-const Feature = goog.requireType('ol.Feature');
-const Circle = goog.requireType('ol.geom.Circle');
-const MultiPolygon = goog.requireType('ol.geom.MultiPolygon');
-const Polygon = goog.requireType('ol.geom.Polygon');
-const RenderFeature = goog.requireType('ol.render.Feature');
-
+import Instruction from 'ol/src/render/canvas/Instruction.js';
+import PolygonReplay from 'ol/src/render/canvas/PolygonBuilder.js';
 
 /**
  * Empty fill style used in our overrides of OL3 polygon rendering functions.

@@ -3,12 +3,12 @@
  */
 goog.declareModuleId('os.mixin.feature');
 
+import Feature from 'ol/src/Feature.js';
+import Style from 'ol/src/style/Style.js';
+
 import {registerClass} from '../classregistry.js';
 import FeatureEvent from '../data/featureevent.js';
 import * as dispatcher from '../dispatcher.js';
-
-const Feature = goog.require('ol.Feature');
-const Style = goog.require('ol.style.Style');
 
 
 /**
@@ -26,10 +26,11 @@ registerClass(Feature.NAME, Feature);
  * @suppress {accessControls}
  */
 Feature.prototype.set = function(key, value, opt_silent) {
+  const values = this.values_ || (this.values_ = {});
   if (value === undefined) {
-    delete this.values_[key];
+    delete values[key];
   } else {
-    this.values_[key] = value;
+    values[key] = value;
   }
 };
 
@@ -41,7 +42,12 @@ Feature.prototype.set = function(key, value, opt_silent) {
  * @suppress {accessControls}
  */
 Feature.prototype.unset = function(key, opt_silent) {
-  delete this.values_[key];
+  if (this.values_ && key in this.values_) {
+    delete this.values_[key];
+    if (this.values_.length === 0) {
+      this.values_ = null;
+    }
+  }
 };
 
 
@@ -81,18 +87,29 @@ Feature.prototype.setStyle = function(style) {
  * Returns a style array for the feature. This is used by the above replacement for setStyle instead of creating a new
  * function every time setStyle is called.
  *
+ * @param {ol.Feature} feature
  * @param {number} resolution
+ * @param {boolean} opt_checkSaved True if we should use saved style instead.
  * @return {Array<Style>}
  * @suppress {accessControls}
  */
-Feature.prototype.getStyleFn = function(resolution) {
-  if (this.style_ instanceof Style) {
-    return [this.style_];
-  } else if (typeof this.style_ == 'function') {
-    var style = this.style_(resolution);
+Feature.prototype.getStyleFn = function(feature, resolution, opt_checkSaved) {
+  let featureStyle = feature.style_;
+
+  if (opt_checkSaved) {
+    const savedStyle = feature.get('savedStyle');
+    if (savedStyle) {
+      featureStyle = savedStyle;
+    }
+  }
+
+  if (featureStyle instanceof Style) {
+    return [featureStyle];
+  } else if (typeof featureStyle == 'function') {
+    var style = featureStyle(resolution);
     return style ? (style instanceof Style ? [style] : style) : [];
   } else {
-    return this.style_;
+    return featureStyle;
   }
 };
 

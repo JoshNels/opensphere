@@ -25,9 +25,6 @@ const QueryData = goog.require('goog.Uri.QueryData');
 const googColor = goog.require('goog.color');
 const googObject = goog.require('goog.object');
 
-const {default: ArcFeatureType} = goog.requireType('plugin.arc.ArcFeatureType');
-
-
 /**
  * Descriptor representing an Arc layer.
  *

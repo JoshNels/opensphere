@@ -10,10 +10,6 @@ import KMLTreeExporter from '../kmltreeexporter.js';
 
 const asserts = goog.require('goog.asserts');
 
-const {default: ExportOptions} = goog.requireType('os.ex.ExportOptions');
-const {default: IPersistenceMethod} = goog.requireType('os.ex.IPersistenceMethod');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The kmltreeexport directive

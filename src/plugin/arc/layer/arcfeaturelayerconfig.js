@@ -20,10 +20,6 @@ import ArcRequestSource from '../source/arcrequestsource.js';
 
 const log = goog.require('goog.log');
 
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
-const {default: VectorLayer} = goog.requireType('os.layer.Vector');
-const {default: ArcFeatureType} = goog.requireType('plugin.arc.ArcFeatureType');
-
 
 /**
  * Layer config for creating a new Arc request feature layer.

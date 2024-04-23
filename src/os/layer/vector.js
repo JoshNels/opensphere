@@ -1,5 +1,9 @@
 goog.declareModuleId('os.layer.Vector');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import Property from 'ol/src/layer/Property.js';
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+
 import ActionEventType from '../action/eventtype.js';
 import {toRgbArray} from '../color.js';
 import DataManager from '../data/datamanager.js';
@@ -51,11 +55,6 @@ import SynchronizerType from './synchronizertype.js';
 const GoogEventType = goog.require('goog.events.EventType');
 const {getRandomString} = goog.require('goog.string');
 
-const events = goog.require('ol.events');
-const Property = goog.require('ol.layer.Property');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-
-const Feature = goog.requireType('ol.Feature');
 const {default: IPersistable} = goog.requireType('os.IPersistable');
 const filter = goog.requireType('os.filter');
 
@@ -211,6 +210,8 @@ export default class Vector extends OLVectorLayer {
      */
     this.hidden_ = false;
 
+    this.propertyChangeListenKey_ = null;
+
     // we don't care about the render order, so disable it to save some processing time
     this.setRenderOrder(null);
     getMapContainer().listen(GoogEventType.PROPERTYCHANGE, this.onMapChange_, false, this);
@@ -220,17 +221,18 @@ export default class Vector extends OLVectorLayer {
    * @inheritDoc
    */
   disposeInternal() {
+    // Dispose of the source first thing ensures kml overlays are removed.
+    var source = this.getSource();
+    if (source) {
+      source.dispose();
+    }
+
     // call the parent chain first to remove listeners
     super.disposeInternal();
     getMapContainer().unlisten(GoogEventType.PROPERTYCHANGE, this.onMapChange_, false, this);
 
     // make sure the map loading counters are updated since the layer is being removed
     this.setLoading(false);
-
-    var source = this.getSource();
-    if (source) {
-      source.dispose();
-    }
 
     StyleManager.getInstance().removeLayerConfig(this.getId());
   }
@@ -241,7 +243,7 @@ export default class Vector extends OLVectorLayer {
   setSource(source) {
     var old = this.getSource();
     if (old && old instanceof VectorSource) {
-      events.unlisten(old, GoogEventType.PROPERTYCHANGE, this.onSourceChange, this);
+      unlistenByKey(this.propertyChangeListenKey_);
       old.setWebGLEnabled(false);
     }
 
@@ -249,7 +251,7 @@ export default class Vector extends OLVectorLayer {
 
     if (source && source instanceof VectorSource) {
       source = /** @type {VectorSource} */ (source);
-      events.listen(source, GoogEventType.PROPERTYCHANGE, this.onSourceChange, this);
+      this.propertyChangeListenKey_ = listen(source, GoogEventType.PROPERTYCHANGE, this.onSourceChange, this);
       source.setWebGLEnabled(getMapContainer().is3DEnabled());
     }
   }

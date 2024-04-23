@@ -1,5 +1,7 @@
 goog.declareModuleId('os.layer.config.AbstractDataSourceLayerConfig');
 
+import VectorRenderType from 'ol/src/layer/VectorTileRenderType.js';
+
 import DataManager from '../../data/datamanager.js';
 import FeatureImporter from '../../im/featureimporter.js';
 import {isTrustedUri} from '../../net/net.js';
@@ -13,10 +15,8 @@ const Uri = goog.require('goog.Uri');
 const {removeIf} = goog.require('goog.array');
 const {assert} = goog.require('goog.asserts');
 const {getLogger} = goog.require('goog.log');
-const VectorRenderType = goog.require('ol.layer.VectorRenderType');
 
 const Logger = goog.requireType('goog.log.Logger');
-const OLVectorSource = goog.requireType('ol.source.Vector');
 const {default: IImporter} = goog.requireType('os.im.IImporter');
 const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
 const {default: IParser} = goog.requireType('os.parse.IParser');

@@ -10,8 +10,6 @@ import WizardStepEvent from '../../os/ui/wiz/step/wizardstepevent.js';
 import SHPParser from '../file/shp/shpparser.js';
 import AreaImportCtrl from './areaimportctrl.js';
 
-const {default: SHPParserConfig} = goog.requireType('plugin.file.shp.SHPParserConfig');
-
 
 /**
  * The SHP import file selection area directive

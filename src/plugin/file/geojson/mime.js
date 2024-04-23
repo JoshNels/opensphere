@@ -1,12 +1,10 @@
 goog.declareModuleId('plugin.file.geojson.mime');
 
+import GeoJSON from 'ol/src/format/GeoJSON.js';
 import * as json from '../../../os/file/mime/json.js';
 import * as mime from '../../../os/file/mime.js';
 
 const Promise = goog.require('goog.Promise');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-
-const {default: OSFile} = goog.requireType('os.file.File');
 
 
 /**
@@ -37,8 +35,10 @@ export const isGeoJSON = function(buffer, opt_file, opt_context) {
  */
 const find_ = function(obj) {
   var type = obj['type'];
-  if (type === 'FeatureCollection' || type === 'Feature' || type in GeoJSON.GEOMETRY_READERS_) {
-    return true;
+  if (type) {
+    if (type === 'FeatureCollection' || type === 'Feature' || type in GeoJSON.GEOMETRY_READERS_) {
+      return true;
+    }
   }
 
   for (var key in obj) {

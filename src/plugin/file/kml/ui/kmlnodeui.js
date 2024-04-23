@@ -10,9 +10,6 @@ import * as ConfirmUI from '../../../../os/ui/window/confirm.js';
 import KMLNodeRemove from '../cmd/kmlnoderemovecmd.js';
 import {createOrEditFolder, createOrEditPlace} from './kmlui.js';
 
-const {FolderOptions, PlacemarkOptions} = goog.requireType('plugin.file.kml.ui');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The node UI for KML tree nodes

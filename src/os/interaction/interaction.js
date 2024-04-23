@@ -1,15 +1,13 @@
 goog.declareModuleId('os.interaction');
 
+import Feature from 'ol/src/Feature.js';
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+import VectorTile from 'ol/src/layer/VectorTile.js';
+
 import RecordField from '../data/recordfield.js';
 import {getLayer} from '../feature/feature.js';
 import {getMapContainer} from '../map/mapinstance.js';
 
-const Feature = goog.require('ol.Feature');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-const VectorTile = goog.require('ol.layer.VectorTile');
-
-const Layer = goog.requireType('ol.layer.Layer');
-const RenderFeature = goog.requireType('ol.render.Feature');
 
 
 /**

@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.position.PositionInteraction');
 
+import {noModifierKeys, targetNotEditable} from 'ol/src/events/condition.js';
+import EventType from 'ol/src/events/EventType.js';
+import Interaction from 'ol/src/interaction/Interaction.js';
 import I3DSupport from '../../os/i3dsupport.js';
 import osImplements from '../../os/implements.js';
 import Metrics from '../../os/metrics/metrics.js';
@@ -8,9 +11,6 @@ import {launchCopy} from './copyposition.js';
 
 const KeyCodes = goog.require('goog.events.KeyCodes');
 const functions = goog.require('goog.functions');
-const EventType = goog.require('ol.events.EventType');
-const {noModifierKeys, targetNotEditable} = goog.require('ol.events.condition');
-const Interaction = goog.require('ol.interaction.Interaction');
 
 
 /**

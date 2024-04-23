@@ -1,5 +1,3 @@
-goog.require('ol.source.TileWMS');
-goog.require('ol.source.Vector');
 goog.require('os.data.LayerTreeSearch');
 goog.require('os.data.groupby.LayerZOrderGroupBy');
 goog.require('os.layer.Tile');
@@ -7,16 +5,17 @@ goog.require('os.layer.Vector');
 goog.require('os.map.instance');
 goog.require('os.mock');
 
+import TileWMS from 'ol/src/source/TileWMS.js';
+import OLVectorSource from 'ol/src/source/Vector.js';
+
+import LayerZOrderGroupBy from '../../../src/os/data/groupby/layerzordergroupby.js';
+import LayerTreeSearch from '../../../src/os/data/layertreesearch.js';
+import FolderManager from '../../../src/os/layer/foldermanager.js';
+import Tile from '../../../src/os/layer/tile.js';
+import Vector from '../../../src/os/layer/vector.js';
+import {getMapContainer} from '../../../src/os/map/mapinstance.js';
 
 describe('os.data.LayerTreeSearch', function() {
-  const TileWMS = goog.module.get('ol.source.TileWMS');
-  const OLVectorSource = goog.module.get('ol.source.Vector');
-  const {default: LayerTreeSearch} = goog.module.get('os.data.LayerTreeSearch');
-  const {default: LayerZOrderGroupBy} = goog.module.get('os.data.groupby.LayerZOrderGroupBy');
-  const {default: Tile} = goog.module.get('os.layer.Tile');
-  const {default: VectorLayer} = goog.module.get('os.layer.Vector');
-  const {getMapContainer} = goog.module.get('os.map.instance');
-
   beforeEach(function() {
     // add a tile layer
     var layer = new Tile({
@@ -31,7 +30,7 @@ describe('os.data.LayerTreeSearch', function() {
     getMapContainer().addLayer(layer);
 
     // add a vector layer
-    layer = new VectorLayer({
+    layer = new Vector({
       source: new OLVectorSource()
     });
 
@@ -60,6 +59,7 @@ describe('os.data.LayerTreeSearch', function() {
   });
 
   it('should search map layers', function() {
+    FolderManager.getInstance().clear();
     var o = {};
     var s = new LayerTreeSearch('data', o);
 

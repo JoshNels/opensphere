@@ -1,12 +1,13 @@
 goog.declareModuleId('os.webgl.WebGLOverlay');
 
+import Overlay from 'ol/src/Overlay.js';
+import {toLonLat} from 'ol/src/proj.js';
+
 import * as osMap from '../map/map.js';
 import MapChange from '../map/mapchange.js';
 import {getMapContainer} from '../map/mapinstance.js';
 
 const GoogEventType = goog.require('goog.events.EventType');
-const Overlay = goog.require('ol.Overlay');
-const olProj = goog.require('ol.proj');
 
 const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
 
@@ -129,7 +130,7 @@ export default class WebGLOverlay extends Overlay {
         // map isn't ready, so hide the overlay
         this.setVisible(false);
       } else {
-        var coord = olProj.toLonLat(position, osMap.PROJECTION);
+        var coord = toLonLat(position, osMap.PROJECTION);
         var pixel = webGLRenderer.getPixelFromCoordinate(coord, true);
         if (!pixel) {
           // coordinate is not visible, so hide the overlay

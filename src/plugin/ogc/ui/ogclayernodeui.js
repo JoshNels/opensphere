@@ -9,9 +9,6 @@ import {Controller as ChooseTimeColumnController} from './choosetimecolumn.js';
 
 const Deferred = goog.require('goog.async.Deferred');
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * @type {string}
  */

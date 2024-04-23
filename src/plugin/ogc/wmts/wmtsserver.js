@@ -7,9 +7,6 @@ import OGCServer from '../../../os/ui/ogc/ogcserver.js';
 const QueryData = goog.require('goog.Uri.QueryData');
 const log = goog.require('goog.log');
 
-const Logger = goog.requireType('goog.log.Logger');
-
-
 /**
  * The logger.
  * @type {Logger}

@@ -7,9 +7,6 @@ import services from '../../os/ogc/services.js';
 import AbstractPlugin from '../../os/plugin/abstractplugin.js';
 import {AreaImportType} from './areadata.js';
 
-const {default: MenuItemOptions} = goog.requireType('os.ui.menu.MenuItemOptions');
-const {Options: OGCListUIOptions} = goog.requireType('os.ui.ogc.OGCListUI');
-
 
 const Settings = OSSettings.getInstance();
 

@@ -15,10 +15,6 @@ import Options from './options.js';
 const googArray = goog.require('goog.array');
 const googString = goog.require('goog.string');
 
-const Feature = goog.requireType('ol.Feature');
-const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
-const {default: ILayer} = goog.requireType('os.layer.ILayer');
-
 
 /**
  * The currently selected option.

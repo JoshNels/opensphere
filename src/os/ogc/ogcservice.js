@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ogc.OGCService');
 
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+
 import OSSettings from '../config/settings.js';
 import * as geo2 from '../geo/geo2.js';
 import Request from '../net/request.js';
@@ -17,10 +19,6 @@ import WFSFormatter from './wfs/wfsformatter.js';
 
 const GoogPromise = goog.require('goog.Promise');
 const Uri = goog.require('goog.Uri');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-
-const Feature = goog.requireType('ol.Feature');
-
 
 /**
  * Opensphere's Settings Manager

@@ -7,9 +7,6 @@ import Module from '../../../../os/ui/module.js';
 import GPXDescriptor from '../gpxdescriptor.js';
 import GPXProvider from '../gpxprovider.js';
 
-const {default: FileParserConfig} = goog.requireType('os.parse.FileParserConfig');
-
-
 /**
  * The GPX import directive.
  *

@@ -1,15 +1,13 @@
 goog.declareModuleId('os.layer.AnimationOverlay');
 
+import OLVectorSource from 'ol/src/source/Vector.js';
+
 import {getMapContainer} from '../map/mapinstance.js';
 import AnimationVector from './animationvector.js';
 
 const Disposable = goog.require('goog.Disposable');
 const {clone} = goog.require('goog.array');
-const OLVectorSource = goog.require('ol.source.Vector');
 
-const Feature = goog.requireType('ol.Feature');
-const OLVectorLayer = goog.requireType('ol.layer.Vector');
-const Style = goog.requireType('ol.style.Style');
 const {default: AnimationOverlayOptions} = goog.requireType('os.layer.AnimationOverlayOptions');
 
 

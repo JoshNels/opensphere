@@ -4,6 +4,8 @@
  */
 goog.declareModuleId('os.style');
 
+import {asArray, asString, toString} from 'ol/src/color.js';
+
 import {toRgbArray} from '../color.js';
 import RecordField from '../data/recordfield.js';
 import PropertyChangeEvent from '../events/propertychangeevent.js';
@@ -23,11 +25,7 @@ import StyleType from './styletype.js';
 
 const {equals} = goog.require('goog.array');
 const {toRadians} = goog.require('goog.math');
-const {asArray, asString, toString} = goog.require('ol.color');
 
-const Feature = goog.requireType('ol.Feature');
-const Layer = goog.requireType('ol.layer.Layer');
-const Style = goog.requireType('ol.style.Style');
 const {default: VectorSource} = goog.requireType('os.source.Vector');
 
 
@@ -911,7 +909,7 @@ export const setConfigLineDash = function(config, lineDash, opt_includeLineDashF
   if (config) {
     var lineDashFields = opt_includeLineDashFields || DEFAULT_LINE_DASH_STYLE_FIELDS;
     for (var key in config) {
-      if (lineDashFields.indexOf(key) !== -1) {
+      if (lineDash && lineDashFields.indexOf(key) !== -1) {
         config[key][StyleField.LINE_DASH] = lineDash;
       }
 

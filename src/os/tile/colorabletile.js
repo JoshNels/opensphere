@@ -1,12 +1,7 @@
 goog.declareModuleId('os.tile.ColorableTile');
 
+import ImageTile from 'ol/src/ImageTile.js';
 import {filterImage} from './tile.js';
-
-const ImageTile = goog.require('ol.ImageTile');
-
-const TileState = goog.requireType('ol.TileState');
-const TileImage = goog.requireType('ol.source.TileImage');
-
 
 /**
  * Implementation of a tile that is colorable.

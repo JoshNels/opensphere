@@ -6,8 +6,6 @@ import KMLNodeAdd from '../file/kml/cmd/kmlnodeaddcmd.js';
 import {copyNode} from './places.js';
 import PlacesManager from './placesmanager.js';
 
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 /**
  * Save a KML tree to places.
  * @param {!Array<KMLNode>|KMLNode} nodes The root KML node(s) to save.

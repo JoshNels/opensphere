@@ -24,7 +24,9 @@
 .ol-control {
   background-color: rgba($body-bg, .8);
   border: .1rem solid $border-color;
+  border-radius: 4px;
   color: rgba($body-color, .8);
+  padding: 2px;
   position: absolute;
 
   &:focus,
@@ -36,8 +38,20 @@
 
   button {
     background-color: rgba($body-bg, .1);
+    border: none;
+    border-radius: 2px;
     color: rgba($body-color, .8);
     cursor: pointer;
+    display: block;
+    font-size: 1.14em;
+    font-weight: bold;
+    height: 1.375em;
+    line-height: .4em;
+    margin: 1px;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    width: 1.375em;
 
     &:hover,
     &.active {
@@ -126,6 +140,7 @@
 .ol-overviewmap {
   bottom: auto;
   left: auto;
+  padding: 0;
   right: 3rem;
   top: .75rem;
 
@@ -136,21 +151,32 @@
   button {
     background: rgba($body-bg, .5);
     color: rgba($body-color, .8);
+    left: .1rem;
     position: absolute;
-    right: .1rem;
     top: .1rem;
   }
 
   .ol-overviewmap-map {
-    border: 0;
+    border: .1rem solid #fff;
     display: block;
-    height: 7.625rem;
+    height: 7.9rem;
     margin: 0;
-    width: 15rem;
+    width: 15.2rem;
+
+    &:focus,
+    &:hover {
+      background-color: rgba($body-bg, .8);
+      border: .1rem solid $border-color;
+      color: rgba($body-color, .8);
+    }
   }
 
   .ol-overviewmap-box {
     border: .125rem dotted $danger;
+
+    &:hover {
+      cursor: move;
+    }
   }
 }
 
@@ -169,29 +195,39 @@
   right: auto;
   top: auto;
   z-index: $u-zindex-base + 1;
+}
 
-  .ol-scale-line-inner {
-    border-color: rgba($body-color, .8);
-    color: rgba($body-color, .8);
-    display: inline-block;
-    font-size: 100%;
-    height: .5rem;
-    line-height: 0;
-  }
+.ol-scale-line-inner {
+  border: 1px solid rgba($body-color, .8);
+  border-top: none;
+  color: rgba($body-color, .8);
+  display: inline-block;
+  font-size: 100%;
+  height: .5rem;
+  line-height: 0;
+  text-align: center;
+  transition: initial;
 }
 
 // Attribution
 .ol-attribution,
 .ol-attribution.ol-uncollapsible {
+  border-radius: 4px 0 0;
   bottom: .25rem;
+  display: inline;
   height: unset;
   left: .25rem;
+  line-height: 1em;
   right: auto;
   text-align: left;
   top: auto;
 
   li:nth-child(n+2):not(:last-child):after {
     content: ', ';
+  }
+
+  li:first-child:after {
+    content: ' ';
   }
 
   &:hover {
@@ -202,6 +238,26 @@
   a {
     color: rgba($link-color, .8);
   }
+
+  ul {
+    color: #000;
+    display: inline-block;
+    font-size: .7rem;
+    line-height: 1.375em;
+    margin: 0;
+    padding: 0 .5em;
+    text-shadow: 0 0 2px #fff;
+  }
+
+  li {
+    display: inline;
+    line-height: inherit;
+    list-style: none;
+  }
+}
+
+.ol-attribution:not(.ol-collapsed) {
+  background: rgba(255, 255, 255, .8);
 }
 
 // Mouse Position

@@ -1,5 +1,9 @@
 goog.declareModuleId('os.ol.control.MousePosition');
 
+import OLMousePosition from 'ol/src/control/MousePosition.js';
+import {toLonLat} from 'ol/src/proj.js';
+import ViewHint from 'ol/src/ViewHint.js';
+
 import BearingSettingsKeys from '../../bearing/bearingsettingskeys.js';
 import DisplaySetting from '../../config/displaysetting.js';
 import Settings from '../../config/settings.js';
@@ -12,12 +16,6 @@ import UnitManager from '../../unit/unitmanager.js';
 
 const {listen, unlistenByKey} = goog.require('goog.events');
 const GoogEventType = goog.require('goog.events.EventType');
-const ViewHint = goog.require('ol.ViewHint');
-const OLMousePosition = goog.require('ol.control.MousePosition');
-const {toLonLat} = goog.require('ol.proj');
-
-const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
-const {default: SettingChangeEvent} = goog.requireType('os.events.SettingChangeEvent');
 
 
 /**
@@ -30,7 +28,7 @@ export default class MousePosition extends OLMousePosition {
    */
   constructor(opt_options) {
     opt_options = opt_options || {};
-    opt_options.undefinedHTML = 'No coordinate';
+    opt_options.placeholder = 'No coordinate';
 
     super(opt_options);
 

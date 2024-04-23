@@ -3,8 +3,6 @@ goog.declareModuleId('plugin.capture.AnnotationTailRenderer');
 import {getMapCanvas} from '../../os/capture/capture.js';
 import SvgRenderer from '../../os/ui/capture/svgrenderer.js';
 
-const Overlay = goog.requireType('ol.Overlay');
-
 
 /**
  * Renders the SVG tail for a map annotation to a canvas.

@@ -6,8 +6,6 @@ import * as mime from '../../../os/file/mime.js';
 
 const Promise = goog.require('goog.Promise');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
 
 /**
  * @type {string}

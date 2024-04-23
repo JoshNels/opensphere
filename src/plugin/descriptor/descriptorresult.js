@@ -3,9 +3,6 @@ goog.declareModuleId('plugin.descriptor.DescriptorResult');
 import AbstractSearchResult from '../../os/search/abstractsearchresult.js';
 import {directiveTag as cardUi} from './descriptorresultcard.js';
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * Descriptor search result.
  * @extends {AbstractSearchResult<!IDataDescriptor>}

@@ -1,5 +1,7 @@
 goog.declareModuleId('os.layer.preset.LayerPresetManager');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import VectorLayerPreset from '../../command/vectorlayerpresetcmd.js';
 import settings from '../../config/settings.js';
 import Registry from '../../data/registry.js';
@@ -20,10 +22,6 @@ const Promise = goog.require('goog.Promise');
 
 const Debouncer = goog.require('goog.async.Debouncer');
 const GoogEventType = goog.require('goog.events.EventType');
-const olEvents = goog.require('ol.events');
-const {EventsKey: OlEventsKey} = goog.requireType('ol');
-const OlLayer = goog.requireType('ol.layer.Layer');
-
 
 const {default: LayerEvent} = goog.requireType('os.events.LayerEvent');
 
@@ -140,7 +138,7 @@ export default class LayerPresetManager extends Disposable {
     // only have one listener at a time
     if (layer && meta && !meta.listener) {
       meta.selected = preset;
-      meta.listener = olEvents.listen(
+      meta.listener = listen(
           layer,
           GoogEventType.PROPERTYCHANGE,
           this.onLayerStyleChanged.bind(this, layerId, layer, false),
@@ -184,7 +182,7 @@ export default class LayerPresetManager extends Disposable {
 
         const key = /** @type {OlEventsKey} */ (meta.listener);
         if (key && layer) {
-          olEvents.unlistenByKey(key);
+          unlistenByKey(key);
           meta.listener = null;
         }
 
@@ -264,7 +262,7 @@ export default class LayerPresetManager extends Disposable {
       const key = /** @type {OlEventsKey} */ (meta.listener);
       const layer = this.getLayer_(id);
       if (key && layer) {
-        olEvents.unlistenByKey(key);
+        unlistenByKey(key);
       }
       meta.listener = null;
       meta.debouncer.dispose();

@@ -1,10 +1,12 @@
 goog.declareModuleId('plugin.area.KMLAreaParser');
 
+import {isDocument} from 'ol/src/xml.js';
+
 import ColumnDefinition from '../../os/data/columndefinition.js';
 import * as text from '../../os/file/mime/text.js';
 import * as mimeZip from '../../os/file/mime/zip.js';
 import {PROJECTION} from '../../os/map/map.js';
-
+import KML from '../../os/ol/format/KML.js';
 import AsyncZipParser from '../../os/parse/asynczipparser.js';
 import * as osXml from '../../os/xml.js';
 
@@ -12,10 +14,6 @@ const dom = goog.require('goog.dom');
 const googDomXml = goog.require('goog.dom.xml');
 const GoogFileReader = goog.require('goog.fs.FileReader');
 const log = goog.require('goog.log');
-const KML = goog.require('ol.format.KML');
-const xml = goog.require('ol.xml');
-
-const {default: IParser} = goog.requireType('os.parse.IParser');
 
 
 /**
@@ -70,7 +68,7 @@ class KMLAreaParser extends AsyncZipParser {
   setSource(source) {
     this.cleanup();
 
-    if (xml.isDocument(source)) {
+    if (isDocument(source)) {
       this.document_ = /** @type {Document} */ (source);
     } else if (typeof source === 'string') {
       this.document_ = googDomXml.loadXml(source);

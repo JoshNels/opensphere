@@ -8,9 +8,6 @@ import GeoServer from './geoserver.js';
 
 const Promise = goog.require('goog.Promise');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  */
 const capTest_ = xml.createDetect(/^(W((MT_)?M|F)S_)?Capabilities$/i, null);

@@ -6,9 +6,6 @@ import * as dispatcher from '../../os/dispatcher.js';
 import {ROOT} from '../../os/os.js';
 import Module from '../../os/ui/module.js';
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * @return {angular.Directive}
  */

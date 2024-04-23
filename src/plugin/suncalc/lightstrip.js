@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.suncalc.LightStripUI');
 
+import {toLonLat} from 'ol/src/proj.js';
 import settings from '../../os/config/settings.js';
 import * as dispatcher from '../../os/dispatcher.js';
 import * as osMap from '../../os/map/map.js';
@@ -12,9 +13,6 @@ import {SettingKey} from './suncalc.js';
 const ConditionalDelay = goog.require('goog.async.ConditionalDelay');
 
 const dispose = goog.require('goog.dispose');
-const olProj = goog.require('ol.proj');
-
-const {default: TimelineScaleOptions} = goog.requireType('os.ui.timeline.TimelineScaleOptions');
 
 
 /**
@@ -236,7 +234,7 @@ export class Controller {
       return false;
     }
 
-    coord = olProj.toLonLat(coord, osMap.PROJECTION);
+    coord = toLonLat(coord, osMap.PROJECTION);
     var start = this.options_.start;
     var end = this.options_.end;
     var diff = end - start;

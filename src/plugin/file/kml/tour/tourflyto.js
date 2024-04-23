@@ -1,13 +1,12 @@
 goog.declareModuleId('plugin.file.kml.tour.FlyTo');
 
+import {transform} from 'ol/src/proj.js';
 import FlightMode from '../../../../os/map/flightmode.js';
 import * as osMap from '../../../../os/map/map.js';
 import MapContainer from '../../../../os/mapcontainer.js';
 import * as osObject from '../../../../os/object/object.js';
 import * as osProj from '../../../../os/proj/proj.js';
 import Wait from './tourwait.js';
-
-const olProj = goog.require('ol.proj');
 
 
 /**
@@ -45,7 +44,7 @@ export default class FlyTo extends Wait {
 
       // coordinates are expected to be in the map projection
       if (options.center) {
-        options.center = olProj.transform(options.center, osProj.EPSG4326, osMap.PROJECTION);
+        options.center = transform(options.center, osProj.EPSG4326, osMap.PROJECTION);
       }
 
       // fly to the specified position

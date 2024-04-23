@@ -4,9 +4,6 @@ import * as osWindow from '../../../os/ui/window.js';
 import * as places from '../places.js';
 import {directiveTag as savePlacesUi} from './saveplaces.js';
 
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-
-
 /**
  * Launch a dialog to save places from a source.
  *

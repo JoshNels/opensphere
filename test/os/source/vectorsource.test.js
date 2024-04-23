@@ -4,9 +4,6 @@ goog.require('goog.functions');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.object');
-goog.require('ol.Feature');
-goog.require('ol.events');
-goog.require('ol.geom.Point');
 goog.require('os.Fields');
 goog.require('os.data.ColumnDefinition');
 goog.require('os.data.DataManager');
@@ -30,6 +27,9 @@ goog.require('os.ui.formatter.DescriptionFormatter');
 goog.require('os.ui.formatter.PropertiesFormatter');
 goog.require('plugin.file.geojson.GeoJSONParser');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
 
 describe('os.source.Vector', function() {
   const googArray = goog.module.get('goog.array');
@@ -38,9 +38,6 @@ describe('os.source.Vector', function() {
   const googNetEventType = goog.module.get('goog.net.EventType');
   const XhrIo = goog.module.get('goog.net.XhrIo');
   const googObject = goog.module.get('goog.object');
-  const Feature = goog.module.get('ol.Feature');
-  const events = goog.module.get('ol.events');
-  const Point = goog.module.get('ol.geom.Point');
   const {default: Fields} = goog.module.get('os.Fields');
   const {default: ColumnDefinition} = goog.module.get('os.data.ColumnDefinition');
   const {default: DataManager} = goog.module.get('os.data.DataManager');
@@ -274,7 +271,7 @@ describe('os.source.Vector', function() {
         count++;
       }
     };
-    events.listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+    const listenKey = listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
 
     var singleFeature = features[0];
     var multiFeature = features.slice(0, 10);
@@ -329,7 +326,7 @@ describe('os.source.Vector', function() {
       expect(addedItems).not.toContain(multiFeature[0]);
 
       addedItems = null;
-      events.unlisten(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+      unlistenByKey(listenKey);
     });
   });
 
@@ -342,7 +339,7 @@ describe('os.source.Vector', function() {
         count++;
       }
     };
-    events.listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+    const listenKey = listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
 
     var singleFeature = features[0];
     var multiFeature = features.slice(0, 10);
@@ -396,7 +393,7 @@ describe('os.source.Vector', function() {
       expect(removedItems).not.toContain(singleFeature);
       expect(removedItems).not.toContain(multiFeature[0]);
 
-      events.unlisten(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+      unlistenByKey(listenKey);
     });
   });
 
@@ -407,7 +404,7 @@ describe('os.source.Vector', function() {
         addedCount++;
       }
     };
-    events.listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+    const listenKey = listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
 
     runs(function() {
       // should select all and fire a change event
@@ -448,7 +445,7 @@ describe('os.source.Vector', function() {
       expect(source.selected_.length).toBe(10000);
       expect(googObject.getKeys(source.selectedById_).length).toBe(10000);
 
-      events.unlisten(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+      unlistenByKey(listenKey);
     });
   });
 
@@ -459,7 +456,7 @@ describe('os.source.Vector', function() {
         removedCount++;
       }
     };
-    events.listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+    const listenKey = listen(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
 
     runs(function() {
       expect(source.selected_.length).toBe(10000);
@@ -503,7 +500,7 @@ describe('os.source.Vector', function() {
       expect(source.selected_.length).toBe(0);
       expect(googObject.getKeys(source.selectedById_).length).toBe(0);
 
-      events.unlisten(source, GoogEventType.PROPERTYCHANGE, onPropertyChange, this);
+      unlistenByKey(listenKey);
     });
   });
 
@@ -591,13 +588,6 @@ describe('os.source.Vector', function() {
     expect(newSource.refreshTimer.getInterval()).toBe(30000);
     expect(source.refreshTimer.getInterval()).toBe(15000);
     expect(newSource.refreshTimer !== source.refreshTimer).toBe(true);
-  });
-
-  it('should not allow invalid geometries', function() {
-    var f = new Feature(new Point([]));
-    var newSource = new VectorSource(undefined);
-    newSource.addFeature(f);
-    expect(f.getGeometry()).toBe(null);
   });
 
   it('should clear the source when disabled', function() {

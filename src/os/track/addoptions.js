@@ -1,8 +1,5 @@
 goog.declareModuleId('os.track.AddOptions');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * @typedef {{
  *   coordinates: (Array<!ol.Coordinate>|undefined),

@@ -1,5 +1,16 @@
 goog.declareModuleId('plugin.file.kml.KMLParser');
 
+import Feature from 'ol/src/Feature.js';
+import {readBoolean, readDecimal, readString, readPositiveInteger, readBooleanString} from 'ol/src/format/xsd.js';
+import {inflateCoordinates} from 'ol/src/geom/flat/inflate.js';
+import GeometryLayout from 'ol/src/geom/GeometryLayout.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import {transformExtent} from 'ol/src/proj.js';
+import IconAnchorUnits from 'ol/src/style/IconAnchorUnits.js';
+import {getUid} from 'ol/src/util.js';
+import {isDocument, getAllTextContent, pushParseAndPop, makeObjectPropertySetter, makeStructureNS} from 'ol/src/xml.js';
 import AlertEventSeverity from '../../../os/alert/alerteventseverity.js';
 import AlertManager from '../../../os/alert/alertmanager.js';
 import * as annotation from '../../../os/annotation/annotation.js';
@@ -41,6 +52,7 @@ import KMLNetworkLinkNode from './ui/kmlnetworklinknode.js';
 import KMLNode from './ui/kmlnode.js';
 import KMLTourNode from './ui/kmltournode.js';
 
+
 const Uri = goog.require('goog.Uri');
 const asserts = goog.require('goog.asserts');
 const ConditionalDelay = goog.require('goog.async.ConditionalDelay');
@@ -52,23 +64,7 @@ const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
 const googObject = goog.require('goog.object');
 const googString = goog.require('goog.string');
-const ol = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const XSD = goog.require('ol.format.XSD');
-const GeometryLayout = goog.require('ol.geom.GeometryLayout');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const LineString = goog.require('ol.geom.LineString');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const inflate = goog.require('ol.geom.flat.inflate');
-const olProj = goog.require('ol.proj');
-const IconAnchorUnits = goog.require('ol.style.IconAnchorUnits');
-const olXml = goog.require('ol.xml');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const Logger = goog.requireType('goog.log.Logger');
-const {default: DynamicFeature} = goog.requireType('os.feature.DynamicFeature');
-const {default: IParser} = goog.requireType('os.parse.IParser');
-const {default: CreateOptions} = goog.requireType('os.track.CreateOptions');
 
 
 /**
@@ -350,10 +346,10 @@ export default class KMLParser extends AsyncZipParser {
   setSource(source) {
     this.cleanup();
 
-    if (olXml.isDocument(source)) {
-      this.document_ = /** @type {Document} */ (source);
-    } else if (typeof source === 'string') {
+    if (typeof source === 'string') {
       this.document_ = xml.loadXml(source);
+    } else if (isDocument(source)) {
+      this.document_ = /** @type {Document} */ (source);
     } else if (source instanceof ArrayBuffer) {
       if (mimeZip.isZip(source)) {
         this.clearAssets();
@@ -414,7 +410,7 @@ export default class KMLParser extends AsyncZipParser {
     var extStylesFound = false;
 
     for (var i = 0, n = styles.length; i < n; i++) {
-      var style = olXml.getAllTextContent(styles[i], true).trim();
+      var style = getAllTextContent(styles[i], true).trim();
       if (style) {
         // remove the fragment, if url is incorrectly formatted, kml is bad and this url should be skipped
         var url = style.replace(/#.*/, '');
@@ -904,7 +900,7 @@ export default class KMLParser extends AsyncZipParser {
     var n;
     for (n = node.firstElementChild; n; n = n.nextElementSibling) {
       if (n.localName == 'BalloonStyle') {
-        var properties = olXml.pushParseAndPop({}, kml.BALLOON_PROPERTY_PARSERS, n, []);
+        var properties = pushParseAndPop({}, kml.BALLOON_PROPERTY_PARSERS, n, []);
         if (properties) {
           var id = node.id || node.getAttribute('id');
           this.balloonStyleMap[id] = properties;
@@ -933,7 +929,7 @@ export default class KMLParser extends AsyncZipParser {
     var balloonEl = el.querySelector('BalloonStyle');
     if (balloonEl) {
       // the placemark has an internal balloon style
-      style = olXml.pushParseAndPop({}, kml.BALLOON_PROPERTY_PARSERS, balloonEl, []);
+      style = pushParseAndPop({}, kml.BALLOON_PROPERTY_PARSERS, balloonEl, []);
     } else {
       // look for a balloon style referenced by styleUrl
       var styleUrl = /** @type {string} */ (feature.get('styleUrl'));
@@ -1043,7 +1039,7 @@ export default class KMLParser extends AsyncZipParser {
    */
   readNetworkLink_(el) {
     var node = null;
-    var linkObj = olXml.pushParseAndPop({}, kml.OL_NETWORK_LINK_PARSERS(), el, []);
+    var linkObj = pushParseAndPop({}, kml.OL_NETWORK_LINK_PARSERS(), el, []);
     if (linkObj && linkObj['href']) {
       node = new KMLNetworkLinkNode(linkObj['href']);
 
@@ -1127,7 +1123,7 @@ export default class KMLParser extends AsyncZipParser {
     // ExtendedData is for) and anything more complicated isn't going to be handled by this
     // parser anyway.
     while (set) {
-      object = olXml.pushParseAndPop(object, set.parsers, el, []);
+      object = pushParseAndPop(object, set.parsers, el, []);
       set = set.parent ? this.parsersByPlacemarkTag_[set.parent] : null;
     }
 
@@ -1193,7 +1189,7 @@ export default class KMLParser extends AsyncZipParser {
         // if a multi track should be interpolated, join it into a single line. the track updates will handle the
         // interpolation between known positions.
         var flatCoordinates = geometry.getFlatCoordinates();
-        var coordinates = inflate.coordinates(flatCoordinates, 0, flatCoordinates.length, 4);
+        var coordinates = inflateCoordinates(flatCoordinates, 0, flatCoordinates.length, 4);
         geometry = new LineString(coordinates);
       }
 
@@ -1246,7 +1242,7 @@ export default class KMLParser extends AsyncZipParser {
     asserts.assert(el.nodeType == NodeType.ELEMENT, 'el.nodeType should be ELEMENT');
     asserts.assert(el.localName == 'GroundOverlay', 'localName should be GroundOverlay');
 
-    var obj = olXml.pushParseAndPop({}, kml.GROUND_OVERLAY_PARSERS, el, []);
+    var obj = pushParseAndPop({}, kml.GROUND_OVERLAY_PARSERS, el, []);
     if (obj) {
       if (obj['extent'] && obj['Icon'] && obj['Icon']['href']) {
         var icon = /** @type {string} */ (obj['Icon']['href']);
@@ -1254,7 +1250,7 @@ export default class KMLParser extends AsyncZipParser {
           icon = this.assetMap_[icon]; // handle images included in a kmz
         }
 
-        var extent = olProj.transformExtent(/** @type {ol.Extent} */ (obj['extent']), osProj.EPSG4326,
+        var extent = transformExtent(/** @type {ol.Extent} */ (obj['extent']), osProj.EPSG4326,
             osMap.PROJECTION);
 
         var feature = new Feature();
@@ -1302,7 +1298,7 @@ export default class KMLParser extends AsyncZipParser {
     asserts.assert(el.nodeType == NodeType.ELEMENT, 'el.nodeType should be ELEMENT');
     asserts.assert(el.localName == 'ScreenOverlay', 'localName should be ScreenOverlay');
 
-    var obj = olXml.pushParseAndPop({}, kml.SCREEN_OVERLAY_PARSERS, el, []);
+    var obj = pushParseAndPop({}, kml.SCREEN_OVERLAY_PARSERS, el, []);
     if (obj && obj['name'] && obj['Icon'] && obj['Icon']['href']) {
       var name = /** @type {string} */ (obj['name']);
 
@@ -1628,27 +1624,27 @@ export default class KMLParser extends AsyncZipParser {
 
         switch (type) {
           case 'bool':
-            reader = XSD.readBoolean;
+            reader = readBoolean;
             break;
           case 'int':
           case 'short':
           case 'float':
           case 'double':
-            reader = XSD.readDecimal;
+            reader = readDecimal;
             break;
           case 'uint':
           case 'ushort':
-            reader = XSD.readNonNegativeInteger;
+            reader = readPositiveInteger;
             break;
           default:
             // all other types are strings
-            reader = XSD.readString;
+            reader = readString;
             break;
         }
 
         var field = fields[j].name || fields[j].getAttribute('name');
         if (field && reader) {
-          parsers[field] = olXml.makeObjectPropertySetter(reader);
+          parsers[field] = makeObjectPropertySetter(reader);
           fieldCount++;
         }
       }
@@ -1656,7 +1652,7 @@ export default class KMLParser extends AsyncZipParser {
       if (fieldCount) {
         this.parsersByPlacemarkTag_[name] = {
           parent: /** @type {string} */ (schemas[i].getAttribute('parent')),
-          parsers: olXml.makeStructureNS(kml.OL_NAMESPACE_URIS(), parsers)
+          parsers: makeStructureNS(kml.OL_NAMESPACE_URIS(), parsers)
         };
       }
     }
@@ -1719,7 +1715,7 @@ export default class KMLParser extends AsyncZipParser {
     // files containing duplicate network links will create features with duplicate id's. this allows us to merge
     // features on refresh, while still creating an id that's unique from other network links (which will use a
     // different parser)
-    var baseId = ol.getUid(feature);
+    var baseId = getUid(feature);
     var id = this.id_ + '#' + baseId;
     feature.setId(id);
 
@@ -1751,7 +1747,7 @@ export default class KMLParser extends AsyncZipParser {
     asserts.assert(el.localName == 'name', 'localName should be name');
 
     // default to null and a default label will be created later
-    node.setLabel(olXml.getAllTextContent(el, true).trim() || null);
+    node.setLabel(getAllTextContent(el, true).trim() || null);
   }
 
   /**
@@ -1765,7 +1761,7 @@ export default class KMLParser extends AsyncZipParser {
     asserts.assert(el.localName == 'open', 'localName should be open');
 
     // default to collapsed, so only expand if the text is '1'.
-    node.collapsed = olXml.getAllTextContent(el, true).trim() !== '1';
+    node.collapsed = getAllTextContent(el, true).trim() !== '1';
   }
 
   /**
@@ -1778,11 +1774,11 @@ export default class KMLParser extends AsyncZipParser {
   static setNodeVisibility_(node, el) {
     asserts.assert(el.localName == 'visibility', 'localName should be visibility');
 
-    var content = olXml.getAllTextContent(el, true).trim();
+    var content = getAllTextContent(el, true).trim();
     if (content) {
       // this only handles turning the node off so we can honor our node defaults. this is specifically for network links,
       // which we always default to being turned off.
-      var visibility = XSD.readBooleanString(content);
+      var visibility = readBooleanString(content);
       if (!visibility) {
         node.setState(TriState.OFF);
       }

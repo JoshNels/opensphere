@@ -2,6 +2,7 @@ goog.declareModuleId('plugin.vectortools.MergeUI');
 
 import '../../os/ui/util/validationmessage.js';
 import './mappingcounter.js';
+import {remove} from 'ol/src/array.js';
 import CommandProcessor from '../../os/command/commandprocessor.js';
 import DataManager from '../../os/data/datamanager.js';
 import SourceManager from '../../os/data/sourcemanager.js';
@@ -15,7 +16,6 @@ import * as osWindow from '../../os/ui/window.js';
 import WindowEventType from '../../os/ui/windoweventtype.js';
 import MergeLayer from './mergelayercmd.js';
 
-const olArray = goog.require('ol.array');
 
 
 /**
@@ -113,7 +113,7 @@ export class Controller extends SourceManager {
   removeSource(source) {
     super.removeSource(source);
 
-    olArray.remove(this.sourceIds_, source.getId());
+    remove(this.sourceIds_, source.getId());
     this.onUpdateDelay();
   }
 

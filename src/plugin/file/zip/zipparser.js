@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.file.zip.ZIPParser');
 
+import {getUid} from 'ol/src/util.js';
 import EventType from '../../../os/events/eventtype.js';
 import OSFile from '../../../os/file/file.js';
 import * as text from '../../../os/file/mime/text.js';
@@ -11,12 +12,6 @@ const googEvents = goog.require('goog.events');
 
 const GoogEvent = goog.require('goog.events.Event');
 const log = goog.require('goog.log');
-const ol = goog.require('ol');
-
-const Logger = goog.requireType('goog.log.Logger');
-const Feature = goog.requireType('ol.Feature');
-const {default: FileWrapper} = goog.requireType('os.file.FileWrapper');
-const {default: ZIPParserConfig} = goog.requireType('plugin.file.zip.ZIPParserConfig');
 
 
 /**
@@ -116,7 +111,7 @@ export default class ZIPParser extends AsyncZipParser {
     var file = null;
 
     if (file) {
-      file.setId(String(ol.getUid(file)));
+      file.setId(String(getUid(file)));
     }
 
     if (!this.hasNext()) {
@@ -353,7 +348,7 @@ export default class ZIPParser extends AsyncZipParser {
       if (file) {
         // turn this into a better object for the UI
         return /** @type {FileWrapper} */ ({
-          id: ol.getUid(file),
+          id: getUid(file),
           label: entry.filename,
           valid: true,
           enabled: true,

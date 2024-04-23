@@ -12,9 +12,6 @@ import * as places from '../places.js';
 import PlacesManager from '../placesmanager.js';
 import * as QuickAddPlacesUI from './quickaddplaces.js';
 
-const {PlacemarkOptions} = goog.requireType('plugin.file.kml.ui');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The places button directive

@@ -1,5 +1,8 @@
 goog.declareModuleId('os.proj.switch');
 
+import Tile from 'ol/src/layer/Tile.js';
+import {equivalent, get} from 'ol/src/proj.js';
+
 import AbstractCommandSet from '../command/abstractcommandset.js';
 import LayerAdd from '../command/layeraddcmd.js';
 import ActivateDescriptor from '../data/activatedescriptorcmd.js';
@@ -8,9 +11,6 @@ import * as osMap from '../map/map.js';
 import {isRasterReprojectionEnabled} from './reprojection.js';
 import ReprojectionWarning from './reprojectionwarning.js';
 import SwitchProjection from './switchprojection.js';
-
-const Tile = goog.require('ol.layer.Tile');
-const olProj = goog.require('ol.proj');
 
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 const {default: ILayer} = goog.requireType('os.layer.ILayer');
@@ -27,7 +27,7 @@ export const checkLayer = function(layer) {
     var p1 = source.getProjection();
     var p2 = osMap.PROJECTION;
 
-    if (layer instanceof Tile && p1 && p2 && !olProj.equivalent(p1, p2)) {
+    if (layer instanceof Tile && p1 && p2 && !equivalent(p1, p2)) {
       if (isRasterReprojectionEnabled()) {
         ReprojectionWarning.getInstance().addTitle(/** @type {ILayer} */ (layer).getTitle());
       } else {
@@ -99,9 +99,9 @@ export const checkCommand = function(command) {
         var p1 = osMap.PROJECTION;
 
         for (i = 0, n = projections.length; i < n; i++) {
-          var p2 = olProj.get(projections[i]);
+          var p2 = get(projections[i]);
 
-          if (p2 && (isRasterReprojectionEnabled() || olProj.equivalent(p1, p2))) {
+          if (p2 && (isRasterReprojectionEnabled() || equivalent(p1, p2))) {
             retVal = true;
             return;
           }

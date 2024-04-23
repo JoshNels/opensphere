@@ -1,8 +1,6 @@
 goog.declareModuleId('plugin.ogc.query.OGCTemporalFormatter');
 
 import * as time from '../../../os/time/time.js';
-const {default: ITemporalFormatter} = goog.requireType('os.query.ITemporalFormatter');
-
 
 /**
  * @implements {ITemporalFormatter}

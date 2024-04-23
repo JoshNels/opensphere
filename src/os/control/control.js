@@ -1,5 +1,7 @@
 goog.declareModuleId('os.control');
 
+import Collection from 'ol/src/Collection.js';
+
 import MousePosition from '../ol/control/mousepositioncontrol.js';
 import * as osProj from '../proj/proj.js';
 import AlertPopup from './alertpopup.js';
@@ -10,7 +12,6 @@ import ScaleLine from './scaleline.js';
 import Zoom from './zoomcontrol.js';
 import ZoomLevel from './zoomlevel.js';
 
-const Collection = goog.require('ol.Collection');
 
 
 /**
@@ -23,7 +24,7 @@ export const getControls = function() {
     className: 'ol-scale-line',
     target: document.getElementById('scale-line')
   });
-  var el = scaleLine.getElement();
+  var el = scaleLine.element;
   el.className += ' position-relative';
   controls.push(scaleLine);
 
@@ -33,7 +34,7 @@ export const getControls = function() {
       projection: osProj.EPSG4326,
       className: 'ol-mouse-position',
       target: mousePositionEle,
-      undefinedHTML: '&nbsp;',
+      placeholder: '&nbsp;',
       useSettings: true
     });
     el = mousePositionControl.getElement();

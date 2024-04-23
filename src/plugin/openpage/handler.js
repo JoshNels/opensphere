@@ -7,8 +7,6 @@ import {TYPE} from './openpage.js';
 
 const googString = goog.require('goog.string');
 
-const {default: IMessageHandler} = goog.requireType('os.xt.IMessageHandler');
-
 
 /**
  * @implements {IMessageHandler}

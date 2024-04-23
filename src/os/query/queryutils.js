@@ -1,14 +1,15 @@
 goog.declareModuleId('os.query.utils');
 
+import {getArea} from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import {transformExtent} from 'ol/src/proj.js';
+
 import * as osMap from '../map/map.js';
 import {EPSG4326} from '../proj/proj.js';
 
 const {nearlyEquals} = goog.require('goog.math');
-const Feature = goog.require('ol.Feature');
-const {getArea} = goog.require('ol.extent');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Polygon = goog.require('ol.geom.Polygon');
-const {transformExtent} = goog.require('ol.proj');
 
 
 /**
@@ -64,7 +65,7 @@ export const isWorldQuery = function(geometry) {
   if (worldArea_ && geometry && geometry.getType() === GeometryType.POLYGON) {
     // transform the world extent to the current projection to compute the area
     var geomArea = /** @type {ol.geom.Polygon} */ (geometry).getArea();
-    return nearlyEquals(geomArea / worldArea_, 1, 1E-4) || geomArea == 0;
+    return nearlyEquals(geomArea / worldArea_, 1, 1E-2) || geomArea == 0;
   }
 
   return false;

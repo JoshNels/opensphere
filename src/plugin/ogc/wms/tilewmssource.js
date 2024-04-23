@@ -1,14 +1,11 @@
 goog.declareModuleId('plugin.ogc.wms.TileWMSSource');
 
+import TileWMS from 'ol/src/source/TileWMS.js';
+
 import PropertyChangeEvent from '../../../os/events/propertychangeevent.js';
 import osImplements from '../../../os/implements.js';
 import IStyle from '../../../os/source/istylesource.js';
 import PropertyChange from '../../../os/source/propertychange.js';
-
-const TileWMS = goog.require('ol.source.TileWMS');
-
-const {default: ILoadingSource} = goog.requireType('os.ol.source.ILoadingSource');
-
 
 /**
  * Layer source for tile data from WMS servers. This source fires a property change event when its
@@ -39,6 +36,22 @@ export default class TileWMSSource extends TileWMS {
     }
 
     return style;
+  }
+
+  /**
+   * Gets the extent.
+   * @return {*} The extent
+   */
+  getExtent() {
+    return this.getProjection().getExtent();
+  }
+
+  /**
+   * The extent.
+   * @param {*} extent The extent to set.
+   */
+  setExtent(extent) {
+    this.getProjection().setExtent(extent);
   }
 
   /**

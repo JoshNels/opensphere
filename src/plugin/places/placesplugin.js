@@ -17,8 +17,6 @@ import * as menu from './placesmenu.js';
 
 const log = goog.require('goog.log');
 
-const Logger = goog.requireType('goog.log.Logger');
-
 
 /**
  * Plugin that allows the user to manage saved features as a KML tree.

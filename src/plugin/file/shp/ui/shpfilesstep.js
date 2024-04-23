@@ -16,9 +16,6 @@ const googEvents = goog.require('goog.events');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-const {default: SHPParserConfig} = goog.requireType('plugin.file.shp.SHPParserConfig');
-
 
 /**
  * SHP import file selection step

@@ -1,5 +1,14 @@
 goog.declareModuleId('os.ui.ol.interaction.AbstractDraw');
 
+import {always, shiftKeyOnly} from 'ol/src/events/condition.js';
+import Event from 'ol/src/events/Event.js';
+import Pointer from 'ol/src/interaction/Pointer.js';
+import Fill from 'ol/src/style/Fill.js';
+import Stroke from 'ol/src/style/Stroke.js';
+import Style from 'ol/src/style/Style.js';
+import Text from 'ol/src/style/Text.js';
+import ViewHint from 'ol/src/ViewHint.js';
+
 import * as dispatcher from '../../../dispatcher.js';
 import DrawEvent from '../../draw/drawevent.js';
 import DrawEventType from '../../draw/draweventtype.js';
@@ -10,18 +19,8 @@ const KeyCodes = goog.require('goog.events.KeyCodes');
 const KeyEvent = goog.require('goog.events.KeyEvent');
 const KeyHandler = goog.require('goog.events.KeyHandler');
 const log = goog.require('goog.log');
-const ViewHint = goog.require('ol.ViewHint');
-const Event = goog.require('ol.events.Event');
-const {always, shiftKeyOnly} = goog.require('ol.events.condition');
-const Pointer = goog.require('ol.interaction.Pointer');
-const Fill = goog.require('ol.style.Fill');
-const Stroke = goog.require('ol.style.Stroke');
-const Style = goog.require('ol.style.Style');
-const Text = goog.require('ol.style.Text');
 
 const Logger = goog.requireType('goog.log.Logger');
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const Geometry = goog.requireType('ol.geom.Geometry');
 
 /**
  * This drawing flag explains whether or not another interaction

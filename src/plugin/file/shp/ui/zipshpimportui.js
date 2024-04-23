@@ -16,9 +16,6 @@ import SHPParserConfig from '../shpparserconfig.js';
 import SHPProvider from '../shpprovider.js';
 import {directiveTag as shpImportUi} from './shpimport.js';
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  * @extends {FileImportUI.<SHPParserConfig>}
  */

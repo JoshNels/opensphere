@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.file.kml.KMLTreeExporter');
 
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import Point from 'ol/src/geom/Point.js';
+import {getUid} from 'ol/src/util.js';
 import RecordField from '../../../os/data/recordfield.js';
 import DynamicFeature from '../../../os/feature/dynamicfeature.js';
 import * as osFeature from '../../../os/feature/feature.js';
@@ -13,16 +16,11 @@ import * as osUiFileKml from '../../../os/ui/file/kml/kml.js';
 import * as xml from '../../../os/xml.js';
 import * as pluginFileKmlExport from './kmlexport.js';
 
+
 const log = goog.require('goog.log');
 const googObject = goog.require('goog.object');
 const googString = goog.require('goog.string');
-const ol = goog.require('ol');
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const Point = goog.require('ol.geom.Point');
 
-const Geometry = goog.requireType('ol.geom.Geometry');
-const {default: ITime} = goog.requireType('os.time.ITime');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
 
 
 /**
@@ -201,7 +199,7 @@ export default class KMLTreeExporter extends AbstractKMLExporter {
    * @inheritDoc
    */
   getId(item) {
-    return String(ol.getUid(item));
+    return String(getUid(item));
   }
 
   /**

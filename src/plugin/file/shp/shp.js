@@ -1,9 +1,7 @@
 goog.declareModuleId('plugin.file.shp');
 
-const GeometryLayout = goog.require('ol.geom.GeometryLayout');
-const GeometryType = goog.require('ol.geom.GeometryType');
-
-const SimpleGeometry = goog.requireType('ol.geom.SimpleGeometry');
+import GeometryLayout from 'ol/src/geom/GeometryLayout.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
 
 /**
  * SHP shape types.

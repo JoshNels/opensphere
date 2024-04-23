@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.suncalc.SunCalcUI');
 
+import {toLonLat} from 'ol/src/proj.js';
 import settings from '../../os/config/settings.js';
 import * as geo from '../../os/geo/geo.js';
 import * as osMap from '../../os/map/map.js';
@@ -15,7 +16,6 @@ import {SettingKey} from './suncalc.js';
 
 const googArray = goog.require('goog.array');
 const color = goog.require('goog.color');
-const olProj = goog.require('ol.proj');
 
 
 /**
@@ -115,7 +115,7 @@ export class Controller {
     var coord = this.coord_ || MapContainer.getInstance().getMap().getView().getCenter();
 
     if (coord) {
-      coord = olProj.toLonLat(coord, osMap.PROJECTION);
+      coord = toLonLat(coord, osMap.PROJECTION);
 
       this.scope_['coord'] = coord;
       var sets = [];

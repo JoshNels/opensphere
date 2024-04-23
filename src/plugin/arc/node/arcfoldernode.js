@@ -7,10 +7,6 @@ import * as arc from '../arc.js';
 const dispose = goog.require('goog.dispose');
 const EventType = goog.require('goog.net.EventType');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const {default: ArcServer} = goog.requireType('plugin.arc.ArcServer');
-const {default: IArcLoader} = goog.requireType('plugin.arc.IArcLoader');
-
 
 /**
  * Loads the capabilities from an Arc server and constructs the tree.

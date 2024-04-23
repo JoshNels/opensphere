@@ -1,24 +1,21 @@
 goog.declareModuleId('plugin.cesium.ImageryProvider');
 
+import EventType from 'ol/src/events/EventType.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import ImageTile from 'ol/src/ImageTile.js';
+import VectorTile from 'ol/src/source/VectorTile.js';
+import {DEFAULT_MAX_ZOOM} from 'ol/src/tilegrid/common.js';
+import {createXYZ} from 'ol/src/tilegrid.js';
+import TileState from 'ol/src/TileState.js';
+import VectorImageTile from 'ol/src/VectorRenderTile.js';
+import OLImageryProvider from 'ol-cesium/src/olcs/core/OLImageryProvider.js';
+import olcsUtil from 'ol-cesium/src/olcs/util.js';
+
+
 import '../../os/mixin/vectorimagetilemixin.js';
 import TileGridTilingScheme from './tilegridtilingscheme.js';
 
-const ol = goog.require('ol');
-const ImageTile = goog.require('ol.ImageTile');
-const TileState = goog.require('ol.TileState');
-const VectorImageTile = goog.require('ol.VectorImageTile');
-const events = goog.require('ol.events');
-const VectorTile = goog.require('ol.source.VectorTile');
-const olTilegrid = goog.require('ol.tilegrid');
-const OLImageryProvider = goog.require('olcs.core.OLImageryProvider');
-const {getSourceProjection} = goog.require('olcs.util');
 const IDisposable = goog.requireType('goog.disposable.IDisposable');
-
-const Layer = goog.requireType('ol.layer.Layer');
-const Projection = goog.requireType('ol.proj.Projection');
-const TileSource = goog.requireType('ol.source.Tile');
-const TileImageSource = goog.requireType('ol.source.TileImage');
-
 
 /**
  * @implements {IDisposable}
@@ -33,7 +30,7 @@ export default class ImageryProvider extends OLImageryProvider {
    * @param {Projection=} opt_fallbackProj Projection to assume if the projection of the source is not defined.
    */
   constructor(source, layer, opt_fallbackProj) {
-    super(/** @type {!TileImageSource} */ (source), opt_fallbackProj);
+    super(layer, source, opt_fallbackProj);
 
     /**
      * @type {boolean}
@@ -68,16 +65,15 @@ export default class ImageryProvider extends OLImageryProvider {
    */
   handleSourceChanged_() {
     if (!this.ready_ && this.source_.getState() == 'ready') {
-      this.projection_ = getSourceProjection(this.source_) || this.fallbackProj_;
-      this.credit_ = OLImageryProvider.createCreditForSource(this.source_) || null;
+      this.projection_ = olcsUtil.getSourceProjection(this.source_) || this.fallbackProj_;
 
       if (this.source_ instanceof VectorTile) {
         // For vector tiles, create a copy of the tile grid with min/max zoom covering all levels. This ensures Cesium
         // will render tiles at all levels.
         const sourceTileGrid = this.source_.getTileGrid();
-        const tileGrid = olTilegrid.createXYZ({
+        const tileGrid = createXYZ({
           extent: sourceTileGrid.getExtent(),
-          maxZoom: ol.DEFAULT_MAX_ZOOM,
+          maxZoom: DEFAULT_MAX_ZOOM,
           minZoom: 0,
           tileSize: sourceTileGrid.getTileSize()
         });
@@ -99,7 +95,7 @@ export default class ImageryProvider extends OLImageryProvider {
    */
   requestImage(x, y, level) {
     var z_ = level;
-    var y_ = -y - 1;
+    var y_ = y;
 
     var deferred = Cesium.when.defer();
 
@@ -130,21 +126,21 @@ export default class ImageryProvider extends OLImageryProvider {
       tile.load();
 
       var layer = this.layer_;
-      var unlisten = events.listen(tile, events.EventType.CHANGE, function() {
+      var unlisten = listen(tile, EventType.CHANGE, function() {
         var state = tile.getState();
         if (state === TileState.EMPTY) {
           deferred.resolve(this.emptyCanvas_);
-          events.unlistenByKey(unlisten);
+          unlistenByKey(unlisten);
         } else if (state === TileState.LOADED) {
           if (tile instanceof ImageTile) {
             deferred.resolve(tile.getImage());
           } else if (tile instanceof VectorImageTile) {
             deferred.resolve(tile.getDrawnImage(layer));
           }
-          events.unlistenByKey(unlisten);
+          unlistenByKey(unlisten);
         } else if (state === TileState.ERROR) {
           deferred.resolve(this.emptyCanvas_);
-          events.unlistenByKey(unlisten);
+          unlistenByKey(unlisten);
         }
       });
     }
@@ -162,7 +158,7 @@ export default class ImageryProvider extends OLImageryProvider {
       const tg = this.source_.getTileGrid();
       return tg ? tg.getMaxZoom() : 18;
     }
-    return ol.DEFAULT_MAX_ZOOM;
+    return DEFAULT_MAX_ZOOM;
   }
 
   /**
@@ -197,5 +193,24 @@ export default class ImageryProvider extends OLImageryProvider {
       return Array.isArray(tileSize) ? tileSize[1] : tileSize;
     }
     return 256;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getTileCredits(x, y, level) {
+    let text = '';
+    let attributions = this.source_.getAttributions();
+    if (typeof attributions === 'function') {
+      attributions = attributions();
+    }
+    if (attributions) {
+      attributions.forEach((htmlOrAttr) => {
+        const html = typeof htmlOrAttr === 'string' ? htmlOrAttr : htmlOrAttr.getHTML();
+        text += html;
+      });
+    }
+
+    return text.length > 0 ? new Cesium.Credit(text, true) : null;
   }
 }

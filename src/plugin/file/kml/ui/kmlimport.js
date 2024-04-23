@@ -7,8 +7,6 @@ import Module from '../../../../os/ui/module.js';
 import KMLDescriptor from '../kmldescriptor.js';
 import KMLProvider from '../kmlprovider.js';
 
-const {default: FileParserConfig} = goog.requireType('os.parse.FileParserConfig');
-
 
 /**
  * The KML import directive

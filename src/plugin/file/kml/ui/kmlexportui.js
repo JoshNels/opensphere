@@ -6,8 +6,6 @@ import {ROOT} from '../../../../os/os.js';
 import * as kml from '../../../../os/ui/file/kml/kml.js';
 import Module from '../../../../os/ui/module.js';
 
-const {default: AbstractKMLExporter} = goog.requireType('os.ui.file.kml.AbstractKMLExporter');
-
 
 /**
  * The kmlexport directive

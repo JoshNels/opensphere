@@ -2,6 +2,7 @@ goog.declareModuleId('plugin.vectortools.JoinUI');
 
 import '../../os/ui/util/validationmessage.js';
 import './mappingcounter.js';
+import {remove} from 'ol/src/array.js';
 import CommandProcessor from '../../os/command/commandprocessor.js';
 import DataManager from '../../os/data/datamanager.js';
 import SourceManager from '../../os/data/sourcemanager.js';
@@ -16,9 +17,6 @@ import WindowEventType from '../../os/ui/windoweventtype.js';
 import JoinLayer from './joinlayercmd.js';
 
 const googString = goog.require('goog.string');
-const olArray = goog.require('ol.array');
-
-const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
 
 
 /**
@@ -142,7 +140,7 @@ export class Controller extends SourceManager {
    */
   removeSource(source) {
     super.removeSource(source);
-    olArray.remove(this.sourceIds_, source.getId());
+    remove(this.sourceIds_, source.getId());
     this.onUpdateDelay();
   }
 

@@ -15,8 +15,6 @@ import * as XYZProviderHelpUI from './xyzproviderhelp.js';
 
 const {getRandomString, numerateCompare} = goog.require('goog.string');
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
 
 /**
  * The XYZ provider import directive

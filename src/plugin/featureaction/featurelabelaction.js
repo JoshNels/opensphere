@@ -16,9 +16,6 @@ import * as osXml from '../../os/xml.js';
 import {StyleType as FAStyleType} from './featureaction.js';
 import {directiveTag as configUi, setDefaultConfig} from './ui/featurelabelactionconfig.js';
 
-const {default: ImportActionCallbackConfig} = goog.requireType('os.im.action.ImportActionCallbackConfig');
-
-
 /**
  * Tag names used for XML persistence.
  * @enum {string}

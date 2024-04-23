@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.file.geojson.GeoJSONParser');
 
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+import {getUid} from 'ol/src/util.js';
 import ColumnDefinition from '../../../os/data/columndefinition.js';
 import * as osFeature from '../../../os/feature/feature.js';
 import * as text from '../../../os/file/mime/text.js';
@@ -8,10 +10,6 @@ import * as osMap from '../../../os/map/map.js';
 
 const Disposable = goog.require('goog.Disposable');
 const googObject = goog.require('goog.object');
-const ol = goog.require('ol');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
-const {default: IParser} = goog.requireType('os.parse.IParser');
 
 
 /**
@@ -179,7 +177,7 @@ export default class GeoJSONParser extends Disposable {
       if (Array.isArray(featureSet)) {
         for (var i = 0, n = featureSet.length; i < n; i++) {
           var feature = featureSet[i];
-          feature.setId(String(ol.getUid(feature)));
+          feature.setId(String(getUid(feature)));
           features.push(feature);
         }
       }

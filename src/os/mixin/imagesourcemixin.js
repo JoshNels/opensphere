@@ -1,20 +1,17 @@
 goog.declareModuleId('os.mixin.ImageSource');
 
+import {remove} from 'ol/src/array.js';
+import ImageState from 'ol/src/ImageState.js';
+import ImageSource from 'ol/src/source/Image.js';
+import Source from 'ol/src/source/Source.js';
+
 import PropertyChangeEvent from '../events/propertychangeevent.js';
 import osImplements from '../implements.js';
 import ILoadingSource from '../ol/source/iloadingsource.js';
 
 const {insert} = goog.require('goog.array');
 const Delay = goog.require('goog.async.Delay');
-const ImageState = goog.require('ol.ImageState');
-const {remove} = goog.require('ol.array');
-const ImageSource = goog.require('ol.source.Image');
-const Source = goog.require('ol.source.Source');
 
-const OLImage = goog.requireType('ol.Image');
-const ImageBase = goog.requireType('ol.ImageBase');
-const Event = goog.requireType('ol.events.Event');
-const Projection = goog.requireType('ol.proj.Projection');
 const {TileFilterFn} = goog.requireType('os.tile');
 
 

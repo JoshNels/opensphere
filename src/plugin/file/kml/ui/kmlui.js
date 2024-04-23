@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.file.kml.ui');
 
+import {getUid} from 'ol/src/util.js';
 import EventType from '../../../../os/action/eventtype.js';
 import CommandProcessor from '../../../../os/command/commandprocessor.js';
 import SequenceCommand from '../../../../os/command/sequencecommand.js';
@@ -14,14 +15,6 @@ import KMLField from '../kmlfield.js';
 
 const GoogEvent = goog.require('goog.events.Event');
 const googString = goog.require('goog.string');
-const ol = goog.require('ol');
-
-const {default: KMLLayer} = goog.requireType('plugin.file.kml.KMLLayer');
-const {default: KMLSource} = goog.requireType('plugin.file.kml.KMLSource');
-const {default: KMLLayerNode} = goog.requireType('plugin.file.kml.ui.KMLLayerNode');
-
-
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
 
 
 /**
@@ -52,7 +45,7 @@ export let PlacemarkOptions;
  */
 export const createOrEditPlace = function(options) {
   var windowId = 'placemarkEdit';
-  windowId += options.feature ? ol.getUid(options.feature) : googString.getRandomString();
+  windowId += options.feature ? getUid(options.feature) : googString.getRandomString();
 
   var scopeOptions = {
     'options': options

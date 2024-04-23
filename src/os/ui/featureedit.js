@@ -1,5 +1,16 @@
 goog.declareModuleId('os.ui.FeatureEditUI');
 
+import {asArray} from 'ol/src/color.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {getCenter} from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Point from 'ol/src/geom/Point.js';
+import SimpleGeometry from 'ol/src/geom/SimpleGeometry.js';
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
+import {transform} from 'ol/src/proj.js';
+import {getUid} from 'ol/src/util.js';
+
 import './geo/position.js';
 import './geo/ringoptions.js';
 import './layer/labelcontrols.js';
@@ -61,21 +72,7 @@ const KeyEvent = goog.require('goog.events.KeyEvent');
 const KeyHandler = goog.require('goog.events.KeyHandler');
 const {toRadians} = goog.require('goog.math');
 const {isEmptyOrWhitespace} = goog.require('goog.string');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-const {asArray} = goog.require('ol.color');
-const events = goog.require('ol.events');
-const {getCenter} = goog.require('ol.extent');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Point = goog.require('ol.geom.Point');
-const SimpleGeometry = goog.require('ol.geom.SimpleGeometry');
-const {transform} = goog.require('ol.proj');
 
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const Geometry = goog.requireType('ol.geom.Geometry');
-const GeometryCollection = goog.requireType('ol.geom.GeometryCollection');
-const VectorLayer = goog.requireType('ol.layer.Vector');
 const {default: PayloadEvent} = goog.requireType('os.events.PayloadEvent');
 const {default: Method} = goog.requireType('os.interpolate.Method');
 const {LabelConfig} = goog.requireType('os.style.label');
@@ -648,7 +645,7 @@ export class Controller extends Disposable {
     this.keyHandler = null;
 
     if (this.mapListenKey) {
-      events.unlistenByKey(this.mapListenKey);
+      unlistenByKey(this.mapListenKey);
       this.mapListenKey = null;
     }
 
@@ -845,7 +842,7 @@ export class Controller extends Disposable {
         // listen for a mouse click on the map
         if (!this.mapListenKey) {
           var map = getMapContainer().getMap();
-          this.mapListenKey = events.listen(map, MapBrowserEventType.SINGLECLICK, this.onMapClick_, this);
+          this.mapListenKey = listen(map, MapBrowserEventType.SINGLECLICK, this.onMapClick_, this);
         }
 
         // hide all windows so it's easier to click a position
@@ -861,7 +858,7 @@ export class Controller extends Disposable {
         this.keyHandler = null;
 
         if (this.mapListenKey) {
-          events.unlistenByKey(this.mapListenKey);
+          unlistenByKey(this.mapListenKey);
           this.mapListenKey = null;
         }
 
@@ -1624,8 +1621,8 @@ export class Controller extends Disposable {
       this.interaction.setActive(true);
       this.interaction.showControls();
 
-      events.listen(this.interaction, ModifyEventType.COMPLETE, this.onInteractionComplete, this);
-      events.listen(this.interaction, ModifyEventType.CANCEL, this.onInteractionCancel, this);
+      listen(this.interaction, ModifyEventType.COMPLETE, this.onInteractionComplete, this);
+      listen(this.interaction, ModifyEventType.CANCEL, this.onInteractionCancel, this);
     }
   }
 

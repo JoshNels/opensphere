@@ -1,11 +1,12 @@
 goog.declareModuleId('os.style.FillReader');
 
+import {asString} from 'ol/src/color.js';
+import Fill from 'ol/src/style/Fill.js';
+
 import AbstractReader from './abstractreader.js';
 import * as osStyle from './style.js';
 
 const {hashCode} = goog.require('goog.string');
-const {asString} = goog.require('ol.color');
-const Fill = goog.require('ol.style.Fill');
 
 
 /**

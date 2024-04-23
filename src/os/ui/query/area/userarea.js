@@ -1,5 +1,13 @@
 goog.declareModuleId('os.ui.query.area.UserAreaUI');
 
+import {remove} from 'ol/src/array.js';
+import {getArea} from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Point from 'ol/src/geom/Point.js';
+import {fromExtent} from 'ol/src/geom/Polygon.js';
+import {getUid} from 'ol/src/util.js';
+
 import '../../geo/position.js';
 import '../../util/validationmessage.js';
 import Settings from '../../../config/settings.js';
@@ -31,16 +39,6 @@ const {getDocument} = goog.require('goog.dom');
 const KeyCodes = goog.require('goog.events.KeyCodes');
 const KeyEvent = goog.require('goog.events.KeyEvent');
 const KeyHandler = goog.require('goog.events.KeyHandler');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const {remove} = goog.require('ol.array');
-const {getArea} = goog.require('ol.extent');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
-
-const Geometry = goog.requireType('ol.geom.Geometry');
-
 
 /**
  * Supported area input types.
@@ -629,7 +627,7 @@ export class Controller extends Disposable {
           // create the shortest path geometry, but still normalize it in case it crosses the antimeridian
           // we only want a true rectangular polygon here as interpolating it adds unnecessary complexity
           maxX = Math.abs(maxX - minX) > 180 ? maxXNormalizedLeft : maxXNormalizedRight;
-          geometry = Polygon.fromExtent([minX, minY, maxX, maxY]);
+          geometry = fromExtent([minX, minY, maxX, maxY]);
         }
       }
     } else {

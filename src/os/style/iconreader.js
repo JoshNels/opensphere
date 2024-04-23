@@ -1,5 +1,11 @@
 goog.declareModuleId('os.style.IconReader');
 
+import {asString} from 'ol/src/color.js';
+import {toDegrees, toRadians} from 'ol/src/math.js';
+import IconStyle from 'ol/src/style/Icon.js';
+import IconAnchorUnits from 'ol/src/style/IconAnchorUnits.js';
+import IconOrigin from 'ol/src/style/IconOrigin.js';
+
 import CrossOrigin from '../net/crossorigin.js';
 import {getCrossOrigin} from '../net/net.js';
 import {GMAPS_SEARCH, getMirror, replaceExportableUri, replaceGoogleUri} from '../ui/file/kml/kml.js';
@@ -11,11 +17,6 @@ import {DEFAULT_ICON, DEFAULT_ICON_OPTIONS} from './styledefaults.js';
 const Uri = goog.require('goog.Uri');
 const {hashCode} = goog.require('goog.string');
 const {IE} = goog.require('goog.userAgent');
-const {asString} = goog.require('ol.color');
-const {toDegrees, toRadians} = goog.require('ol.math');
-const IconStyle = goog.require('ol.style.Icon');
-const IconAnchorUnits = goog.require('ol.style.IconAnchorUnits');
-const IconOrigin = goog.require('ol.style.IconOrigin');
 
 
 /**

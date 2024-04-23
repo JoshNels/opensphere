@@ -7,9 +7,6 @@ import {launchConfirm} from '../../os/ui/window/confirm.js';
 import {launchConfirmText} from '../../os/ui/window/confirmtext.js';
 import {EventType} from './electron.js';
 
-const {default: SettingsFileNode} = goog.requireType('plugin.electron.SettingsFileNode');
-
-
 /**
  * The settingsfilenodeui directive.
  * @return {angular.Directive}

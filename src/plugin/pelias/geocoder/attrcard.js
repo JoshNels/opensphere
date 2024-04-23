@@ -3,9 +3,6 @@ goog.declareModuleId('plugin.pelias.geocoder.AttrCardUI');
 import {ROOT} from '../../../os/os.js';
 import Module from '../../../os/ui/module.js';
 
-const {default: AttrResult} = goog.requireType('plugin.pelias.geocoder.AttrResult');
-
-
 /**
  * The geonames result card directive for displaying search results.
  *

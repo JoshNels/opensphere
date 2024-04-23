@@ -1,6 +1,11 @@
 goog.declareModuleId('plugin.file.kml.ui.KMLNode');
 
 import '../../../../os/ui/node/defaultlayernodeui.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {extend, createEmpty, isEmpty} from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import {fromExtent} from 'ol/src/geom/Polygon.js';
+import ImageStatic from 'ol/src/source/ImageStatic.js';
 import * as annotation from '../../../../os/annotation/annotation.js';
 import FeatureAnnotation from '../../../../os/annotation/featureannotation.js';
 import * as osColor from '../../../../os/color.js';
@@ -26,16 +31,6 @@ import {createOrEditPlace, setCreateFolderNodeFn, setCreatePlacemarkNodeFn, upda
 const dispose = goog.require('goog.dispose');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
-const Feature = goog.require('ol.Feature');
-const events = goog.require('ol.events');
-const olExtent = goog.require('ol.extent');
-const Polygon = goog.require('ol.geom.Polygon');
-const ImageStatic = goog.require('ol.source.ImageStatic');
-
-const Logger = goog.requireType('goog.log.Logger');
-const {default: ImageLayer} = goog.requireType('os.layer.Image');
-const {default: KMLSource} = goog.requireType('plugin.file.kml.KMLSource');
-const {PlacemarkOptions} = goog.requireType('plugin.file.kml.ui');
 
 
 /**
@@ -205,6 +200,8 @@ export default class KMLNode extends SlickTreeNode {
      * @type {?LayerNode}
      */
     this.layerNode = null;
+
+    this.featureListenKey = null;
   }
 
   /**
@@ -241,14 +238,14 @@ export default class KMLNode extends SlickTreeNode {
    */
   setFeature(feature) {
     if (this.feature_) {
-      events.unlisten(this.feature_, GoogEventType.PROPERTYCHANGE, this.onFeatureChange, this);
+      unlistenByKey(this.featureListenKey);
       this.clearAnnotations();
     }
 
     this.feature_ = feature;
 
     if (this.feature_) {
-      events.listen(this.feature_, GoogEventType.PROPERTYCHANGE, this.onFeatureChange, this);
+      this.featureListenKey = listen(this.feature_, GoogEventType.PROPERTYCHANGE, this.onFeatureChange, this);
     }
     this.loadAnnotation();
 
@@ -599,7 +596,7 @@ export default class KMLNode extends SlickTreeNode {
           var child = /** @type {IExtent} */ (children[i]);
           var ex = child.getExtent();
           if (extent && ex) {
-            olExtent.extend(extent, ex);
+            extend(extent, ex);
           } else if (!extent) {
             extent = ex;
           }
@@ -613,7 +610,7 @@ export default class KMLNode extends SlickTreeNode {
       }
     } else {
       var geoms = this.getFeatures().map(fn.mapFeatureToGeometry);
-      extent = geoms.reduce(fn.reduceExtentFromGeometries, olExtent.createEmpty());
+      extent = geoms.reduce(fn.reduceExtentFromGeometries, createEmpty());
     }
 
     return extent;
@@ -636,8 +633,8 @@ export default class KMLNode extends SlickTreeNode {
       return features;
     } else if (this.image_) {
       var extent = this.getExtent();
-      if (extent && !olExtent.isEmpty(extent)) {
-        return [new Feature(Polygon.fromExtent(extent))];
+      if (extent && !isEmpty(extent)) {
+        return [new Feature(fromExtent(extent))];
       }
     }
 

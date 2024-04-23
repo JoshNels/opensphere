@@ -1,13 +1,10 @@
 goog.declareModuleId('plugin.weather.WeatherPlugin');
 
+import {toLonLat} from 'ol/src/proj.js';
 import settings from '../../os/config/settings.js';
 import * as osMap from '../../os/map/map.js';
 import AbstractPlugin from '../../os/plugin/abstractplugin.js';
 import * as mapMenu from '../../os/ui/menu/mapmenu.js';
-
-const olProj = goog.require('ol.proj');
-
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
 
 
 /**
@@ -85,7 +82,7 @@ const onLookup = function(evt) {
  */
 const launchForecast = function(coord) {
   var url = getWeatherUrl();
-  coord = olProj.toLonLat(coord, osMap.PROJECTION);
+  coord = toLonLat(coord, osMap.PROJECTION);
 
   if (url) {
     url = url.replace('{lon}', coord[0].toString());

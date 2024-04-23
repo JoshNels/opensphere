@@ -3,6 +3,10 @@ goog.declareModuleId('plugin.im.action.feature.ui.EditFeatureActionUI');
 import '../../../os/ui/filter/advancedfilterbuilder.js';
 import '../../../os/ui/filter/basicfilterbuilder.js';
 import '../../../os/ui/util/validationmessage.js';
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+import ImageState from 'ol/src/ImageState.js';
+import {toContext} from 'ol/src/render.js';
 import * as dispatcher from '../../../os/dispatcher.js';
 import * as osObject from '../../../os/object/object.js';
 import * as canvas from '../../../os/ol/canvas.js';
@@ -18,15 +22,6 @@ import EditFilterActionCtrl from '../../../os/ui/im/action/editfilteraction.js';
 import EventType from '../../../os/ui/im/action/eventtype.js';
 import Module from '../../../os/ui/module.js';
 
-const Feature = goog.require('ol.Feature');
-const ImageState = goog.require('ol.ImageState');
-const Point = goog.require('ol.geom.Point');
-const render = goog.require('ol.render');
-
-const OLStyle = goog.requireType('ol.style.Style');
-const {default: LabelAction} = goog.requireType('plugin.im.action.feature.LabelAction');
-const {default: SoundAction} = goog.requireType('plugin.im.action.feature.SoundAction');
-const {default: StyleAction} = goog.requireType('plugin.im.action.feature.StyleAction');
 
 
 /**
@@ -152,7 +147,7 @@ export class Controller extends EditFilterActionCtrl {
       // clear any previous contents
       styleContext.clearRect(0, 0, this.styleCanvas.clientWidth, this.styleCanvas.clientHeight);
 
-      var styleRender = render.toContext(styleContext, {
+      var styleRender = toContext(styleContext, {
         // fix legend scaling on all displays - fixes Retina cropping issue
         pixelRatio: 1
       });
@@ -251,7 +246,7 @@ export class Controller extends EditFilterActionCtrl {
       // clear any previous contents
       labelContext.clearRect(0, 0, this.labelCanvas.clientWidth, this.labelCanvas.clientHeight);
 
-      var labelRender = render.toContext(labelContext, {
+      var labelRender = toContext(labelContext, {
         // fix legend scaling on all displays - fixes Retina cropping issue
         pixelRatio: 1
       });

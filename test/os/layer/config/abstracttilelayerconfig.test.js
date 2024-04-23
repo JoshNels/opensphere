@@ -1,4 +1,3 @@
-goog.require('ol.source.XYZ');
 goog.require('os.layer.MockLayer');
 goog.require('os.layer.config.AbstractTileLayerConfig');
 goog.require('os.layer.config.LayerConfigManager');
@@ -8,8 +7,10 @@ goog.require('os.net');
 goog.require('os.net.CrossOrigin');
 goog.require('os.proj');
 
+import XYZ from 'ol/src/source/XYZ.js';
+import MockTileLayerConfig from './tilelayerconfig.mock.js';
+
 describe('os.layer.config.AbstractTileLayerConfig', function() {
-  const XYZ = goog.module.get('ol.source.XYZ');
   const {default: AbstractTileLayerConfig} = goog.module.get('os.layer.config.AbstractTileLayerConfig');
   const {default: LayerConfigManager} = goog.module.get('os.layer.config.LayerConfigManager');
   const net = goog.module.get('os.net');
@@ -17,7 +18,6 @@ describe('os.layer.config.AbstractTileLayerConfig', function() {
   const osProj = goog.module.get('os.proj');
 
   const MockLayer = goog.module.get('os.layer.MockLayer');
-  const MockTileLayerConfig = goog.module.get('os.layer.config.MockTileLayerConfig');
 
   it('configures for an explicitType', function() {
     var lc = new AbstractTileLayerConfig();
@@ -100,7 +100,8 @@ describe('os.layer.config.AbstractTileLayerConfig', function() {
       return source;
     });
     var layer = lc.createLayer(testOptions);
-    expect(layer.getSource().getAttributions()[0].getHTML()).toBe('mock attribution');
-    expect(layer.getSource().getAttributions()[1].getHTML()).toBe('ex libris');
+    var attributionsGetter = layer.getSource().getAttributions();
+    expect(attributionsGetter()[0]).toBe('mock attribution');
+    expect(attributionsGetter()[1]).toBe('ex libris');
   });
 });

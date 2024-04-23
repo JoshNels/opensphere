@@ -1,5 +1,9 @@
 goog.declareModuleId('plugin.file.kml.KMLExporter');
 
+import {find} from 'ol/src/array.js';
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Point from 'ol/src/geom/Point.js';
 import DataManager from '../../../os/data/datamanager.js';
 import RecordField from '../../../os/data/recordfield.js';
 import DynamicFeature from '../../../os/feature/dynamicfeature.js';
@@ -20,13 +24,7 @@ import {directiveTag as kmlExportUi} from './ui/kmlexportui.js';
 const log = goog.require('goog.log');
 const googObject = goog.require('goog.object');
 const googString = goog.require('goog.string');
-const olArray = goog.require('ol.array');
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Point = goog.require('ol.geom.Point');
 
-const Feature = goog.requireType('ol.Feature');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
 
 
 /**
@@ -359,7 +357,7 @@ export default class KMLExporter extends AbstractKMLExporter {
             this.labelMap[sourceId] = cfg['labels'];
           } else if (itemStyle && Array.isArray(itemStyle)) {
             // Check the feature level
-            var labels = olArray.find(itemStyle, osStyle.isLabelConfig);
+            var labels = find(itemStyle, osStyle.isLabelConfig);
             if (labels) {
               this.labelMap[sourceId] = labels['labels'];
             }

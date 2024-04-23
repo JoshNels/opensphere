@@ -1,8 +1,8 @@
 goog.declareModuleId('os.geom.Ellipse');
 
-import * as geo from '../geo/geo.js';
+import Polygon from 'ol/src/geom/Polygon.js';
 
-const Polygon = goog.require('ol.geom.Polygon');
+import * as geo from '../geo/geo.js';
 
 
 /**
@@ -19,7 +19,7 @@ export default class Ellipse extends Polygon {
    * @param {number=} opt_orientation The ellipse orientation, in degrees from true north. 0 if not provided.
    */
   constructor(center, semiMajor, opt_semiMinor, opt_orientation) {
-    super(null);
+    super([]);
 
     /**
      * The center point of the ellipse.

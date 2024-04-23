@@ -4,10 +4,6 @@ import TimelineController from '../time/timelinecontroller.js';
 
 const Disposable = goog.require('goog.Disposable');
 
-const PluggableMap = goog.requireType('ol.PluggableMap');
-const View = goog.requireType('ol.View');
-
-
 /**
  * Abstract class to synchronize an OpenLayers layer to a WebGL renderer.
  *

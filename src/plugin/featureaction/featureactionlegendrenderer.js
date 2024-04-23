@@ -5,11 +5,6 @@ import ILegendRenderer from '../../os/legend/ilegendrenderer.js';
 import * as legend from '../../os/legend/legend.js';
 import FeatureActionManager from './featureactionmanager.js';
 
-const {default: FilterActionEntry} = goog.requireType('os.im.action.FilterActionEntry');
-const {default: IImportAction} = goog.requireType('os.im.action.IImportAction');
-const {default: VectorLayer} = goog.requireType('os.layer.Vector');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-
 
 /**
  * Add feature style actions to the legend.

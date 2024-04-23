@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.cesium.interaction.drawpolygon');
 
+import core from 'ol-cesium/src/olcs/core.js';
+
 import * as dispatcher from '../../../os/dispatcher.js';
 import DrawPolygon from '../../../os/interaction/drawpolygoninteraction.js';
 import * as osInterpolate from '../../../os/interpolate.js';
@@ -7,10 +9,6 @@ import Method from '../../../os/interpolatemethod.js';
 import MapEvent from '../../../os/map/mapevent.js';
 import MapContainer from '../../../os/mapcontainer.js';
 
-const core = goog.require('olcs.core');
-
-const LineString = goog.requireType('ol.geom.LineString');
-const {default: CesiumRenderer} = goog.requireType('plugin.cesium.CesiumRenderer');
 
 
 /**

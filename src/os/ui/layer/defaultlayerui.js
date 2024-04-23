@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.layer.DefaultLayerUI');
 
+import Layer from 'ol/src/layer/Layer.js';
+import UrlTile from 'ol/src/source/UrlTile.js';
+
 import LayerAutoRefresh from '../../command/layerautorefreshcmd.js';
 import LayerStyle from '../../command/layerstylecmd.js';
 import Settings from '../../config/settings.js';
@@ -12,9 +15,6 @@ import ControlType from '../controltype.js';
 import Module from '../module.js';
 import AbstractLayerUICtrl from './abstractlayerui.js';
 import {REFRESH_DURATIONS} from './layers.js';
-
-const Layer = goog.require('ol.layer.Layer');
-const UrlTile = goog.require('ol.source.UrlTile');
 
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 const {default: ILayer} = goog.requireType('os.layer.ILayer');

@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.cesium.sync.polygon');
 
+import olcsCore from 'ol-cesium/src/olcs/core.js';
+
 import * as geo from '../../../os/geo/geo.js';
 import {GeometryInstanceId} from '../cesium.js';
 import {createColoredPrimitive, createGeometryInstance} from '../primitive.js';
@@ -9,14 +11,6 @@ import {getDashPattern} from './linestring.js';
 import {getColor, getLineWidthFromStyle} from './style.js';
 
 const asserts = goog.require('goog.asserts');
-const olcsCore = goog.require('olcs.core');
-
-const Feature = goog.requireType('ol.Feature');
-const Geometry = goog.requireType('ol.geom.Geometry');
-const MultiPolygon = goog.requireType('ol.geom.MultiPolygon');
-const Polygon = goog.requireType('ol.geom.Polygon');
-const Style = goog.requireType('ol.style.Style');
-const {default: VectorContext} = goog.requireType('plugin.cesium.VectorContext');
 
 
 /**

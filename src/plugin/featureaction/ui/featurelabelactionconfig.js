@@ -2,6 +2,7 @@ goog.declareModuleId('plugin.im.action.feature.ui.LabelConfigUI');
 
 import '../../../os/ui/layer/labelcontrols.js';
 import '../../../os/ui/popover/popover.js';
+import {remove, find} from 'ol/src/array.js';
 import * as osColor from '../../../os/color.js';
 import ColumnDefinition from '../../../os/data/columndefinition.js';
 import DataManager from '../../../os/data/datamanager.js';
@@ -24,10 +25,6 @@ import ActionConfigCtrl from './featureactionconfig.js';
 
 const Delay = goog.require('goog.async.Delay');
 const dispose = goog.require('goog.dispose');
-const olArray = goog.require('ol.array');
-
-const {default: LabelAction} = goog.requireType('plugin.im.action.feature.LabelAction');
-
 
 /**
  * Directive to configure a feature label action.
@@ -234,7 +231,7 @@ export class Controller extends ActionConfigCtrl {
    * @export
    */
   updateCustomColumn() {
-    olArray.remove(this.scope['columns'], this.customColumn);
+    remove(this.scope['columns'], this.customColumn);
 
     var name = (this.labelConfig && this.labelConfig['customName'] || '').trim();
     if (name) {
@@ -246,7 +243,7 @@ export class Controller extends ActionConfigCtrl {
       // if a custom label is configured, make it available for selection in the column picker
       if (this['addCustomLabel'] && this.scope && this.scope['columns']) {
         var findFn = column.findByField.bind(undefined, 'field', name);
-        if (!olArray.find(this.scope['columns'], findFn)) {
+        if (!find(this.scope['columns'], findFn)) {
           this.scope['columns'].push(this.customColumn);
           this.scope['columns'].sort(column.nameCompare);
         }

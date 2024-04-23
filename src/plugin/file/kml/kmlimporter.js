@@ -9,10 +9,6 @@ import StyleField from '../../../os/style/stylefield.js';
 import StyleType from '../../../os/style/styletype.js';
 import SlickTreeNode from '../../../os/ui/slick/slicktreenode.js';
 
-const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
-const {default: KMLParser} = goog.requireType('plugin.file.kml.KMLParser');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Imports a set of KML items

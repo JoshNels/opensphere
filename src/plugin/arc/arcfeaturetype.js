@@ -1,8 +1,5 @@
 goog.declareModuleId('plugin.arc.ArcFeatureType');
 
-const {default: FeatureTypeColumn} = goog.requireType('os.ogc.FeatureTypeColumn');
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-
 
 /**
  * Feature type representing Arc features.

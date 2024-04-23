@@ -1,6 +1,5 @@
 goog.declareModuleId('os.source.IImportSource');
 
-const Feature = goog.requireType('ol.Feature');
 const {default: IImporter} = goog.requireType('os.im.IImporter');
 
 

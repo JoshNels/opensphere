@@ -1,14 +1,10 @@
 goog.declareModuleId('plugin.track.TrackInteraction');
 
+import OlStroke from 'ol/src/style/Stroke.js';
+import OlStyle from 'ol/src/style/Style.js';
 import MeasureInteraction from '../../os/interaction/measureinteraction.js';
 import * as osObject from '../../os/object/object.js';
 import {LINE_STYLE_OPTIONS} from '../../os/style/style.js';
-
-const OlStroke = goog.require('ol.style.Stroke');
-const OlStyle = goog.require('ol.style.Style');
-
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const OlLineString = goog.requireType('ol.geom.LineString');
 
 
 /**

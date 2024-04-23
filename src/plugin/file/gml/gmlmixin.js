@@ -1,10 +1,9 @@
 goog.declareModuleId('plugin.file.gml.GMLMixin');
 
-const {getFirstElementChild} = goog.require('goog.dom');
-const GMLBase = goog.require('ol.format.GMLBase');
-const {get: getProjection} = goog.require('ol.proj');
+import GMLBase from 'ol/src/format/GMLBase.js';
+import {get as getProjection} from 'ol/src/proj.js';
 
-const Projection = goog.requireType('ol.proj.Projection');
+const {getFirstElementChild} = goog.require('goog.dom');
 
 
 /**

@@ -1,11 +1,11 @@
 goog.declareModuleId('os.layer.AnimationVector');
 
-const {getUid} = goog.require('ol');
-const {listen, unlistenByKey} = goog.require('ol.events');
+import OLEventType from 'ol/src/events/EventType.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
 
-const OLEventType = goog.require('ol.events.EventType');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-const RenderEventType = goog.require('ol.render.EventType');
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+import RenderEventType from 'ol/src/render/EventType.js';
+import {getUid} from 'ol/src/util.js';
 
 
 /**
@@ -49,7 +49,7 @@ export default class AnimationVector extends OLVectorLayer {
         layerState.zIndex += AnimationVector.Z_OFFSET;
 
         evt.frameState.layerStatesArray.push(layerState);
-        evt.frameState.layerStates[getUid(this)] = layerState;
+        evt.frameState.renderTargets[getUid(this)] = layerState;
       });
 
       this.mapRenderKey_ = listen(this, OLEventType.CHANGE, map.render, map);

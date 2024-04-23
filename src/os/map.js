@@ -1,7 +1,11 @@
 goog.declareModuleId('os.Map');
 
+import OLMap from 'ol/src/Map.js';
+import {fromLonLat, toLonLat, transformExtent} from 'ol/src/proj.js';
+
 import './mixin/canvasreplaygroupmixin.js';
 import './mixin/canvasreplaymixin.js';
+import './mixin/canvasexecutormixin.js';
 import * as osMap from './map/map.js';
 import {getMapContainer} from './map/mapinstance.js';
 import {EPSG4326} from './proj/proj.js';
@@ -9,8 +13,6 @@ import {MODAL_SELECTOR} from './ui/ui.js';
 
 const TagName = goog.require('goog.dom.TagName');
 const {IE} = goog.require('goog.userAgent');
-const OLMap = goog.require('ol.Map');
-const {fromLonLat, toLonLat, transformExtent} = goog.require('ol.proj');
 
 
 /**
@@ -47,14 +49,14 @@ export default class Map extends OLMap {
   /**
    * @inheritDoc
    */
-  getCoordinateFromPixel(pixel) {
+  getCoordinateFromPixelInternal(pixel) {
     if (getMapContainer().is3DEnabled()) {
       var webGL = getMapContainer().getWebGLRenderer();
       var coord = webGL ? webGL.getCoordinateFromPixel(pixel) : null;
       return coord ? fromLonLat(coord, osMap.PROJECTION) : null;
     }
 
-    var coord = super.getCoordinateFromPixel(pixel);
+    var coord = super.getCoordinateFromPixelInternal(pixel);
     var extent = this.getView().getProjection().getExtent();
     if (coord && (coord[1] < extent[1] || coord[1] > extent[3])) {
       // don't return coordinates outside of the projection bounds
@@ -67,7 +69,7 @@ export default class Map extends OLMap {
   /**
    * @inheritDoc
    */
-  getPixelFromCoordinate(coordinate) {
+  getPixelFromCoordinateInternal(coordinate) {
     if (getMapContainer().is3DEnabled() && coordinate) {
       coordinate = toLonLat(coordinate, osMap.PROJECTION);
 
@@ -75,7 +77,7 @@ export default class Map extends OLMap {
       return webGL ? webGL.getPixelFromCoordinate(coordinate) : null;
     }
 
-    return super.getPixelFromCoordinate(coordinate);
+    return super.getPixelFromCoordinateInternal(coordinate);
   }
 
   /**

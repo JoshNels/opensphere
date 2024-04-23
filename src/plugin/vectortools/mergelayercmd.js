@@ -8,11 +8,6 @@ import MapContainer from '../../os/mapcontainer.js';
 import * as style from '../../os/style/style.js';
 import * as vectortools from './vectortools.js';
 
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: ISource} = goog.requireType('os.source.ISource');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-const {default: Options} = goog.requireType('plugin.vectortools.Options');
-
 
 /**
  * Command for merging vector layers

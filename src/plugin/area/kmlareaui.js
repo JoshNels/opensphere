@@ -8,8 +8,6 @@ import Module from '../../os/ui/module.js';
 import AreaImportCtrl from './areaimportctrl.js';
 import KMLAreaParser from './kmlareaparser.js';
 
-const {default: FileParserConfig} = goog.requireType('os.parse.FileParserConfig');
-
 
 /**
  * The KML area import directive

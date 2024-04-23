@@ -1,5 +1,7 @@
 goog.declareModuleId('os.MainCtrl');
 
+import ViewHint from 'ol/src/ViewHint.js';
+
 import './file/mime/any.js';
 import './ui/alerts.js';
 import './ui/dragdrop/urldragdropui.js';
@@ -187,7 +189,6 @@ const KeyEvent = goog.require('goog.events.KeyEvent');
 const KeyHandler = goog.require('goog.events.KeyHandler');
 const log = goog.require('goog.log');
 const {IE, GECKO, LINUX} = goog.require('goog.userAgent');
-const ViewHint = goog.require('ol.ViewHint');
 
 const {default: LayerConfigEvent} = goog.requireType('os.events.LayerConfigEvent');
 const {default: OSFile} = goog.requireType('os.file.File');

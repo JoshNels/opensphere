@@ -19,10 +19,6 @@ const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
 const googString = goog.require('goog.string');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const Logger = goog.requireType('goog.log.Logger');
-const {default: ArcServer} = goog.requireType('plugin.arc.ArcServer');
-
 
 /**
  * Loads the capabilities from an Arc server and constructs the tree.

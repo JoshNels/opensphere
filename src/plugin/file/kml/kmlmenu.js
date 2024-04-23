@@ -11,9 +11,6 @@ import KMLNode from './ui/kmlnode.js';
 
 const asserts = goog.require('goog.asserts');
 
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
-
 
 /**
  * KML menu event types.

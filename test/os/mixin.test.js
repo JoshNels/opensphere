@@ -1,17 +1,11 @@
-goog.require('ol.Feature');
-goog.require('ol.Object');
-goog.require('ol.events');
-goog.require('ol.events.EventTarget');
-goog.require('ol.geom.Point');
 goog.require('os.mixin');
 
+import EventTarget from 'ol/src/events/Target.js';
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+import OLObject from 'ol/src/Object.js';
 
 describe('os.mixin', function() {
-  const Feature = goog.module.get('ol.Feature');
-  const OLObject = goog.module.get('ol.Object');
-  const EventTarget = goog.module.get('ol.events.EventTarget');
-  const Point = goog.module.get('ol.geom.Point');
-
   it('should allow disabling events', function() {
     spyOn(EventTarget.prototype, 'dispatchEvent');
 
@@ -54,7 +48,7 @@ describe('os.mixin', function() {
     expect(EventTarget.prototype.dispatchEvent.calls.length).toBe(0);
 
     // creating the geometry will fire a changed event, so dispatchEvent will be called once
-    var geometry = new Point(null);
+    var geometry = new Point([]);
     expect(EventTarget.prototype.dispatchEvent.calls.length).toBe(1);
 
     geometry.set('testKey', 'testValue');

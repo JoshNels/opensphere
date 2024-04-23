@@ -4,9 +4,6 @@ import State from '../../os/command/state.js';
 import TriState from '../../os/structs/tristate.js';
 import PlacesManager from './placesmanager.js';
 
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Command for hiding all places

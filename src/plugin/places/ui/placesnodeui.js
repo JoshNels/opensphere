@@ -6,9 +6,6 @@ import {createOrEditFolder, createOrEditPlace} from '../../file/kml/ui/kmlui.js'
 import {Icon, getPlacesRoot} from '../places.js';
 import PlacesManager from '../placesmanager.js';
 
-const {FolderOptions, PlacemarkOptions} = goog.requireType('plugin.file.kml.ui');
-const {default: KMLLayerNode} = goog.requireType('plugin.file.kml.ui.KMLLayerNode');
-
 
 /**
  * @type {string}

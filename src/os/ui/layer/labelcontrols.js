@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.layer.LabelControlsUI');
 
+import {remove} from 'ol/src/array.js';
+
 import '../geo/position.js';
 import Settings from '../../config/settings.js';
 import Metrics from '../../metrics/metrics.js';
@@ -12,7 +14,6 @@ import LabelControlsEventType from './labelcontrolseventtype.js';
 
 const Disposable = goog.require('goog.Disposable');
 const {moveItem} = goog.require('goog.array');
-const {remove} = goog.require('ol.array');
 
 const {LabelConfig} = goog.requireType('os.style.label');
 

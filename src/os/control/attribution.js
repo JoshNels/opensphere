@@ -1,9 +1,10 @@
 goog.declareModuleId('os.control.Attribution');
 
+import {equals} from 'ol/src/array.js';
+import OLAttribution from 'ol/src/control/Attribution.js';
+
 const dom = goog.require('goog.dom');
 const SafeHtml = goog.require('goog.html.SafeHtml');
-const olArray = goog.require('ol.array');
-const OLAttribution = goog.require('ol.control.Attribution');
 
 
 /**
@@ -21,7 +22,7 @@ export default class Attribution extends OLAttribution {
    * @inheritDoc
    * @suppress {accessControls}
    */
-  getSourceAttributions_(frameState) {
+  collectSourceAttributions_(frameState) {
     /**
      * Used to determine if an attribution already exists.
      * @type {Object<string, boolean>}
@@ -49,7 +50,7 @@ export default class Attribution extends OLAttribution {
         continue;
       }
 
-      var attributionGetter = source.getAttributions2();
+      var attributionGetter = source.getAttributions();
       if (!attributionGetter) {
         continue;
       }
@@ -87,8 +88,8 @@ export default class Attribution extends OLAttribution {
       return;
     }
 
-    var attributions = this.getSourceAttributions_(frameState);
-    if (olArray.equals(attributions, this.renderedAttributions_)) {
+    var attributions = this.collectSourceAttributions_(frameState);
+    if (equals(attributions, this.renderedAttributions_)) {
       return;
     }
 
@@ -118,6 +119,8 @@ export default class Attribution extends OLAttribution {
     }
 
     this.renderedAttributions_ = attributions;
+
+    dom.removeNode(this.toggleButton_);
   }
 }
 

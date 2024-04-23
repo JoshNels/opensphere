@@ -20,9 +20,6 @@ const Timer = goog.require('goog.Timer');
 const log = goog.require('goog.log');
 const userAgent = goog.require('goog.userAgent');
 
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
-
-
 /**
  * Plugin to manage screen capture for opensphere
  */

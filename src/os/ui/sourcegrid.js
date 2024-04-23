@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.SourceGridUI');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import VectorEventType from 'ol/src/source/VectorEventType.js';
+
 import AlertEventSeverity from '../alert/alerteventseverity.js';
 import AlertManager from '../alert/alertmanager.js';
 import {toHexString} from '../color.js';
@@ -21,12 +24,8 @@ const Delay = goog.require('goog.async.Delay');
 const dispose = goog.require('goog.dispose');
 const GoogEventType = goog.require('goog.events.EventType');
 const {makeSafe} = goog.require('goog.string');
-const {listen, unlisten} = goog.require('ol.events');
-const VectorEventType = goog.require('ol.source.VectorEventType');
 
 const GoogEvent = goog.requireType('goog.events.Event');
-const Feature = goog.requireType('ol.Feature');
-const OLVectorSource = goog.requireType('ol.source.Vector');
 const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
 const {default: VectorSource} = goog.requireType('os.source.Vector');
 const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
@@ -84,6 +83,10 @@ export class Controller extends SlickGridCtrl {
     super($scope, $element, $compile);
     this.copyLimitMsg = Controller.COPY_LIMIT_MSG;
     this.useExtractorInSort = false;
+
+    this.propertyChangeKey = null;
+    this.addFeatureKey = null;
+    this.removeFeatureKey = null;
 
     /**
      * The vector source.
@@ -339,9 +342,9 @@ export class Controller extends SlickGridCtrl {
    */
   onSourceSwitch(newVal, oldVal) {
     if (oldVal) {
-      unlisten(oldVal, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
-      unlisten(oldVal, VectorEventType.ADDFEATURE, this.onFeaturesAdded_, this);
-      unlisten(oldVal, VectorEventType.REMOVEFEATURE, this.onFeaturesRemoved_, this);
+      unlistenByKey(this.propertyChangeKey);
+      unlistenByKey(this.addFeatureKey);
+      unlistenByKey(this.removeFeatureKey);
     }
 
     this.source = newVal;
@@ -356,9 +359,9 @@ export class Controller extends SlickGridCtrl {
       this.onSelectedChange(this.source.getSelectedItems());
       this.onColumnsChange();
 
-      listen(newVal, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
-      listen(newVal, VectorEventType.ADDFEATURE, this.onFeaturesAdded_, this);
-      listen(newVal, VectorEventType.REMOVEFEATURE, this.onFeaturesRemoved_, this);
+      this.propertyChangeKey = listen(newVal, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
+      this.addFeatureKey = listen(newVal, VectorEventType.ADDFEATURE, this.onFeaturesAdded_, this);
+      this.removeFeatureKey = listen(newVal, VectorEventType.REMOVEFEATURE, this.onFeaturesRemoved_, this);
     } else {
       this.scope.data = [];
       this.onColumnsChange();

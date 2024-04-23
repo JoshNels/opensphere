@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.places.menu');
 
+import Point from 'ol/src/geom/Point.js';
 import CommandProcessor from '../../os/command/commandprocessor.js';
 import ParallelCommand from '../../os/command/parallelcommand.js';
 import DataManager from '../../os/data/datamanager.js';
@@ -13,7 +14,7 @@ import * as os from '../../os/os.js';
 import VectorSource from '../../os/source/vectorsource.js';
 import {launchFeatureList} from '../../os/ui/featurelist.js';
 import * as layerMenu from '../../os/ui/menu/layermenu.js';
-import * as mapMenu from '../../os/ui/menu/mapmenu.js';
+import {getMenu, showIfHasCoordinate, GroupLabel} from '../../os/ui/menu/mapmenu.js';
 import MenuItemType from '../../os/ui/menu/menuitemtype.js';
 import * as spatial from '../../os/ui/menu/spatial.js';
 import KMLNodeRemove from '../file/kml/cmd/kmlnoderemovecmd.js';
@@ -30,12 +31,6 @@ import * as PlacesUI from './ui/placesui.js';
 import * as QuickAddPlacesUI from './ui/quickaddplaces.js';
 
 const GoogEvent = goog.require('goog.events.Event');
-const Point = goog.require('ol.geom.Point');
-
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
-const {FolderOptions, PlacemarkOptions} = goog.requireType('plugin.file.kml.ui');
-
 
 /**
  * Places group label for menus.
@@ -280,7 +275,7 @@ const visibleIfLayerNodeSupported_ = function(context) {
  * Set up places items on the map.
  */
 export const mapSetup = function() {
-  var menu = mapMenu.getMenu();
+  var menu = getMenu();
 
   if (menu && !menu.getRoot().find(GROUP_LABEL)) {
     var root = menu.getRoot();
@@ -294,7 +289,7 @@ export const mapSetup = function() {
           eventType: EventType.SAVE_TO,
           tooltip: 'Creates a new saved place from this location',
           icons: ['<i class="fa fa-fw ' + places.Icon.PLACEMARK + '"></i>'],
-          beforeRender: mapMenu.showIfHasCoordinate,
+          beforeRender: showIfHasCoordinate,
           handler: saveCoordinateToPlaces,
           metricKey: PlacesKeys.ADD_PLACE,
           sort: 0
@@ -303,7 +298,7 @@ export const mapSetup = function() {
           eventType: EventType.SAVE_TO_ANNOTATION,
           tooltip: 'Creates a new saved place with a text box at this location',
           icons: ['<i class="fa fa-fw ' + places.Icon.ANNOTATION + '"></i>'],
-          beforeRender: mapMenu.showIfHasCoordinate,
+          beforeRender: showIfHasCoordinate,
           handler: createAnnotationFromCoordinate,
           metricKey: PlacesKeys.ADD_ANNOTATION,
           sort: 1
@@ -313,7 +308,7 @@ export const mapSetup = function() {
           eventType: EventType.QUICK_ADD_PLACES,
           tooltip: 'Quickly add places to the selected folder',
           icons: ['<i class="fa fa-fw ' + places.Icon.QUICK_ADD + '"></i>'],
-          beforeRender: mapMenu.showIfHasCoordinate,
+          beforeRender: showIfHasCoordinate,
           handler: quickAddFromCoordinate,
           metricKey: PlacesKeys.QUICK_ADD_PLACES,
           sort: 120
@@ -327,9 +322,9 @@ export const mapSetup = function() {
  * Clean up places items on the map.
  */
 export const mapDispose = function() {
-  var menu = mapMenu.getMenu();
+  var menu = getMenu();
   if (menu) {
-    var group = menu.getRoot().find(mapMenu.GroupLabel.COORDINATE);
+    var group = menu.getRoot().find(GroupLabel.COORDINATE);
     if (group) {
       group.removeChild(EventType.SAVE_TO);
     }
@@ -396,7 +391,7 @@ export const spatialSetup = function() {
  * Clean up places items in the spatial menu.
  */
 export const spatialDispose = function() {
-  var menu = mapMenu.getMenu();
+  var menu = getMenu();
   if (menu) {
     var group = menu.getRoot().find(spatial.Group.TOOLS);
     if (group) {

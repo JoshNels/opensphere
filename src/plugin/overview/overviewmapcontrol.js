@@ -1,16 +1,12 @@
 goog.declareModuleId('plugin.overview.OverviewMap');
 
+import OLOverviewMap from 'ol/src/control/OverviewMap.js';
+import MapProperty from 'ol/src/MapProperty.js';
+import View from 'ol/src/View.js';
+
 import Settings from '../../os/config/settings.js';
 import * as osMap from '../../os/map/map.js';
-
 import MapContainer from '../../os/mapcontainer.js';
-const MapProperty = goog.require('ol.MapProperty');
-const View = goog.require('ol.View');
-const OLOverviewMap = goog.require('ol.control.OverviewMap');
-
-const Collection = goog.requireType('ol.Collection');
-const LayerBase = goog.requireType('ol.layer.Base');
-
 
 /**
  * Overview map control.
@@ -22,6 +18,15 @@ export default class OverviewMap extends OLOverviewMap {
    * @suppress {accessControls} To allow access to box overlay.
    */
   constructor(opt_opts) {
+    const view = new View({
+      projection: osMap.PROJECTION,
+      minZoom: osMap.OVERVIEW_MAP_MIN_ZOOM,
+      maxZoom: osMap.MAX_ZOOM,
+      center: [0, 0],
+      showFullExtent: true
+    });
+
+    opt_opts.view = view;
     super(opt_opts);
     this.updateView_();
 
@@ -61,9 +66,9 @@ export default class OverviewMap extends OLOverviewMap {
   handleMapPropertyChange_(evt) {
     if (evt.key === MapProperty.VIEW) {
       this.updateView_();
+    } else {
+      super.handleMapPropertyChange_(evt);
     }
-
-    super.handleMapPropertyChange_(evt);
   }
 
   /**
@@ -75,8 +80,10 @@ export default class OverviewMap extends OLOverviewMap {
   updateView_() {
     var view = new View({
       projection: osMap.PROJECTION,
-      minZoom: osMap.MIN_ZOOM,
-      maxZoom: osMap.MAX_ZOOM
+      minZoom: osMap.OVERVIEW_MAP_MIN_ZOOM,
+      maxZoom: osMap.MAX_ZOOM,
+      center: [0, 0],
+      showFullExtent: true
     });
 
     // Don't contrain the view resolution for the overview map. This improves overview map behavior when fitting the

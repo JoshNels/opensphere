@@ -25,19 +25,6 @@ const Deferred = goog.require('goog.async.Deferred');
 const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const Logger = goog.requireType('goog.log.Logger');
-const ResponseType = goog.requireType('goog.net.XhrIo.ResponseType');
-const Feature = goog.requireType('ol.Feature');
-const {default: Importer} = goog.requireType('os.im.Importer');
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-const {default: WFSTypeConfig} = goog.requireType('os.ogc.WFSTypeConfig');
-const {default: IParser} = goog.requireType('os.parse.IParser');
-const {default: ISource} = goog.requireType('os.source.ISource');
-const {default: RequestSource} = goog.requireType('os.source.Request');
-const {default: GMLParser} = goog.requireType('plugin.file.gml.GMLParser');
-
 
 /**
  * This is a plain WFS layer config that handles DescribeFeatureType, altitude and time mappings,

@@ -11,10 +11,6 @@ import {EventType, Metrics, TITLE} from './featureaction.js';
 import launchForLayer from './ui/launchforlayer.js';
 
 const asserts = goog.require('goog.asserts');
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-
-
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
 
 
 /**

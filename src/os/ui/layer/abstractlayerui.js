@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.layer.AbstractLayerUICtrl');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {ObjectEvent} from 'ol/src/Object.js';
+
 import CommandProcessor from '../../command/commandprocessor.js';
 import ParallelCommand from '../../command/parallelcommand.js';
 import {isLayerNode} from '../../data/data.js';
@@ -15,8 +18,6 @@ const Delay = goog.require('goog.async.Delay');
 const nextTick = goog.require('goog.async.nextTick');
 const dispose = goog.require('goog.dispose');
 const GoogEventType = goog.require('goog.events.EventType');
-const OLObject = goog.require('ol.Object');
-const {listen, unlistenByKey} = goog.require('ol.events');
 
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 const {default: LayerNode} = goog.requireType('os.data.LayerNode');
@@ -252,13 +253,13 @@ export default class Controller extends Disposable {
   /**
    * Handles layer property change events.
    *
-   * @param {PropertyChangeEvent|OLObject.Event} event
+   * @param {PropertyChangeEvent|ObjectEvent} event
    * @protected
    */
   onLayerPropertyChange(event) {
     if (!this.isDisposed()) {
       // initialize the control if it's an OL event for a property we're controlling, or for our own style events
-      if (event instanceof OLObject.Event && this.scope[event.key] != null) {
+      if (event instanceof ObjectEvent && this.scope[event.key] != null) {
         this.refreshUI();
       } else if (event instanceof PropertyChangeEvent) {
         var p = event.getProperty();

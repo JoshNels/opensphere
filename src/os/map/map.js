@@ -1,20 +1,15 @@
 goog.declareModuleId('os.map');
 
+import {linear as linearEasing} from 'ol/src/easing.js';
+import {clamp, toRadians} from 'ol/src/math.js';
+import {get as getProjection} from 'ol/src/proj.js';
+import {DEFAULT_MAX_ZOOM} from 'ol/src/tilegrid/common.js';
+import {createForProjection} from 'ol/src/tilegrid.js';
+
 import '../ol/ol.js';
 import FlightMode from './flightmode.js';
 
-const {linear: linearEasing} = goog.require('ol.easing');
 const {assert} = goog.require('goog.asserts');
-const {DEFAULT_MAX_ZOOM} = goog.require('ol');
-const {clamp, toRadians} = goog.require('ol.math');
-const {get: getProjection} = goog.require('ol.proj');
-const {createForProjection} = goog.require('ol.tilegrid');
-
-const PluggableMap = goog.requireType('ol.PluggableMap');
-const Projection = goog.requireType('ol.proj.Projection');
-const TileGrid = goog.requireType('ol.tilegrid.TileGrid');
-const OLMap = goog.requireType('ol.Map');
-
 
 /**
  * Selector for the OpenLayers map canvas.
@@ -50,7 +45,13 @@ export const DEFAULT_ZOOM = 3;
  * Minimum zoom level for the map
  * @type {number}
  */
-export const MIN_ZOOM = 2;
+export const MIN_ZOOM = 0;
+
+/**
+ * Minimum zoom level for the map
+ * @type {number}
+ */
+export const OVERVIEW_MAP_MIN_ZOOM = 2;
 
 /**
  * Maximum zoom level for the map

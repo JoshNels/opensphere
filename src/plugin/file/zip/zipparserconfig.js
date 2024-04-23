@@ -2,8 +2,6 @@ goog.declareModuleId('plugin.file.zip.ZIPParserConfig');
 
 import FileParserConfig from '../../../os/parse/fileparserconfig.js';
 
-const {default: FileWrapper} = goog.requireType('os.file.FileWrapper');
-
 
 /**
  * Configuration for a ZIP parser.

@@ -9,9 +9,6 @@ const dispose = goog.require('goog.dispose');
 const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
 
-const GoogEvent = goog.requireType('goog.events.Event');
-const Logger = goog.requireType('goog.log.Logger');
-
 
 /**
  * The Arc request source requests the IDs of all of the features in an area. ArcGIS servers will

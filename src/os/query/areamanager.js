@@ -1,5 +1,11 @@
 goog.declareModuleId('os.query.AreaManager');
 
+import {asString} from 'ol/src/color.js';
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import {VectorSourceEvent} from 'ol/src/source/Vector.js';
+import VectorEventType from 'ol/src/source/VectorEventType.js';
+
 import '../mixin/objectmixin.js';
 import {toRgbArray} from '../color.js';
 import TransformAreas from '../command/transformareascmd.js';
@@ -23,13 +29,7 @@ import {isWorldQuery} from './queryutils.js';
 
 const Deferred = goog.require('goog.async.Deferred');
 const {unsafeClone} = goog.require('goog.object');
-const {asString} = goog.require('ol.color');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-const Polygon = goog.require('ol.geom.Polygon');
-const OLVectorSource = goog.require('ol.source.Vector');
-const VectorEventType = goog.require('ol.source.VectorEventType');
 
-const Feature = goog.requireType('ol.Feature');
 const {default: SettingChangeEvent} = goog.requireType('os.events.SettingChangeEvent');
 
 
@@ -135,7 +135,7 @@ export default class AreaManager extends BaseAreaManager {
 
       if (source.getFeatureById(id)) {
         // 3D can take per feature updates
-        source.dispatchEvent(new OLVectorSource.Event(VectorEventType.CHANGEFEATURE, area));
+        source.dispatchEvent(new VectorSourceEvent(VectorEventType.CHANGEFEATURE, area));
         changed = true;
       }
     }
@@ -156,7 +156,7 @@ export default class AreaManager extends BaseAreaManager {
         DrawingLayer.ID).getSource());
     var id = area.getId();
     if (id && source.getFeatureById(id)) {
-      source.dispatchEvent(new OLVectorSource.Event(VectorEventType.CHANGEFEATURE, area));
+      source.dispatchEvent(new VectorSourceEvent(VectorEventType.CHANGEFEATURE, area));
     }
     source.changed();
   }

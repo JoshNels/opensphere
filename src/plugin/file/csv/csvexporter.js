@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.file.csv.CSVExporter');
 
+import Point from 'ol/src/geom/Point.js';
+
 import RecordField from '../../../os/data/recordfield.js';
 import {createEllipse} from '../../../os/feature/feature.js';
 import Fields from '../../../os/fields/fields.js';
@@ -12,13 +14,8 @@ import TimeRange from '../../../os/time/timerange.js';
 import AbstractCSVExporter from '../../../os/ui/file/csv/abstractcsvexporter.js';
 import {directiveTag as exportUi} from './ui/csvexportui.js';
 
-const log = goog.require('goog.log');
-const Point = goog.require('ol.geom.Point');
 
-const Logger = goog.requireType('goog.log.Logger');
-const Feature = goog.requireType('ol.Feature');
-const SimpleGeometry = goog.requireType('ol.geom.SimpleGeometry');
-const {default: ITime} = goog.requireType('os.time.ITime');
+const log = goog.require('goog.log');
 
 
 /**

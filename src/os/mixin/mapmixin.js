@@ -3,10 +3,8 @@
  */
 goog.declareModuleId('os.mixin.map');
 
-const {getUid} = goog.require('ol');
-const PluggableMap = goog.require('ol.PluggableMap');
-
-const Feature = goog.requireType('ol.Feature');
+import PluggableMap from 'ol/src/PluggableMap.js';
+import Style from 'ol/src/style/Style.js';
 
 /**
  * If the mixin has been initialized.
@@ -31,12 +29,8 @@ export const init = () => {
    * @suppress {accessControls|duplicate|checkTypes}
    */
   PluggableMap.prototype.skipFeature = function(feature) {
-    // do not change this from using getUid, or the OL3 renderer will not recognize it!!
-    var featureUid = getUid(feature).toString();
-    if (!this.skippedFeatureUids_[featureUid]) {
-      this.skippedFeatureUids_[featureUid] = true;
-      this.render();
-    }
+    feature.set('savedStyle', feature.getStyle());
+    feature.setStyle(new Style(null));
   };
 
 
@@ -47,12 +41,9 @@ export const init = () => {
    * @suppress {accessControls|duplicate|checkTypes}
    */
   PluggableMap.prototype.unskipFeature = function(feature) {
-    // do not change this from using getUid, or the OL3 renderer will not recognize it!!
-    var featureUid = getUid(feature).toString();
-    if (this.skippedFeatureUids_[featureUid]) {
-      delete this.skippedFeatureUids_[featureUid];
-      this.render();
-    }
+    const featureSavedStyle = feature.get('savedStyle');
+    feature.unset('savedStyle');
+    feature.setStyle(featureSavedStyle);
   };
 };
 

@@ -1,7 +1,3 @@
-goog.require('ol.Feature');
-goog.require('ol.geom.Point');
-goog.require('ol.layer.Vector');
-goog.require('ol.source.Vector');
 goog.require('os.data.RecordField');
 goog.require('os.mock');
 goog.require('os.source.Vector');
@@ -9,17 +5,17 @@ goog.require('os.webgl');
 goog.require('os.webgl.AltitudeMode');
 goog.require('plugin.cesium.sync.HeightReference');
 
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+import OLVectorSource from 'ol/src/source/Vector.js';
+import * as primitiveUtils from '../primitive.mock.js';
 
 describe('plugin.cesium.sync.HeightReference', () => {
-  const Feature = goog.module.get('ol.Feature');
-  const Point = goog.module.get('ol.geom.Point');
-  const OLVectorLayer = goog.module.get('ol.layer.Vector');
-  const OLVectorSource = goog.module.get('ol.source.Vector');
   const {default: RecordField} = goog.module.get('os.data.RecordField');
   const {default: VectorSource} = goog.module.get('os.source.Vector');
   const {default: AltitudeMode} = goog.module.get('os.webgl.AltitudeMode');
   const {getHeightReference, isPrimitiveClassTypeChanging} = goog.module.get('plugin.cesium.sync.HeightReference');
-  const primitiveUtils = goog.module.get('test.plugin.cesium.primitive');
 
   describe('getHeightReference', () => {
     const altModeField = RecordField.ALTITUDE_MODE;

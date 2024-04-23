@@ -1,6 +1,6 @@
 goog.declareModuleId('os.ol.mixin.Disposable');
 
-const Disposable = goog.require('ol.Disposable');
+import Disposable from 'ol/src/Disposable.js';
 
 
 /**
@@ -26,7 +26,7 @@ export const init = () => {
    * @suppress {accessControls}
    */
   Disposable.prototype.isDisposed = function() {
-    return this.disposed_;
+    return this.disposed;
   };
 };
 

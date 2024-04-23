@@ -1,14 +1,15 @@
-const ClosurePlugin = require('@ngageoint/closure-webpack-plugin');
 const path = require('path');
+const ClosurePlugin = require('@ngageoint/closure-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const buildDir = path.resolve(__dirname, '.build');
-const gccOptions = require(path.join(buildDir, 'gcc-webpack'));
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production' || !argv.mode;
   const depsFile = path.join(buildDir, 'deps.js');
 
   return {
+    mode: argv.mode,
     entry: [
       path.join(buildDir, 'index.js')
     ],
@@ -20,12 +21,11 @@ module.exports = (env, argv) => {
     watch: !isProduction,
     optimization: {
       minimize: isProduction,
-      minimizer: [
-        new ClosurePlugin({
-          mode: 'AGGRESSIVE_BUNDLE',
-          platform: 'java'
-        }, gccOptions)
-      ],
+      minimizer: [new TerserPlugin({
+        terserOptions: {
+          mangle: false
+        }
+      })],
       concatenateModules: false,
       splitChunks: {
         minSize: 0
@@ -43,7 +43,8 @@ module.exports = (env, argv) => {
         deps: [
           require.resolve('google-closure-library/closure/goog/deps'),
           depsFile
-        ]
+        ],
+        mode: 'development'
       })
     ]
   };

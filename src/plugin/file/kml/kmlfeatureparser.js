@@ -1,12 +1,9 @@
 goog.declareModuleId('plugin.file.kml.KMLFeatureParser');
 
+import {isDocument, parse} from 'ol/src/xml.js';
 import * as text from '../../../os/file/mime/text.js';
 import * as osMap from '../../../os/map/map.js';
-
-const KML = goog.require('ol.format.KML');
-const xml = goog.require('ol.xml');
-
-const {default: IParser} = goog.requireType('os.parse.IParser');
+import KML from '../../../os/ol/format/KML.js';
 
 
 /**
@@ -42,10 +39,10 @@ export default class KMLFeatureParser {
       source = text.getText(source) || null;
     }
 
-    if (xml.isDocument(source)) {
+    if (isDocument(source)) {
       this.document_ = /** @type {Document} */ (source);
     } else if (typeof source === 'string') {
-      this.document_ = xml.parse(source);
+      this.document_ = parse(source);
     }
   }
 

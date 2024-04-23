@@ -9,9 +9,6 @@ import {launchConfirm} from '../../os/ui/window/confirm.js';
 import {launchConfirmText} from '../../os/ui/window/confirmtext.js';
 import {EventType} from './electron.js';
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  * Confirm the label for a settings file.
  * @param {string} filePath The file path.

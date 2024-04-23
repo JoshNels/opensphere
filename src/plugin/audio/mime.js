@@ -5,9 +5,6 @@ import * as mime from '../../os/file/mime.js';
 
 const Promise = goog.require('goog.Promise');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
-
 /**
  * Priority for audio file detection. Some audio formats (like .wav) may be detected as text, so this has to run first.
  * @type {number}

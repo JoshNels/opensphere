@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.menu.buffer');
 
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+
 import EventType from '../../action/eventtype.js';
 import {ICON} from '../../buffer/buffer.js';
 import {isGeometryPolygonal} from '../../geo/geo.js';
@@ -15,8 +18,6 @@ import * as spatialMenu from './spatial.js';
 const {assert} = goog.require('goog.asserts');
 const GoogEvent = goog.require('goog.events.Event');
 const {toTitleCase} = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const Point = goog.require('ol.geom.Point');
 
 const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
 const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
@@ -145,7 +146,7 @@ export const spatialDispose = function() {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfCanBuffer = function(context) {
+const visibleIfCanBuffer = function(context) {
   // polygonal geometries are generally drawn as areas, so don't clutter the menu with the buffer option
   this.visible = false;
 

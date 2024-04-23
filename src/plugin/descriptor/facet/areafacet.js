@@ -7,9 +7,6 @@ import BaseFacet from '../../../os/search/basefacet.js';
 
 const Promise = goog.require('goog.Promise');
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * @extends {BaseFacet<!IDataDescriptor>}
  */

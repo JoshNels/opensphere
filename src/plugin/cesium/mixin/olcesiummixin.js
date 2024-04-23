@@ -1,13 +1,10 @@
 goog.declareModuleId('plugin.cesium.mixin.olcs');
 
+import OLCesium from 'ol-cesium/src/olcs/OLCesium.js';
+import olcsUtil from 'ol-cesium/src/olcs/util.js';
+
 import I3DSupport from '../../../os/i3dsupport.js';
 import osImplements from '../../../os/implements.js';
-
-const OLCesium = goog.require('olcs.OLCesium');
-const {supportsImageRenderingPixelated} = goog.require('olcs.util');
-
-const Interaction = goog.requireType('ol.interaction.Interaction');
-const {default: Camera} = goog.requireType('plugin.cesium.Camera');
 
 
 /**
@@ -61,7 +58,7 @@ export const load = () => {
 
       this.resizeTimeout = setTimeout(function() {
         var resolutionScale = this.resolutionScale_;
-        if (!supportsImageRenderingPixelated()) {
+        if (!olcsUtil.supportsImageRenderingPixelated()) {
           resolutionScale *= window.devicePixelRatio || 1.0;
         }
         this.resolutionScaleChanged_ = false;

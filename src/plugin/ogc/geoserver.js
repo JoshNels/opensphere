@@ -5,8 +5,6 @@ import osImplements from '../../os/implements.js';
 import OGCServer from '../../os/ui/ogc/ogcserver.js';
 
 const log = goog.require('goog.log');
-const Logger = goog.requireType('goog.log.Logger');
-
 
 /**
  * The GeoServer server provider.

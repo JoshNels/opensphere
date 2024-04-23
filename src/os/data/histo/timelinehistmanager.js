@@ -1,5 +1,7 @@
 goog.declareModuleId('os.data.histo.TimelineHistManager');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import * as dispatcher from '../../dispatcher.js';
 import LayerEventType from '../../events/layereventtype.js';
 import * as fn from '../../fn/fn.js';
@@ -14,7 +16,6 @@ import DataEventType from '../event/dataeventtype.js';
 const Throttle = goog.require('goog.async.Throttle');
 const EventTarget = goog.require('goog.events.EventTarget');
 const GoogEventType = goog.require('goog.events.EventType');
-const events = goog.require('ol.events');
 
 const {default: DataEvent} = goog.requireType('os.data.event.DataEvent');
 const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
@@ -41,10 +42,12 @@ export default class TimelineHistManager extends EventTarget {
      */
     this.changeThrottle_ = new Throttle(this.onChangeThrottle_, 100, this);
 
+    this.listenKeys_ = {};
+
     var sources = DataManager.getInstance().getSources();
     for (var i = 0, n = sources.length; i < n; i++) {
       var source = /** @type {events.EventTarget} */ (sources[i]);
-      events.listen(source, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
+      this.listenKeys_[source] = listen(source, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
     }
 
     DataManager.getInstance().listen(DataEventType.SOURCE_ADDED, this.onSourceAdded_, false, this);
@@ -67,10 +70,8 @@ export default class TimelineHistManager extends EventTarget {
     DataManager.getInstance().unlisten(DataEventType.SOURCE_ADDED, this.onSourceAdded_, false, this);
     DataManager.getInstance().unlisten(DataEventType.SOURCE_REMOVED, this.onSourceRemoved_, false, this);
 
-    var sources = DataManager.getInstance().getSources();
-    for (var i = 0, n = sources.length; i < n; i++) {
-      var source = /** @type {events.EventTarget} */ (sources[i]);
-      events.unlisten(source, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
+    for (const source in this.listenKeys_) {
+      unlistenByKey(this.listenKeys_[source]);
     }
 
     setDataManager(null);
@@ -100,8 +101,8 @@ export default class TimelineHistManager extends EventTarget {
    */
   onSourceAdded_(event) {
     if (event.source) {
-      events.listen(/** @type {events.EventTarget} */ (event.source), GoogEventType.PROPERTYCHANGE,
-          this.onSourcePropertyChange_, this);
+      this.listenKeys_[event.source] = listen(/** @type {events.EventTarget} */ (event.source),
+          GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
       this.fireChangeEvent_();
     }
   }
@@ -111,9 +112,9 @@ export default class TimelineHistManager extends EventTarget {
    * @private
    */
   onSourceRemoved_(event) {
-    if (event.source) {
-      events.unlisten(/** @type {events.EventTarget} */ (event.source), GoogEventType.PROPERTYCHANGE,
-          this.onSourcePropertyChange_, this);
+    if (event.source && this.listenKeys_[event.source]) {
+      unlistenByKey(this.listenKeys_[event.source]);
+      delete this.listenKeys_[event.source];
       this.fireChangeEvent_();
     }
   }

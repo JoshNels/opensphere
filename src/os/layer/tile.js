@@ -1,5 +1,12 @@
 goog.declareModuleId('os.layer.Tile');
 
+import {listen} from 'ol/src/events.js';
+import {createEmpty, isEmpty} from 'ol/src/extent.js';
+import Property from 'ol/src/layer/Property.js';
+import OLTileLayer from 'ol/src/layer/Tile.js';
+import TileImage from 'ol/src/source/TileImage.js';
+import UrlTile from 'ol/src/source/UrlTile.js';
+
 import '../mixin/tileimagemixin.js';
 import '../mixin/urltilemixin.js';
 import EventType from '../action/eventtype.js';
@@ -42,15 +49,7 @@ const {assert} = goog.require('goog.asserts');
 const GoogEventType = goog.require('goog.events.EventType');
 const {getRandomString} = goog.require('goog.string');
 
-const events = goog.require('ol.events');
-const {createEmpty, isEmpty} = goog.require('ol.extent');
-const Property = goog.require('ol.layer.Property');
-const OLTileLayer = goog.require('ol.layer.Tile');
-const TileImage = goog.require('ol.source.TileImage');
-const UrlTile = goog.require('ol.source.UrlTile');
-
 const {TileFilterFn} = goog.requireType('os.tile');
-const {default: IActionTarget} = goog.requireType('os.ui.action.IActionTarget');
 
 
 /**
@@ -182,9 +181,11 @@ export default class Tile extends OLTileLayer {
      */
     this.groupLabel_ = null;
 
+    this.propertyChangeListenKey_ = null;
+
     var source = this.getSource();
     if (source) {
-      events.listen(source, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
+      this.propertyChangeListenKey_ = listen(source, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
     }
   }
 
@@ -209,9 +210,7 @@ export default class Tile extends OLTileLayer {
       // If you don't suppress the event for this set, you'll get an infinite, asynchronous
       // loop with the layer UI. Debugging that was fun. Like "shaving your head with a cheese
       // grater" fun.
-      source.suppressEvents();
-      source.set(Property.MIN_RESOLUTION, value);
-      source.enableEvents();
+      source.set(Property.MIN_RESOLUTION, value, true);
     }
 
     super.setMinResolution(value);
@@ -233,9 +232,7 @@ export default class Tile extends OLTileLayer {
       // If you don't suppress the event for this set, you'll get an infinite, asynchronous
       // loop with the layer UI. Debugging that was fun. Like "shaving your head with a cheese
       // grater" fun.
-      source.suppressEvents();
-      source.set(Property.MAX_RESOLUTION, value);
-      source.enableEvents();
+      source.set(Property.MAX_RESOLUTION, value, true);
     }
 
     super.setMaxResolution(value);

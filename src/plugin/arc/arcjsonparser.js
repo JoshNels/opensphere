@@ -1,20 +1,17 @@
 goog.declareModuleId('plugin.arc.ArcJSONParser');
 
+import Feature from 'ol/src/Feature.js';
+import LinearRing from 'ol/src/geom/LinearRing.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
 import * as text from '../../os/file/mime/text.js';
 import * as geo2 from '../../os/geo/geo2.js';
 
 const Disposable = goog.require('goog.Disposable');
 const googString = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const LineString = goog.require('ol.geom.LineString');
-const LinearRing = goog.require('ol.geom.LinearRing');
-const MultiPoint = goog.require('ol.geom.MultiPoint');
-const MultiPolygon = goog.require('ol.geom.MultiPolygon');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
-
-const {default: IParser} = goog.requireType('os.parse.IParser');
-
 
 /**
  * Parses an arc JSON data source
@@ -192,8 +189,10 @@ class ArcJSONParser extends Disposable {
     }
 
     if (polygons.length > 1) {
-      var multi = new MultiPolygon(null);
-      multi.setPolygons(polygons);
+      var multi = new MultiPolygon([]);
+      for (var i = 0; i < polygons.length; i++) {
+        multi.appendPolygon(polygons[i]);
+      }
       return multi;
     }
     return polygons[0];

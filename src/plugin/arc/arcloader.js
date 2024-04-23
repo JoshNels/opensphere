@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.arc.ArcLoader');
 
+import {remove} from 'ol/src/array.js';
 import Request from '../../os/net/request.js';
 import * as arc from './arc.js';
 import ArcServer from './arcserver.js';
@@ -11,14 +12,6 @@ const dispose = goog.require('goog.dispose');
 const EventTarget = goog.require('goog.events.EventTarget');
 const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
-const olArray = goog.require('ol.array');
-
-const GoogEvent = goog.requireType('goog.events.Event');
-const Logger = goog.requireType('goog.log.Logger');
-const {default: ITreeNode} = goog.requireType('os.structs.ITreeNode');
-const {default: SlickTreeNode} = goog.requireType('os.ui.slick.SlickTreeNode');
-const {default: IArcLoader} = goog.requireType('plugin.arc.IArcLoader');
-
 
 /**
  * Loads the capabilities from an Arc server and constructs the tree.
@@ -293,7 +286,7 @@ class ArcLoader extends EventTarget {
       this.futureChildren_.push(node);
     }
 
-    olArray.remove(this.toLoad_, node);
+    remove(this.toLoad_, node);
 
     if (this.toLoad_.length === 0) {
       // cull any folders that have only one child to reduce tree clutter

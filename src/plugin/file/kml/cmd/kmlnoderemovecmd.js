@@ -3,8 +3,6 @@ goog.declareModuleId('plugin.file.kml.cmd.KMLNodeRemove');
 import State from '../../../../os/command/state.js';
 import AbstractKMLNode from './abstractkmlnodecmd.js';
 
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Command to remove a KML node from its parent.

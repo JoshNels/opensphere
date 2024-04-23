@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.area');
 
+import {find} from 'ol/src/array.js';
+import Feature from 'ol/src/Feature.js';
 import AlertEventSeverity from '../../os/alert/alerteventseverity.js';
 import AlertManager from '../../os/alert/alertmanager.js';
 import RecordField from '../../os/data/recordfield.js';
@@ -9,10 +11,6 @@ import {getAreaManager} from '../../os/query/queryinstance.js';
 import * as query from '../../os/ui/query/query.js';
 
 const googString = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const olArray = goog.require('ol.array');
-
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
 
 
 /**
@@ -72,7 +70,7 @@ const processFeature_ = function(feature, config, mappings) {
 
   // Strip out unnecessary feature values (kml style was breaking the refresh)
   feature.getKeys().forEach(function(value) {
-    var found = olArray.find(query.featureKeys, function(key) {
+    var found = find(query.featureKeys, function(key) {
       return key.toLowerCase() == value.toLowerCase();
     });
     if (!found) {

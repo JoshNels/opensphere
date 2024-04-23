@@ -1,7 +1,20 @@
 goog.declareModuleId('os.ui.layer.compare.LayerCompareUI');
 
+import Collection from 'ol/src/Collection.js';
+import RotateControl from 'ol/src/control/Rotate.js';
+import ZoomControl from 'ol/src/control/Zoom.js';
+import {platformModifierKeyOnly} from 'ol/src/events/condition.js';
+import {createEmpty, getHeight, getWidth, buffer as olBuffer} from 'ol/src/extent.js';
+import DragZoom from 'ol/src/interaction/DragZoom.js';
+import {defaults} from 'ol/src/interaction.js';
+import TileLayer from 'ol/src/layer/Tile.js';
+import OLMap from 'ol/src/Map.js';
+import OLVectorSource from 'ol/src/source/Vector.js';
+import View from 'ol/src/View.js';
+
 import EventType from '../../../action/eventtype.js';
 import * as capture from '../../../capture/capture.js';
+import RecordField from '../../../data/recordfield.js';
 import ZOrder from '../../../data/zorder.js';
 import ZOrderEventType from '../../../data/zordereventtype.js';
 import LayerEventType from '../../../events/layereventtype.js';
@@ -12,12 +25,15 @@ import osImplements from '../../../implements.js';
 import instanceOf from '../../../instanceof.js';
 import MouseRotate from '../../../interaction/mouserotateinteraction.js';
 import ILayer from '../../../layer/ilayer.js';
+import VectorLayer from '../../../layer/vector.js';
 import * as osMap from '../../../map/map.js';
 import {getMapContainer} from '../../../map/mapinstance.js';
 import {getMaxFeatures} from '../../../ogc/ogc.js';
 import {ROOT} from '../../../os.js';
 import SourceClass from '../../../source/sourceclass.js';
-import {getLayersFromContext, visibleIfSupported} from '../../menu/layermenu.js';
+import VectorSource from '../../../source/vectorsource.js';
+import StyleType from '../../../style/styletype.js';
+import * as layerMenu from '../../menu/layermenu.js';
 import Menu from '../../menu/menu.js';
 import MenuItem from '../../menu/menuitem.js';
 import MenuItemType from '../../menu/menuitemtype.js';
@@ -27,30 +43,16 @@ import {launchConfirm} from '../../window/confirm.js';
 import {bringToFront, close as closeWindow, create as createWindow, getById as getWindowById} from '../../window.js';
 import LayerCompareNode from './layercomparenode.js';
 
-const DragZoom = goog.require('ol.interaction.DragZoom');
+
 const dispose = goog.require('goog.dispose');
 const ViewportSizeMonitor = goog.require('goog.dom.ViewportSizeMonitor');
 const {listen, unlistenByKey} = goog.require('goog.events');
 const GoogEventType = goog.require('goog.events.EventType');
-const Collection = goog.require('ol.Collection');
-const OLMap = goog.require('ol.Map');
 const Promise = goog.require('goog.Promise');
-const View = goog.require('ol.View');
-const RotateControl = goog.require('ol.control.Rotate');
-const ZoomControl = goog.require('ol.control.Zoom');
-const OLVectorSource = goog.require('ol.source.Vector');
-const olExtent = goog.require('ol.extent');
-const {defaults} = goog.require('ol.interaction');
-const {getCenter: getExtentCenter} = goog.require('ol.extent');
-const {platformModifierKeyOnly} = goog.require('ol.events.condition');
-
 const EventKey = goog.requireType('goog.events.Key');
-const Control = goog.requireType('ol.control.Control');
-const Interaction = goog.requireType('ol.interaction.Interaction');
-const Layer = goog.requireType('ol.layer.Layer');
+const googString = goog.require('goog.string');
 const LayerEvent = goog.requireType('os.events.LayerEvent');
 const {Context} = goog.requireType('os.ui.menu.layer');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
 const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
 const {default: MenuItemOptions} = goog.requireType('os.ui.menu.MenuItemOptions');
 
@@ -296,7 +298,7 @@ export class Controller {
         icons: ['<i class="fa fa-fw fa-fighter-jet"></i>'],
         tooltip: 'Repositions the map to show the layer',
         handler: this.handleGoTo.bind(this),
-        beforeRender: visibleIfSupported,
+        beforeRender: layerMenu.visibleIfSupported,
         sort: 10
       }, {
         label: 'Remove',
@@ -353,7 +355,7 @@ export class Controller {
         icons: ['<i class="fa fa-fw fa-fighter-jet"></i>'],
         tooltip: 'Repositions the map to show the layer',
         handler: this.handleGoTo.bind(this),
-        beforeRender: visibleIfSupported,
+        beforeRender: layerMenu.visibleIfSupported,
         sort: 10
       }, {
         label: 'Remove',
@@ -496,7 +498,9 @@ export class Controller {
       maxZoom: osMap.MAX_ZOOM,
       projection,
       rotation,
-      zoom
+      zoom,
+      showFullExtent: true,
+      constrainRotation: false
     });
   }
 
@@ -518,6 +522,21 @@ export class Controller {
   }
 
   /**
+   * Checks if the basemap is already within the layers list.
+   * @param {*} layers The list of layers to check.
+   * @param {*} basemap The basemap to check if in list.
+   * @return {boolean} True if the basemap is in list of layers, false if it is not.
+   */
+  layerIncluded(layers, basemap) {
+    let included = false;
+
+    for (let i = 0; i < layers.length && !included; i++) {
+      included = layers[i].getSource() == basemap.getSource();
+    }
+    return included;
+  }
+
+  /**
    * Set the layers in a collection.
    * @param {Collection<Layer>} collection The collection.
    * @param {Array<Layer>|undefined} layers The layers.
@@ -529,17 +548,82 @@ export class Controller {
     if (layers) {
       // always include the basemaps here, but never add duplicates
       getBasemaps().forEach((basemap) => {
-        if (!layers.includes(basemap)) {
-          layers.push(basemap);
+        if (!this.layerIncluded(layers, basemap)) {
+          const source = basemap.getSource();
+          const maxRes = basemap.getMaxResolution();
+          const minRes = basemap.getMinResolution();
+          const opacity = basemap.getOpacity();
+          const zIndex = basemap.getZIndex();
+          layers.push(new TileLayer({
+            source: source,
+            opacity: opacity,
+            preload: Infinity,
+            maxResolution: maxRes,
+            minResolution: minRes,
+            zIndex: zIndex
+          }));
         }
       });
 
       layers.forEach((layer) => {
-        collection.push(layer);
+        if (!(layer instanceof TileLayer)) {
+          var id = googString.getRandomString();
+          var newSource = new VectorSource();
+          newSource.setId(id);
+
+          var newLayer = new VectorLayer({
+            source: newSource,
+            zIndex: layer.getZIndex()
+          });
+          newLayer.setId(id);
+          newSource.setTitle(newLayer.getTitle());
+          // keep track of its ID, use it for revert
+          var newSource = newLayer.getSource();
+          this.newLayerId_ = newSource.getId();
+
+          // get a cloning function and use it to do the feature copy
+          var cloneFunc = this.getFeatureCloneFunction(this.newLayerId_);
+          const source = layer.getSource();
+          var features = this.getFeatures(source);
+          var clonedFeatures = features.map(cloneFunc);
+          newSource.addFeatures(clonedFeatures);
+          collection.push(newLayer);
+        } else {
+          collection.push(layer);
+        }
       });
     }
   }
 
+  /**
+   * @param {VectorSource} source The vector source
+   * @return {Array<!Feature>} the features
+   */
+  getFeatures(source) {
+    return source.getFeatures();
+  }
+
+  /**
+   * @param {string} sourceId
+   * @return {function(Feature):Feature} map function used for cloning lists of features
+   */
+  getFeatureCloneFunction(sourceId) {
+    /**
+     * @param {Feature} feature Original feature
+     * @return {Feature} copied feature
+     */
+    var cloneFunc = function(feature) {
+      var newFeature = feature.clone();
+      newFeature.suppressEvents();
+      newFeature.set(RecordField.SOURCE_ID, sourceId, false);
+      newFeature.unset(StyleType.SELECT, false);
+      newFeature.unset(StyleType.HIGHLIGHT, false);
+      newFeature.enableEvents();
+      return newFeature;
+    };
+
+    return cloneFunc;
+  }
   /**
    * Set the layers on the left map.
    * @param {Array<Layer>|undefined} layers The layers.
@@ -594,7 +678,7 @@ export class Controller {
     let nodes = [];
     if (layers && layers.length > 0) {
       nodes = layers.map((layer) => {
-        if (!isBasemap(layer)) {
+        if (!(layer instanceof TileLayer)) {
           const node = new LayerCompareNode();
           node.setLayer(/** @type {ILayer} */ (layer));
           return node;
@@ -744,7 +828,7 @@ export class Controller {
    */
   handleGoTo(event) {
     // aggregate the features and execute flyTo, in case they have altitude and pure extent wont cut it
-    const layers = getLayersFromContext(event.getContext());
+    const layers = layerMenu.getLayersFromContext(event.getContext());
     const features = layers.reduce((feats, layer) => {
       let source = layer.getSource();
       if (source instanceof OLVectorSource) {
@@ -757,9 +841,9 @@ export class Controller {
 
     let extent;
     if (features && features.length) {
-      extent = getGeometries(features).reduce(reduceExtentFromGeometries, olExtent.createEmpty());
+      extent = getGeometries(features).reduce(reduceExtentFromGeometries, createEmpty());
     } else {
-      extent = layers.reduce(reduceExtentFromLayers, olExtent.createEmpty());
+      extent = layers.reduce(reduceExtentFromLayers, createEmpty());
     }
 
     if (extent && extent.indexOf(Infinity) != -1 || extent.indexOf(-Infinity) != -1) {
@@ -778,8 +862,8 @@ export class Controller {
     const leftView = this.leftMap.getView();
     const buffer = .1;
 
-    if (olExtent.getWidth(extent) < buffer && olExtent.getHeight(extent) < buffer) {
-      extent = olExtent.buffer(extent, buffer);
+    if (getWidth(extent) < buffer && getHeight(extent) < buffer) {
+      extent = olBuffer(extent, buffer);
     }
 
     // In 2D views, projections supporting wrapping can pan "multiple worlds" over. We want to pan the least
@@ -985,7 +1069,7 @@ export const getCompareController = () => {
 const canMove = function(target, context) {
   this.visible = true;
 
-  const layers = getLayersFromContext(context);
+  const layers = layerMenu.getLayersFromContext(context);
   const controller = getCompareController();
 
   if (controller && layers.some((l) => controller.hasLayer(l, target))) {

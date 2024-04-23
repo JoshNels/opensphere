@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.google.places.Search');
 
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+import {transformExtent} from 'ol/src/proj.js';
 import AlertEventSeverity from '../../../os/alert/alerteventseverity.js';
 import AlertManager from '../../../os/alert/alertmanager.js';
 import Settings from '../../../os/config/settings.js';
@@ -10,12 +13,6 @@ import AbstractUrlSearch from '../../../os/search/abstracturlsearch.js';
 import AttrResult from './attrresult.js';
 import Result from './result.js';
 import {ID} from './index.js';
-
-const Feature = goog.require('ol.Feature');
-const Point = goog.require('ol.geom.Point');
-const olProj = goog.require('ol.proj');
-
-const {default: Request} = goog.requireType('os.net.Request');
 
 
 /**
@@ -47,7 +44,7 @@ export default class Search extends AbstractUrlSearch {
       var extent = MapContainer.getInstance().getMap().getExtent();
 
       // translate to lon/lat
-      extent = olProj.transformExtent(extent, osMap.PROJECTION, osProj.EPSG4326);
+      extent = transformExtent(extent, osMap.PROJECTION, osProj.EPSG4326);
       var distance = osasm.geodesicInverse(extent.slice(0, 2), extent.slice(2, 4)).distance;
 
       if (distance <= threshold) {

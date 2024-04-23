@@ -6,10 +6,6 @@ import MapContainer from '../../os/mapcontainer.js';
 import VectorSource from '../../os/source/vectorsource.js';
 import * as vectortools from './vectortools.js';
 
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: VectorSource1} = goog.requireType('os.source.Vector');
-const {default: Options} = goog.requireType('plugin.vectortools.Options');
-
 
 /**
  * Command for copying a vector layer

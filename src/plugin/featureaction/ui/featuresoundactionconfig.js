@@ -8,9 +8,6 @@ import {ROOT} from '../../../os/os.js';
 import Module from '../../../os/ui/module.js';
 import ActionConfigCtrl from './featureactionconfig.js';
 
-const {default: SoundAction} = goog.requireType('plugin.im.action.feature.SoundAction');
-
-
 /**
  * Directive to configure a feature style action.
  *

@@ -1,5 +1,11 @@
 goog.declareModuleId('os.layer.Image');
 
+import {listen} from 'ol/src/events.js';
+import {createEmpty, isEmpty} from 'ol/src/extent.js';
+import ImageLayer from 'ol/src/layer/Image.js';
+import ImageSource from 'ol/src/source/Image.js';
+import ImageStatic from 'ol/src/source/ImageStatic.js';
+
 import EventType from '../action/eventtype.js';
 import {adjustColor, adjustSharpness} from '../color.js';
 import * as dispatcher from '../dispatcher.js';
@@ -25,14 +31,6 @@ import SynchronizerType from './synchronizertype.js';
 const {assert} = goog.require('goog.asserts');
 const GoogEventType = goog.require('goog.events.EventType');
 const {getRandomString} = goog.require('goog.string');
-
-const {listen} = goog.require('ol.events');
-const {createEmpty, isEmpty} = goog.require('ol.extent');
-const ImageLayer = goog.require('ol.layer.Image');
-const ImageSource = goog.require('ol.source.Image');
-const ImageStatic = goog.require('ol.source.ImageStatic');
-
-const {default: IActionTarget} = goog.requireType('os.ui.action.IActionTarget');
 
 
 /**

@@ -17,9 +17,6 @@ import * as places from '../places.js';
 
 const Disposable = goog.require('goog.Disposable');
 
-const {default: Method} = goog.requireType('os.interpolate.Method');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * The quickaddplaces directive

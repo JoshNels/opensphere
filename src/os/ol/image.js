@@ -1,13 +1,10 @@
 goog.declareModuleId('os.ol.image');
 
+import {createCanvasContext2D} from 'ol/src/dom.js';
+import {boundingExtent, getCenter, getWidth, getHeight} from 'ol/src/extent.js';
+import ImageCanvas from 'ol/src/ImageCanvas.js';
+
 import {D2R} from '../geo/geo.js';
-
-const ImageCanvas = goog.require('ol.ImageCanvas');
-const {createCanvasContext2D} = goog.require('ol.dom');
-const olExtent = goog.require('ol.extent');
-
-const ImageBase = goog.requireType('ol.ImageBase');
-
 
 /**
  * Rotates an OL Image about the center of the image's extent by the given value.
@@ -19,9 +16,9 @@ const ImageBase = goog.requireType('ol.ImageBase');
 export const rotate = function(image, rotation) {
   var rad = rotation * D2R;
   var origExtent = image.getExtent();
-  var center = olExtent.getCenter(origExtent);
-  var width = olExtent.getWidth(origExtent);
-  var height = olExtent.getHeight(origExtent);
+  var center = getCenter(origExtent);
+  var width = getWidth(origExtent);
+  var height = getHeight(origExtent);
 
   var resolution = image.getResolution();
   var pxWidth = width / resolution;
@@ -37,9 +34,9 @@ export const rotate = function(image, rotation) {
     rotate(rad, -pxWidth2, pxHeight2),
     rotate(rad, -pxWidth2, -pxHeight2),
     rotate(rad, pxWidth2, -pxHeight2)];
-  var pxExtent = olExtent.boundingExtent(coords);
+  var pxExtent = boundingExtent(coords);
 
-  var ctx = createCanvasContext2D(olExtent.getWidth(pxExtent), olExtent.getHeight(pxExtent));
+  var ctx = createCanvasContext2D(getWidth(pxExtent), getHeight(pxExtent));
 
   var canvas = ctx.canvas;
   var newWidth2 = canvas.width / 2;

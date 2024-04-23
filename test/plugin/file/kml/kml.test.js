@@ -1,28 +1,24 @@
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
-goog.require('ol.format.KML');
-goog.require('ol.geom.GeometryLayout');
-goog.require('ol.geom.LineString');
-goog.require('ol.geom.MultiLineString');
-goog.require('ol.xml');
 goog.require('os.style');
 goog.require('os.time.TimeInstant');
 goog.require('os.time.TimeRange');
 goog.require('plugin.file.kml');
 
+import GeometryLayout from 'ol/src/geom/GeometryLayout.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import {pushParseAndPop} from 'ol/src/xml.js';
+
+import KML from '../../../../src/os/ol/format/KML.js';
+import {toAbgrString} from '../../../../src/os/style/style.js';
+import TimeInstant from '../../../../src/os/time/timeinstant.js';
+import TimeRange from '../../../../src/os/time/timerange.js';
+import {readTime, OL_LINK_PARSERS, readLatLonBox, readLatLonQuad, GROUND_OVERLAY_PARSERS} from '../../../../src/plugin/file/kml/kml.js';
 
 describe('plugin.file.kml', function() {
   const dom = goog.module.get('goog.dom');
   const googDomXml = goog.module.get('goog.dom.xml');
-  const KML = goog.module.get('ol.format.KML');
-  const GeometryLayout = goog.module.get('ol.geom.GeometryLayout');
-  const LineString = goog.module.get('ol.geom.LineString');
-  const MultiLineString = goog.module.get('ol.geom.MultiLineString');
-  const xml = goog.module.get('ol.xml');
-  const {toAbgrString} = goog.module.get('os.style');
-  const {default: TimeInstant} = goog.module.get('os.time.TimeInstant');
-  const {default: TimeRange} = goog.module.get('os.time.TimeRange');
-  const kml = goog.module.get('plugin.file.kml');
 
   it('reads a kml:TimeStamp element', function() {
     var when = new Date();
@@ -30,7 +26,7 @@ describe('plugin.file.kml', function() {
     var doc = googDomXml.loadXml(timeStampXml);
     var tsEl = dom.getFirstElementChild(doc);
 
-    var time = kml.readTime(tsEl, []);
+    var time = readTime(tsEl, []);
     expect(time).not.toBeNull();
     expect(time instanceof TimeInstant).toBe(true);
     expect(time instanceof TimeRange).toBe(false);
@@ -46,7 +42,7 @@ describe('plugin.file.kml', function() {
     var doc = googDomXml.loadXml(timeSpanXml);
     var tsEl = dom.getFirstElementChild(doc);
 
-    var time = kml.readTime(tsEl, []);
+    var time = readTime(tsEl, []);
     expect(time).not.toBeNull();
     expect(time instanceof TimeRange).toBe(true);
     expect(time.getStart()).toBe(begin.getTime());
@@ -72,7 +68,7 @@ describe('plugin.file.kml', function() {
     var linkEl = dom.getFirstElementChild(doc);
 
     // all but href are our extension to the Openlayers parser
-    var link = xml.pushParseAndPop({}, kml.OL_LINK_PARSERS(), linkEl, []);
+    var link = pushParseAndPop({}, OL_LINK_PARSERS(), linkEl, []);
     expect(link['href']).toBe(href);
     expect(link['refreshMode']).toBe(refreshMode);
     expect(link['refreshInterval']).toBe(refreshInterval);
@@ -104,7 +100,7 @@ describe('plugin.file.kml', function() {
       [forwardSlashHref]: 'data://fakeimagedatauri'
     };
 
-    var link = xml.pushParseAndPop({}, kml.OL_LINK_PARSERS(), linkEl, []);
+    var link = pushParseAndPop({}, OL_LINK_PARSERS(), linkEl, []);
     expect(link['href']).toBe(forwardSlashHref);
     expect(link['refreshMode']).toBe(refreshMode);
     expect(link['refreshInterval']).toBe(refreshInterval);
@@ -133,7 +129,7 @@ describe('plugin.file.kml', function() {
     const doc = googDomXml.loadXml(latLonBoxXml);
     const latLonBoxEl = dom.getFirstElementChild(doc);
     const latLonBox = {};
-    kml.readLatLonBox(latLonBoxEl, [latLonBox]);
+    readLatLonBox(latLonBoxEl, [latLonBox]);
     expect(latLonBox.extent.every((val, idx) => val === expectedExtent[idx])).toBe(true);
     expect(latLonBox.rotation).toBe(rotation);
   });
@@ -152,7 +148,7 @@ describe('plugin.file.kml', function() {
     const doc = googDomXml.loadXml(latLonQuadXml);
     const latLonQuadEl = dom.getFirstElementChild(doc);
     const latLonQuad = {};
-    kml.readLatLonQuad(latLonQuadEl, [latLonQuad]);
+    readLatLonQuad(latLonQuadEl, [latLonQuad]);
     expect(latLonQuad.extent.every((val, idx) => val === expectedExtent[idx])).toBe(true);
   });
 
@@ -170,7 +166,7 @@ describe('plugin.file.kml', function() {
     const doc = googDomXml.loadXml(latLonQuadXml);
     const latLonQuadEl = dom.getFirstElementChild(doc);
     const latLonQuad = {};
-    kml.readLatLonQuad(latLonQuadEl, [latLonQuad]);
+    readLatLonQuad(latLonQuadEl, [latLonQuad]);
     expect(latLonQuad.extent.every((val, idx) => val === expectedExtent[idx])).toBe(true);
   });
 
@@ -202,7 +198,7 @@ describe('plugin.file.kml', function() {
 
     const doc = googDomXml.loadXml(groundOverlayXml);
     const groundOverlayEl = dom.getFirstElementChild(doc);
-    const groundOverlay = xml.pushParseAndPop({}, kml.GROUND_OVERLAY_PARSERS, groundOverlayEl, []);
+    const groundOverlay = pushParseAndPop({}, GROUND_OVERLAY_PARSERS, groundOverlayEl, []);
     expect(groundOverlay.altitude).toBe(altitude);
     expect(groundOverlay.altitudeMode).toBe(altitudeMode);
     expect(groundOverlay.color.every((val, idx) => val === color[idx]));

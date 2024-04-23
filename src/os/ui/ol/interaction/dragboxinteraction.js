@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.ol.interaction.DragBox');
 
+import {fromExtent} from 'ol/src/geom/Polygon.js';
+import {toLonLat} from 'ol/src/proj.js';
+
 import RecordField from '../../../data/recordfield.js';
 import {normalizeLongitude} from '../../../geo/geo2.js';
 import GeometryField from '../../../geom/geometryfield.js';
@@ -8,12 +11,6 @@ import Method from '../../../interpolatemethod.js';
 import Box from '../../../olm/render/box.js';
 import AltitudeMode from '../../../webgl/altitudemode.js';
 import AbstractDrag from './abstractdraginteraction.js';
-
-const Polygon = goog.require('ol.geom.Polygon');
-const {toLonLat} = goog.require('ol.proj');
-
-const Style = goog.requireType('ol.style.Style');
-
 
 /**
  * Draws a rectangluar query area on the map.
@@ -174,7 +171,7 @@ export default class DragBox extends AbstractDrag {
         geometry = new Polygon([coords]);
       } else {
         this.useOriginal = true;
-        geometry = Polygon.fromExtent([minX, minY, maxX, maxY]);
+        geometry = fromExtent([minX, minY, maxX, maxY]);
       }
 
       this.updateGeometry(geometry);

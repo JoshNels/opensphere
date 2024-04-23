@@ -3,8 +3,6 @@ goog.declareModuleId('plugin.ogc.query.OGCExclusionFormatter');
 import * as interpolate from '../../../os/interpolate.js';
 import OSOGCExclusionFormatter from '../../../os/ogc/filter/ogcexclusionformatter.js';
 
-const Geometry = goog.requireType('ol.geom.Geometry');
-
 
 /**
  * OGC exclusion formatter that converts the geometry to EPSG:4326.

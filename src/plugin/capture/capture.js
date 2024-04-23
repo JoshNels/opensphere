@@ -6,9 +6,6 @@ import TimelineController from '../../os/time/timelinecontroller.js';
 const Timer = goog.require('goog.Timer');
 const googArray = goog.require('goog.array');
 
-const {default: ILayer} = goog.requireType('os.layer.ILayer');
-
-
 /**
  * Default wait time to check if the map is ready, in milliseconds.
  * @type {number}

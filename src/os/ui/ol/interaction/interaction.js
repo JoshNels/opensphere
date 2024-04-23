@@ -1,15 +1,10 @@
 goog.declareModuleId('os.ui.ol.interaction');
 
+import EventType from 'ol/src/events/EventType.js';
+
 import {isGeometryPolygonal} from '../../../geo/geo.js';
 
 const userAgent = goog.require('goog.userAgent');
-const EventType = goog.require('ol.events.EventType');
-
-const Feature = goog.requireType('ol.Feature');
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const Layer = goog.requireType('ol.layer.Layer');
-const RenderFeature = goog.requireType('ol.render.Feature');
-
 
 /**
  * If true, keyboard interactions will fire on keydown. Otherwise, they will fire on keypress.

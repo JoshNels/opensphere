@@ -2,9 +2,6 @@ goog.declareModuleId('os.events.LayerEvent');
 
 const GoogEvent = goog.require('goog.events.Event');
 
-const OLEventTarget = goog.requireType('ol.events.EventTarget');
-
-
 /**
  */
 export default class LayerEvent extends GoogEvent {

@@ -1,15 +1,14 @@
 goog.declareModuleId('os.interaction.DragBox');
 
+import {asArray} from 'ol/src/color.js';
+import Stroke from 'ol/src/style/Stroke.js';
+import Style from 'ol/src/style/Style.js';
+
 import I3DSupport from '../i3dsupport.js';
 import osImplements from '../implements.js';
 import OSMap from '../map.js';
 import OLDragBox from '../ui/ol/interaction/dragboxinteraction.js';
 
-const {asArray} = goog.require('ol.color');
-const Stroke = goog.require('ol.style.Stroke');
-const Style = goog.require('ol.style.Style');
-
-const Polygon = goog.requireType('ol.geom.Polygon');
 
 
 /**

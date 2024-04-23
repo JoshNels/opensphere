@@ -1,10 +1,7 @@
 goog.declareModuleId('os.ol.source.VectorTile');
 
-const OLVectorTileSource = goog.require('ol.source.VectorTile');
-const {expandUrl, createFromTileUrlFunctions} = goog.require('ol.TileUrlFunction');
-
-const Projection = goog.requireType('ol.proj.Projection');
-
+import OLVectorTileSource from 'ol/src/source/VectorTile.js';
+import {expandUrl, createFromTileUrlFunctions} from 'ol/src/tileurlfunction.js';
 
 /**
  * Layer source for vector tile data.

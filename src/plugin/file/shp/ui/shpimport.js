@@ -7,9 +7,6 @@ import {directive as wizardDirective} from '../../../../os/ui/wiz/wizard.js';
 import SHPDescriptor from '../shpdescriptor.js';
 import SHPProvider from '../shpprovider.js';
 
-const {default: SHPParserConfig} = goog.requireType('plugin.file.shp.SHPParserConfig');
-
-
 /**
  * Controller for the SHP import wizard window
  *

@@ -15,12 +15,6 @@ import {Metrics as FeatureActionMetrics, editEntry, getExportName} from './featu
 
 const googDispose = goog.require('goog.dispose');
 
-const {default: FilterActionEntry} = goog.requireType('os.im.action.FilterActionEntry');
-const {default: ITreeNode} = goog.requireType('os.structs.ITreeNode');
-const {default: FilterActionNode} = goog.requireType('os.ui.im.action.FilterActionNode');
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const layerMenu = goog.requireType('os.ui.menu.layer');
-
 
 /**
  * Application feature action node menu.

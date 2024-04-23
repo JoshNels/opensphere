@@ -5,16 +5,13 @@
  */
 goog.declareModuleId('os.interpolate');
 
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import {get, getTransform} from 'ol/src/proj.js';
+
 import * as geo2 from './geo/geo2.js';
 import Method from './interpolatemethod.js';
 import * as osMap from './map/map.js';
 import {EPSG4326} from './proj/proj.js';
-
-const GeometryType = goog.require('ol.geom.GeometryType');
-const olProj = goog.require('ol.proj');
-
-const {default: Config} = goog.requireType('os.interpolate.Config');
-
 
 /**
  * Interpolation settings keys.
@@ -130,11 +127,11 @@ export const beginTempInterpolation = function(opt_projection, opt_method, opt_d
   };
 
   if (opt_projection) {
-    var projection = olProj.get(opt_projection || osMap.PROJECTION);
+    var projection = get(opt_projection || osMap.PROJECTION);
 
     tmpTransforms = ({
-      coordToLonLat: olProj.getTransform(projection, EPSG4326),
-      lonLatToCoord: olProj.getTransform(EPSG4326, projection),
+      coordToLonLat: getTransform(projection, EPSG4326),
+      lonLatToCoord: getTransform(EPSG4326, projection),
       lastProj: projection.getCode()
     });
   }
@@ -288,8 +285,8 @@ let tmpTransforms = null;
 export const updateTransforms = function() {
   if (!localTransforms || osMap.PROJECTION.getCode() !== localTransforms.lastProj) {
     localTransforms = {
-      coordToLonLat: olProj.getTransform(osMap.PROJECTION, EPSG4326),
-      lonLatToCoord: olProj.getTransform(EPSG4326, osMap.PROJECTION),
+      coordToLonLat: getTransform(osMap.PROJECTION, EPSG4326),
+      lonLatToCoord: getTransform(EPSG4326, osMap.PROJECTION),
       lastProj: osMap.PROJECTION.getCode()
     };
   }

@@ -1,13 +1,10 @@
 goog.declareModuleId('os.source.ImageStatic');
 
+import {intersects} from 'ol/src/extent.js';
+import ImageState from 'ol/src/ImageState.js';
+import OLImageStatic from 'ol/src/source/ImageStatic.js';
+
 import {rotate} from '../ol/image.js';
-
-const ImageState = goog.require('ol.ImageState');
-const {intersects} = goog.require('ol.extent');
-const OLImageStatic = goog.require('ol.source.ImageStatic');
-
-const ImageBase = goog.requireType('ol.ImageBase');
-
 
 /**
  * @suppress {accessControls}

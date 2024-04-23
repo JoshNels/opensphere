@@ -5,8 +5,6 @@ import {directiveTag as kmlTourNodeUi} from './kmltournodeui.js';
 
 const dispose = goog.require('goog.dispose');
 
-const {default: Tour} = goog.requireType('plugin.file.kml.tour.Tour');
-
 /**
  * Tree node for a KML tour.
  */

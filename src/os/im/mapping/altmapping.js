@@ -15,9 +15,6 @@ import RenameMapping from './renamemapping.js';
 const googObject = goog.require('goog.object');
 const {toTitleCase} = goog.require('goog.string');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * Altitude mapping.
  *

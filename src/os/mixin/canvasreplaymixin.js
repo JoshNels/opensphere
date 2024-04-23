@@ -1,21 +1,16 @@
 goog.declareModuleId('os.mixin.canvasreplay');
 
-const {getUid} = goog.require('ol');
-const {equals} = goog.require('ol.array');
-const {intersects} = goog.require('ol.extent');
-const length = goog.require('ol.geom.flat.length');
-const textpath = goog.require('ol.geom.flat.textpath');
-const {transform2D} = goog.require('ol.geom.flat.transform');
-const canvas = goog.require('ol.render.canvas');
-const Instruction = goog.require('ol.render.canvas.Instruction');
-const Replay = goog.require('ol.render.canvas.Replay');
-const {TEXT_ALIGN} = goog.require('ol.render.replay');
-const olTransform = goog.require('ol.transform');
-
-const Feature = goog.requireType('ol.Feature');
-const SimpleGeometry = goog.requireType('ol.geom.SimpleGeometry');
-const RenderFeature = goog.requireType('ol.render.Feature');
-const TextReplay = goog.requireType('ol.render.canvas.TextReplay');
+import {equals} from 'ol/src/array.js';
+import {intersects} from 'ol/src/extent.js';
+import {lineStringLength} from 'ol/src/geom/flat/length.js';
+import {drawTextOnPath} from 'ol/src/geom/flat/textpath.js';
+import {transform2D} from 'ol/src/geom/flat/transform.js';
+import Replay from 'ol/src/render/canvas/ExecutorGroup.js';
+import Instruction from 'ol/src/render/canvas/Instruction.js';
+import {TEXT_ALIGN} from 'ol/src/render/canvas/TextBuilder.js';
+import {defaultPadding} from 'ol/src/render/canvas.js';
+import {setFromArray} from 'ol/src/transform.js';
+import {getUid} from 'ol/src/util.js';
 
 /**
  * If the mixin has been initialized.
@@ -59,7 +54,7 @@ export const init = () => {
       pixelCoordinates = transform2D(
           this.coordinates, 0, this.coordinates.length, 2,
           transform, this.pixelCoordinates_);
-      olTransform.setFromArray(this.renderedTransform_, transform);
+      setFromArray(this.renderedTransform_, transform);
     }
     // removed skipFeatures because that is just superfluous
     var i = 0; // instruction index
@@ -191,7 +186,7 @@ export const init = () => {
             backgroundFill = /** @type {boolean} */ (instruction[17]);
             backgroundStroke = /** @type {boolean} */ (instruction[18]);
           } else {
-            padding = canvas.defaultPadding;
+            padding = defaultPadding;
             backgroundFill = backgroundStroke = false;
           }
 
@@ -225,12 +220,12 @@ export const init = () => {
           var textKey = /** @type {string} */ (instruction[13]);
           var textScale = /** @type {number} */ (instruction[14]);
 
-          var pathLength = length.lineString(pixelCoordinates, begin, end, 2);
+          var pathLength = lineStringLength(pixelCoordinates, begin, end, 2);
           var textLength = measure(text);
           if (overflow || textLength <= pathLength) {
             var textAlign = /** @type {TextReplay} */ (this).textStates[textKey].textAlign;
             var startM = (pathLength - textLength) * TEXT_ALIGN[textAlign];
-            var parts = textpath.lineString(
+            var parts = drawTextOnPath(
                 pixelCoordinates, begin, end, 2, text, measure, startM, maxAngle);
             if (parts) {
               var c;
@@ -249,7 +244,7 @@ export const init = () => {
                       /** @type {number} */ (part[0]), /** @type {number} */ (part[1]), label,
                       anchorX, anchorY, declutterGroup, label.height, 1, 0, 0,
                       /** @type {number} */ (part[3]), textScale, false, label.width,
-                      canvas.defaultPadding, null, null);
+                      defaultPadding, null, null);
                 }
               }
               if (fillKey) {
@@ -263,7 +258,7 @@ export const init = () => {
                       /** @type {number} */ (part[0]), /** @type {number} */ (part[1]), label,
                       anchorX, anchorY, declutterGroup, label.height, 1, 0, 0,
                       /** @type {number} */ (part[3]), textScale, false, label.width,
-                      canvas.defaultPadding, null, null);
+                      defaultPadding, null, null);
                 }
               }
             }

@@ -1,9 +1,8 @@
-goog.require('ol.style.Stroke');
 goog.require('os.style.StrokeReader');
 
+import Stroke from 'ol/src/style/Stroke.js';
 
 describe('os.style.StrokeReader', function() {
-  const Stroke = goog.module.get('ol.style.Stroke');
   const {default: StrokeReader} = goog.module.get('os.style.StrokeReader');
 
   var config;

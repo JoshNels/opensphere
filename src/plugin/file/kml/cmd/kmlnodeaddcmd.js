@@ -3,8 +3,6 @@ goog.declareModuleId('plugin.file.kml.cmd.KMLNodeAdd');
 import State from '../../../../os/command/state.js';
 import AbstractKMLNode from './abstractkmlnodecmd.js';
 
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Command to add a KML node to a parent.

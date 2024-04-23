@@ -1,5 +1,8 @@
 goog.declareModuleId('os.source');
 
+import Feature from 'ol/src/Feature.js';
+import Property from 'ol/src/layer/Property.js';
+
 import AlertEventSeverity from '../alert/alerteventseverity.js';
 import AlertManager from '../alert/alertmanager.js';
 import ColumnDefinition from '../data/columndefinition.js';
@@ -22,10 +25,7 @@ import {numerateNameCompare} from '../ui/slick/column.js';
 const Timer = goog.require('goog.Timer');
 const {defaultCompare} = goog.require('goog.array');
 const {isEmptyOrWhitespace, makeSafe} = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const Property = goog.require('ol.layer.Property');
 
-const OLSource = goog.requireType('ol.source.Source');
 const {default: VectorLayer} = goog.requireType('os.layer.Vector');
 const {default: FeatureTypeColumn} = goog.requireType('os.ogc.FeatureTypeColumn');
 const {default: ISource} = goog.requireType('os.source.ISource');

@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.arc');
 
+import {get as getProjection, transformExtent} from 'ol/src/proj.js';
 import {getText} from '../../os/file/mime/text.js';
 import {EPSG4326} from '../../os/proj/proj.js';
 import {launchForLayer} from '../../os/ui/query/combinator.js';
@@ -8,14 +9,6 @@ import ESRIType from './esritype.js';
 
 const xml = goog.require('goog.dom.xml');
 const googString = goog.require('goog.string');
-const {get: getProjection, transformExtent} = goog.require('ol.proj');
-
-const {default: VectorLayer} = goog.requireType('os.layer.Vector');
-const {default: FeatureTypeColumn} = goog.requireType('os.ogc.FeatureTypeColumn');
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-const {default: SlickTreeNode} = goog.requireType('os.ui.slick.SlickTreeNode');
-const {default: ArcServer} = goog.requireType('plugin.arc.ArcServer');
-const {default: IArcLoader} = goog.requireType('plugin.arc.IArcLoader');
 
 
 /**

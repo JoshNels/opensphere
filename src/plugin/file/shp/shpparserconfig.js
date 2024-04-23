@@ -7,8 +7,6 @@ import SHPParser from './shpparser.js';
 
 const googEvents = goog.require('goog.events');
 
-const {default: OSFile} = goog.requireType('os.file.File');
-
 
 /**
  * Configuration for a SHP parser.

@@ -1,5 +1,11 @@
 goog.declareModuleId('os.ui.feature.FeatureInfoUI');
 
+import EventType from 'ol/src/events/EventType.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+import {toLonLat} from 'ol/src/proj.js';
+
 import '../location/simplelocation.js';
 import '../uiswitch.js';
 import './simplepropertiesui.js';
@@ -19,12 +25,7 @@ import FeatureInfoTabManager from './featureinfotabmanager.js';
 
 const Disposable = goog.require('goog.Disposable');
 const GoogEventType = goog.require('goog.events.EventType');
-const Feature = goog.require('ol.Feature');
-const events = goog.require('ol.events');
-const Point = goog.require('ol.geom.Point');
-const {toLonLat} = goog.require('ol.proj');
 
-const RenderFeature = goog.requireType('ol.render.Feature');
 const {default: FeatureEvent} = goog.requireType('os.data.FeatureEvent');
 const {default: FeatureTab} = goog.requireType('os.ui.tab.FeatureTab');
 
@@ -123,7 +124,7 @@ export class Controller extends Disposable {
     super.disposeInternal();
 
     if (this.changeKey_) {
-      events.unlistenByKey(this.changeKey_);
+      unlistenByKey(this.changeKey_);
       this.changeKey_ = null;
     }
 
@@ -178,7 +179,7 @@ export class Controller extends Disposable {
     }
 
     if (this.changeKey_) {
-      events.unlistenByKey(this.changeKey_);
+      unlistenByKey(this.changeKey_);
       this.changeKey_ = null;
     }
 
@@ -190,7 +191,7 @@ export class Controller extends Disposable {
       var feature = newVal[0];
       if (feature && feature instanceof Feature) {
         // listen for change events fired by the feature so the window can be updated
-        this.changeKey_ = events.listen(feature, events.EventType.CHANGE, this.onFeatureChangeEvent, this);
+        this.changeKey_ = listen(feature, EventType.CHANGE, this.onFeatureChangeEvent, this);
       }
     }
 

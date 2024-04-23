@@ -1,5 +1,15 @@
 goog.declareModuleId('os.ui.ol.interaction.DrawPolygon');
 
+import Collection from 'ol/src/Collection.js';
+import {getCenter, getWidth} from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import LineString from 'ol/src/geom/LineString.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+import MapBrowserEvent from 'ol/src/MapBrowserEvent.js';
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
+import OLVectorSource from 'ol/src/source/Vector.js';
+
 import RecordField from '../../../data/recordfield.js';
 import {normalizeGeometryCoordinates} from '../../../geo/geo2.js';
 import {validate} from '../../../geo/jsts.js';
@@ -16,18 +26,6 @@ const BrowserEvent = goog.require('goog.events.BrowserEvent');
 const KeyCodes = goog.require('goog.events.KeyCodes');
 const KeyEvent = goog.require('goog.events.KeyEvent');
 const KeyHandler = goog.require('goog.events.KeyHandler');
-const Collection = goog.require('ol.Collection');
-const Feature = goog.require('ol.Feature');
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-const MapBrowserPointerEvent = goog.require('ol.MapBrowserPointerEvent');
-const {getCenter, getWidth} = goog.require('ol.extent');
-const LineString = goog.require('ol.geom.LineString');
-const Polygon = goog.require('ol.geom.Polygon');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-const OLVectorSource = goog.require('ol.source.Vector');
-
-const Geometry = goog.requireType('ol.geom.Geometry');
-
 
 /**
  */
@@ -36,12 +34,12 @@ export default class DrawPolygon extends AbstractDraw {
    * Constructor.
    */
   constructor() {
-    super({
-      handleEvent: DrawPolygon.handleEvent_,
-      handleDownEvent: DrawPolygon.handleDownEvent_,
-      handleMoveEvent: DrawPolygon.handleMoveEvent_,
-      handleUpEvent: DrawPolygon.handleUpEvent_
-    });
+    super({});
+
+    this.handleEvent = this.handleEvent_;
+    this.handleDownEvent = this.handleDownEvent_;
+    this.handleMoveEvent = this.handleMoveEvent_;
+    this.handleUpEvent = this.handleUpEvent_;
 
     this.type = DrawPolygon.TYPE;
 
@@ -135,7 +133,7 @@ export default class DrawPolygon extends AbstractDraw {
   }
 
   /**
-   * @param {MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param {MapBrowserEvent} mapBrowserEvent Event.
    * @protected
    */
   saveLast(mapBrowserEvent) {
@@ -143,7 +141,7 @@ export default class DrawPolygon extends AbstractDraw {
   }
 
   /**
-   * @param {MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param {MapBrowserEvent} mapBrowserEvent Event.
    * @return {boolean} Whether or not we should finish drawing
    * @protected
    */
@@ -358,11 +356,11 @@ export default class DrawPolygon extends AbstractDraw {
   }
 
   /**
-   * @param {MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param {MapBrowserEvent} mapBrowserEvent Event.
    * @this DrawPolygon
    * @private
    */
-  static handleMoveEvent_(mapBrowserEvent) {
+  handleMoveEvent_(mapBrowserEvent) {
     if (this.drawing) {
       this.update(mapBrowserEvent);
     }
@@ -375,8 +373,8 @@ export default class DrawPolygon extends AbstractDraw {
    * @private
    * @suppress {accessControls}
    */
-  static handleEvent_(mapBrowserEvent) {
-    if (!(mapBrowserEvent instanceof MapBrowserPointerEvent)) {
+  handleEvent_(mapBrowserEvent) {
+    if (!(mapBrowserEvent instanceof MapBrowserEvent)) {
       return true;
     }
 
@@ -394,12 +392,12 @@ export default class DrawPolygon extends AbstractDraw {
   }
 
   /**
-   * @param {MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param {MapBrowserEvent} mapBrowserEvent Event.
    * @this DrawPolygon
    * @return {boolean}
    * @private
    */
-  static handleUpEvent_(mapBrowserEvent) {
+  handleUpEvent_(mapBrowserEvent) {
     var px = mapBrowserEvent.pixel;
     if (this.downPixel_ && Math.abs(px[0] - this.downPixel_[0]) < 3 && Math.abs(px[1] - this.downPixel_[1]) < 3) {
       // If we saved the down pixel and the up event is within our tolerance, handle the event. If outside the
@@ -422,12 +420,12 @@ export default class DrawPolygon extends AbstractDraw {
   }
 
   /**
-   * @param {MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param {MapBrowserEvent} mapBrowserEvent Event.
    * @this DrawPolygon
    * @return {boolean}
    * @private
    */
-  static handleDownEvent_(mapBrowserEvent) {
+  handleDownEvent_(mapBrowserEvent) {
     // Only handle the event if there are no other draw controls active
     if (!this.getOtherDrawing()) {
       var browserEvent = new BrowserEvent(mapBrowserEvent.originalEvent);

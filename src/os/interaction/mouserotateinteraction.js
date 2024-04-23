@@ -1,13 +1,14 @@
 goog.declareModuleId('os.interaction.MouseRotate');
 
+import {noModifierKeys} from 'ol/src/events/condition.js';
+import Interaction from 'ol/src/interaction/Interaction.js';
+
 import I3DSupport from '../i3dsupport.js';
 import osImplements from '../implements.js';
 import {ROTATE_DELTA} from './interaction.js';
 
 const {assert} = goog.require('goog.asserts');
 const BrowserEvent = goog.require('goog.events.BrowserEvent');
-const {noModifierKeys} = goog.require('ol.events.condition');
-const Interaction = goog.require('ol.interaction.Interaction');
 
 
 /**
@@ -84,8 +85,8 @@ export default class MouseRotate extends Interaction {
    */
   static handleEvent(mapBrowserEvent) {
     var stopEvent = false;
-    if (mapBrowserEvent.pointerEvent &&
-        mapBrowserEvent.pointerEvent.buttons == 2 &&
+    if (mapBrowserEvent.originalEvent &&
+        mapBrowserEvent.originalEvent.buttons == 2 &&
         mapBrowserEvent.dragging &&
         noModifierKeys(mapBrowserEvent)) {
       this.rotate(mapBrowserEvent);

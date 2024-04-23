@@ -7,8 +7,6 @@ import {directive as wizardDirective} from '../../../../os/ui/wiz/wizard.js';
 import CSVDescriptor from '../csvdescriptor.js';
 import CSVProvider from '../csvprovider.js';
 
-const {default: CSVParserConfig} = goog.requireType('plugin.file.csv.CSVParserConfig');
-
 
 /**
  * Controller for the CSV import wizard window

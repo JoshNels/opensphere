@@ -1,5 +1,3 @@
-goog.require('ol.Feature');
-goog.require('ol.proj');
 goog.require('os.MapContainer');
 goog.require('os.config.Settings');
 goog.require('os.mock');
@@ -8,9 +6,9 @@ goog.require('plugin.pelias.geocoder.Plugin');
 goog.require('plugin.pelias.geocoder.Result');
 goog.require('plugin.pelias.geocoder.Search');
 
+import Feature from 'ol/src/Feature.js';
+
 describe('plugin.pelias.geocoder.Search', function() {
-  const Feature = goog.module.get('ol.Feature');
-  const olProj = goog.module.get('ol.proj');
   const {default: MapContainer} = goog.module.get('os.MapContainer');
   const {default: Settings} = goog.module.get('os.config.Settings');
   const {default: SearchEventType} = goog.module.get('os.search.SearchEventType');
@@ -41,6 +39,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should not add boundary if the view diagonal is not within the threshold', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     Settings.getInstance().set('plugin.pelias.geocoder.extentParams', boundary);
     expect(search.getSearchUrl()).toBe(url);
   });
@@ -57,8 +56,9 @@ describe('plugin.pelias.geocoder.Search', function() {
   it('should add focus point if so configured', function() {
     var search = new Search();
     Settings.getInstance().set('plugin.pelias.geocoder.focusPoint', true);
-    spyOn(olProj, 'toLonLat').andReturn([150.1, -35.2]);
+    spyOn(MapContainer.getInstance().getMap().getView(), 'getCenter').andReturn([150.1, -35.2]);
     spyOn(MapContainer.getInstance().getMap().getView(), 'getZoom').andReturn(10.0);
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
 
     expect(search.getSearchUrl()).toBe(url + '&focus.point.lat=-35.2&focus.point.lon=150.1');
   });
@@ -66,8 +66,9 @@ describe('plugin.pelias.geocoder.Search', function() {
   it('should should not add focus point at low zoom levels', function() {
     var search = new Search();
     Settings.getInstance().set('plugin.pelias.geocoder.focusPoint', true);
-    spyOn(olProj, 'toLonLat').andReturn([150.1, -35.2]);
+    spyOn(MapContainer.getInstance().getMap().getView(), 'getCenter').andReturn([150.1, -35.2]);
     spyOn(MapContainer.getInstance().getMap().getView(), 'getZoom').andReturn(3.0);
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
 
     expect(search.getSearchUrl()).toBe(url);
   });
@@ -91,6 +92,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should handle malformed JSON in results', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     loadAndRun(
         search,
         '/base/test/plugin/pelias/geocoder/malformed.json',
@@ -102,6 +104,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should handle valid JSON without features', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     loadAndRun(
         search,
         '/base/test/plugin/pelias/geocoder/nofeatures.json',
@@ -113,6 +116,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should handle JSON with invalid features', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     loadAndRun(
         search,
         '/base/test/plugin/pelias/geocoder/badfeatures.json',
@@ -129,6 +133,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should parse results', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     loadAndRun(
         search,
         '/base/test/plugin/pelias/geocoder/pelias-result.json',
@@ -149,6 +154,7 @@ describe('plugin.pelias.geocoder.Search', function() {
 
   it('should parse results with addresses', function() {
     var search = new Search();
+    spyOn(MapContainer.getInstance().getMap(), 'getExtent').andReturn([0, 0, 45, 45]);
     loadAndRun(
         search,
         '/base/test/plugin/pelias/geocoder/pelias-result2.json',

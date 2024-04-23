@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.places');
 
+import Feature from 'ol/src/Feature.js';
+import Geometry from 'ol/src/geom/Geometry.js';
+import {getUid} from 'ol/src/util.js';
 import * as annotation from '../../os/annotation/annotation.js';
 import CommandProcessor from '../../os/command/commandprocessor.js';
 import SequenceCommand from '../../os/command/sequencecommand.js';
@@ -23,15 +26,8 @@ import KMLField from '../file/kml/kmlfield.js';
 import KMLTreeExporter from '../file/kml/kmltreeexporter.js';
 import {getKMLRoot, updateFolder, updatePlacemark} from '../file/kml/ui/kmlui.js';
 
-const {removeDuplicates} = goog.require('goog.array');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const Geometry = goog.require('ol.geom.Geometry');
 
-const {LabelConfig} = goog.requireType('os.style.label');
-const {default: KMLLayerNode} = goog.requireType('plugin.file.kml.ui.KMLLayerNode');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-const {default: PlacesManager} = goog.requireType('plugin.places.PlacesManager');
+const {removeDuplicates} = goog.require('goog.array');
 
 
 /**

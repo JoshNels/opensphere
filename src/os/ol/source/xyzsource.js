@@ -1,10 +1,7 @@
 goog.declareModuleId('os.ol.source.XYZ');
 
-const TileUrlFunction = goog.require('ol.TileUrlFunction');
-const OLXYZ = goog.require('ol.source.XYZ');
-
-const Projection = goog.requireType('ol.proj.Projection');
-
+import OLXYZ from 'ol/src/source/XYZ.js';
+import {expandUrl, createFromTileUrlFunctions} from 'ol/src/tileurlfunction.js';
 
 /**
  * Layer source for tile data with URLs in a set XYZ format.
@@ -37,7 +34,7 @@ export default class XYZ extends OLXYZ {
    * @inheritDoc
    */
   setUrl(url) {
-    var urls = this.urls = TileUrlFunction.expandUrl(url);
+    var urls = this.urls = expandUrl(url);
     this.setTileUrlFunction(this.createFromTemplates(urls));
   }
 
@@ -74,7 +71,7 @@ export default class XYZ extends OLXYZ {
         } else {
           return template.replace(zRegEx, (tileCoord[0] + offset).toString())
               .replace(xRegEx, tileCoord[1].toString())
-              .replace(yRegEx, (-tileCoord[2] - 1).toString())
+              .replace(yRegEx, tileCoord[2].toString())
               .replace(dashYRegEx, function() {
                 var y = (1 << tileCoord[0]) - tileCoord[2] - 1;
                 return y.toString();
@@ -90,6 +87,6 @@ export default class XYZ extends OLXYZ {
    * @protected
    */
   createFromTemplates(templates) {
-    return TileUrlFunction.createFromTileUrlFunctions(templates.map(this.createFromTemplate, this));
+    return createFromTileUrlFunctions(templates.map(this.createFromTemplate, this));
   }
 }

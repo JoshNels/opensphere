@@ -1,20 +1,16 @@
 goog.require('goog.events.EventType');
-goog.require('ol');
-goog.require('ol.events');
-goog.require('ol.source.TileWMS');
-goog.require('ol.tilegrid');
 goog.require('os.layer.Tile');
 goog.require('os.map');
 goog.require('os.mock');
 goog.require('plugin.ogc.wms.TileWMSSource');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import TileWMS from 'ol/src/source/TileWMS.js';
+import {DEFAULT_MAX_ZOOM} from 'ol/src/tilegrid/common.js';
+import {createForProjection} from 'ol/src/tilegrid.js';
 
 describe('os.layer.Tile', function() {
   const GoogEventType = goog.module.get('goog.events.EventType');
-  const ol = goog.module.get('ol');
-  const events = goog.module.get('ol.events');
-  const TileWMS = goog.module.get('ol.source.TileWMS');
-  const tilegrid = goog.module.get('ol.tilegrid');
   const {default: Tile} = goog.module.get('os.layer.Tile');
   const osMap = goog.module.get('os.map');
   const {default: TileWMSSource} = goog.module.get('plugin.ogc.wms.TileWMSSource');
@@ -39,8 +35,9 @@ describe('os.layer.Tile', function() {
       calls++;
     };
 
+    let listenKey;
     runs(function() {
-      events.listen(layer, GoogEventType.PROPERTYCHANGE, loadListener);
+      listenKey = listen(layer, GoogEventType.PROPERTYCHANGE, loadListener);
       expect(layer.isLoading()).toBe(false);
 
       // make sure setting to the same value doesn't fire a change event
@@ -75,7 +72,7 @@ describe('os.layer.Tile', function() {
       expect(calls).toEqual(2);
       expect(layer.isLoading()).toBe(false);
 
-      events.unlisten(layer, GoogEventType.PROPERTYCHANGE, loadListener);
+      unlistenByKey(listenKey);
     });
   });
 
@@ -98,7 +95,7 @@ describe('os.layer.Tile', function() {
     var layer = new Tile({
       source: new TileWMSSource(({
         params: {'LAYERS': 'dontcare'},
-        tileGrid: tilegrid.createForProjection(osMap.PROJECTION, ol.DEFAULT_MAX_ZOOM, [256, 256])
+        tileGrid: createForProjection(osMap.PROJECTION, DEFAULT_MAX_ZOOM, [256, 256])
       }))
     });
 

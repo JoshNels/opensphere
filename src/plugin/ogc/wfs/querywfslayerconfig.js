@@ -13,9 +13,6 @@ import getFilterColumns from './getfiltercolumns.js';
 import launchFilterManager from './launchfiltermanager.js';
 import WFSLayerConfig from './wfslayerconfig.js';
 
-const {default: OGCFilterModifierOptions} = goog.requireType('os.ogc.filter.OGCFilterModifierOptions');
-const {default: RequestSource} = goog.requireType('os.source.Request');
-
 
 /**
  * The query version of the WFS layer config, which adds connections to various query managers

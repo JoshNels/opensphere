@@ -1,5 +1,8 @@
 goog.declareModuleId('os.annotation.FeatureAnnotationUI');
 
+import EventType from 'ol/src/events/EventType.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import '../ui/text/tuieditorui.js';
 import PropertyChangeEvent from '../events/propertychangeevent.js';
 import FeatureEditField from '../ui/featureeditfield.js';
@@ -10,12 +13,6 @@ import AbstractAnnotationCtrl from './abstractannotationctrl.js';
 import * as annotation from './annotation.js';
 import TailStyle from './tailstyle.js';
 import TailType from './tailtype.js';
-
-const olEvents = goog.require('ol.events');
-const EventType = goog.require('ol.events.EventType');
-
-const {default: WebGLOverlay} = goog.requireType('os.webgl.WebGLOverlay');
-
 
 /**
  * The annotation template. This must be inline to avoid timing issues between template load and positioning the
@@ -55,7 +52,7 @@ const template =
         '<div ng-show="!ctrl.editingName">{{ctrl.name}}</div>' +
         '<div class="form-row p-1" ng-if="ctrl.editingName">' +
           '<div class="col">' +
-            '<input class="form-control" type="text" ng-model="ctrl.name"/>' +
+            '<input id="placeName" class="form-control" type="text" ng-model="ctrl.name" ng-click="ctrl.setFocus()"/>' +
           '</div>' +
           '<div class="col-auto">' +
             '<button class="btn btn-success mr-1" title="Save the name" ' +
@@ -73,7 +70,8 @@ const template =
           'ng-show="ctrl.options.showDescription" ' +
           'ng-style="{ background: ctrl.options.showBackground ? ctrl.options.bodyBG : transparent }" ' +
           'ng-dblclick="ctrl.editDescription()">' +
-        '<tuieditor text="ctrl.description" edit="ctrl.editingDescription" is-required="false" maxlength="4000">' +
+        '<tuieditor text="ctrl.description" edit="ctrl.editingDescription" is-required="false"' +
+        'maxlength="4000" ng-click="ctrl.setFocusDesc()">' +
         '</tuieditor>' +
         '<div class="text-right mt-1" ng-if="ctrl.editingDescription">' +
           '<button class="btn btn-success mr-1" title="Save the text box" ng-click="ctrl.saveAnnotation()">' +
@@ -161,8 +159,8 @@ export class Controller extends AbstractAnnotationCtrl {
      */
     this.userChanged_ = false;
 
-    olEvents.listen(this.feature, EventType.CHANGE, this.onFeatureChange_, this);
-    olEvents.listen(this.overlay, 'change:visible', this.onOverlayVisibleChange_, this);
+    this.changeEventsKey_ = listen(this.feature, EventType.CHANGE, this.onFeatureChange_, this);
+    this.visibleEventsKey_ = listen(this.overlay, 'change:visible', this.onOverlayVisibleChange_, this);
   }
 
   /**
@@ -171,8 +169,8 @@ export class Controller extends AbstractAnnotationCtrl {
   $onDestroy() {
     super.$onDestroy();
 
-    olEvents.unlisten(this.feature, EventType.CHANGE, this.onFeatureChange_, this);
-    olEvents.unlisten(this.overlay, 'change:visible', this.onOverlayVisibleChange_, this);
+    unlistenByKey(this.changeEventsKey_);
+    unlistenByKey(this.visibleEventsKey_);
 
     this.feature = null;
     this.overlay = null;
@@ -272,7 +270,7 @@ export class Controller extends AbstractAnnotationCtrl {
 
       // try updating the tail
       if (this.updateTail()) {
-        olEvents.unlisten(this.overlay, 'change:visible', this.onOverlayVisibleChange_, this);
+        unlistenByKey(this.visibleEventsKey_);
       }
 
       this.inVisibleChange_ = false;
@@ -317,13 +315,6 @@ export class Controller extends AbstractAnnotationCtrl {
     }
 
     return undefined;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  updateTail() {
-    return this.tailType === TailType.ABSOLUTE ? this.updateTailAbsolute() : this.updateTailFixed();
   }
 
   /**

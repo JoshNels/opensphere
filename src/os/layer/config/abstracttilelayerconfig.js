@@ -1,5 +1,10 @@
 goog.declareModuleId('os.layer.config.AbstractTileLayerConfig');
 
+import {transformExtent} from 'ol/src/proj.js';
+import {DEFAULT_MAX_ZOOM} from 'ol/src/tilegrid/common.js';
+import TileGrid from 'ol/src/tilegrid/TileGrid.js';
+import {createForProjection} from 'ol/src/tilegrid.js';
+
 import '../../mixin/tileimagemixin.js';
 import '../../mixin/urltilemixin.js';
 import Settings from '../../config/settings.js';
@@ -14,14 +19,8 @@ import Tile from '../tile.js';
 import AbstractLayerConfig from './abstractlayerconfig.js';
 
 const log = goog.require('goog.log');
-const {DEFAULT_MAX_ZOOM} = goog.require('ol');
-const {transformExtent} = goog.require('ol.proj');
-const {createForProjection} = goog.require('ol.tilegrid');
 
 const Logger = goog.requireType('goog.log.Logger');
-const Projection = goog.requireType('ol.proj.Projection');
-const TileImage = goog.requireType('ol.source.TileImage');
-const TileGrid = goog.requireType('ol.tilegrid.TileGrid');
 const {default: TileClass} = goog.requireType('os.TileClass');
 
 
@@ -114,7 +113,16 @@ export default class AbstractTileLayerConfig extends AbstractLayerConfig {
     }
 
     this.projection = projection;
-    this.tileGrid = createForProjection(this.projection, DEFAULT_MAX_ZOOM, [width, height]);
+    const tempGrid = createForProjection(this.projection, DEFAULT_MAX_ZOOM, [width, height]);
+    const gridOptions = {
+      extent: tempGrid.getExtent(),
+      origin: tempGrid.getOrigin(0),
+      resolutions: tempGrid.getResolutions(),
+      tileSize: tempGrid.getTileSize(0),
+      minZoom: options['zoomOffset'] == -1 ? 1 : 0
+    };
+
+    this.tileGrid = new TileGrid(gridOptions);
 
     // cross origin
     if (!isValidCrossOrigin(options['crossOrigin'])) {

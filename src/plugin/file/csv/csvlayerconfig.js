@@ -4,8 +4,6 @@ import AbstractDataSourceLayerConfig from '../../../os/layer/config/abstractdata
 import CSVParser from './csvparser.js';
 import CSVParserConfig from './csvparserconfig.js';
 
-const {default: FeatureImporter} = goog.requireType('os.im.FeatureImporter');
-
 
 /**
  */

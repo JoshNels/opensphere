@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.file.kml.AbstractKMLManager');
 
+import {listen} from 'ol/src/events.js';
 import AlertManager from '../../../os/alert/alertmanager.js';
 import ConfigEventType from '../../../os/config/eventtype.js';
 import OsEventType from '../../../os/events/eventtype.js';
@@ -14,16 +15,6 @@ const dispose = goog.require('goog.dispose');
 const GoogEventTarget = goog.require('goog.events.EventTarget');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
-const events = goog.require('ol.events');
-
-const Event = goog.requireType('goog.events.Event');
-const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
-const {default: osFile} = goog.requireType('os.file.File');
-const {default: KMLLayer} = goog.requireType('plugin.file.kml.KMLLayer');
-const {default: KMLSource} = goog.requireType('plugin.file.kml.KMLSource');
-const {default: KMLTreeExporter} = goog.requireType('plugin.file.kml.KMLTreeExporter');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
 
 /**
  * Abstract KML manager class for persistent layers (e.g. Places).
@@ -106,6 +97,8 @@ export default class AbstractKMLManager extends GoogEventTarget {
      * @private
      */
     this.saveDelay_ = new Delay(this.saveInternal, 250, this);
+
+    this.sourceListenKey = null;
   }
 
   /**
@@ -227,7 +220,7 @@ export default class AbstractKMLManager extends GoogEventTarget {
       this.setupLayer(this.layer_, options);
 
       this.source_ = /** @type {KMLSource} */ (this.layer_.getSource());
-      events.listen(this.source_, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
+      this.sourceListenKey = listen(this.source_, GoogEventType.PROPERTYCHANGE, this.onSourcePropertyChange_, this);
 
       if (!this.source_.isLoading()) {
         this.onSourceLoaded_();

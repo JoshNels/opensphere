@@ -1,10 +1,5 @@
 goog.declareModuleId('os.layer.AnimationOverlayOptions');
 
-const Feature = goog.requireType('ol.Feature');
-const OLMap = goog.requireType('ol.Map');
-const Style = goog.requireType('ol.style.Style');
-
-
 /**
  * @typedef {{
  *   features: (Array<!Feature>|undefined),

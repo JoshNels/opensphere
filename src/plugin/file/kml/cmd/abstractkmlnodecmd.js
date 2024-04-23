@@ -6,9 +6,6 @@ const Disposable = goog.require('goog.Disposable');
 const dispose = goog.require('goog.dispose');
 const {default: ICommand} = goog.requireType('os.command.ICommand');
 
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
-
-
 /**
  * Abstract command for adding/removing KML nodes.
  *

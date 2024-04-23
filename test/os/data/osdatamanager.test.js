@@ -1,4 +1,3 @@
-goog.require('ol.source.TileWMS');
 goog.require('os.MapContainer');
 goog.require('os.config.Settings');
 goog.require('os.config.storage.SettingsObjectStorage');

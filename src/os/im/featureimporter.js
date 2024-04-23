@@ -1,5 +1,8 @@
 goog.declareModuleId('os.im.FeatureImporter');
 
+import Feature from 'ol/src/Feature.js';
+import {getUid} from 'ol/src/util.js';
+
 import DataEventType from '../data/event/dataeventtype.js';
 import RecordField from '../data/recordfield.js';
 import * as dispatcher from '../dispatcher.js';
@@ -12,8 +15,6 @@ import {sanitize} from '../ui/ui.js';
 import Importer from './importer.js';
 
 const log = goog.require('goog.log');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
 
 const GoogEvent = goog.requireType('goog.events.Event');
 const Logger = goog.requireType('goog.log.Logger');

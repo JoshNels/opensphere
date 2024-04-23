@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.file.geojson.GeoJSONExporter');
 
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+
 import RecordField from '../../../os/data/recordfield.js';
 import AbstractExporter from '../../../os/ex/abstractexporter.js';
 import Fields from '../../../os/fields/fields.js';
@@ -8,11 +10,8 @@ import {PROJECTION} from '../../../os/map/map.js';
 import * as osProj from '../../../os/proj/proj.js';
 import TimeRange from '../../../os/time/timerange.js';
 
+
 const log = goog.require('goog.log');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-
-const {default: ITime} = goog.requireType('os.time.ITime');
-
 
 /**
  * The GeoJSON exporter.

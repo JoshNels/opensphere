@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.params.menu');
 
+import Layer from 'ol/src/layer/Layer.js';
 import AlertEventSeverity from '../../os/alert/alerteventseverity.js';
 import AlertManager from '../../os/alert/alertmanager.js';
 import * as layerMenu from '../../os/ui/menu/layermenu.js';
@@ -7,7 +8,6 @@ import {launchParamsEdit} from './editrequestparams.js';
 import * as pluginParams from './params.js';
 
 const asserts = goog.require('goog.asserts');
-const Layer = goog.require('ol.layer.Layer');
 
 const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
 const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');

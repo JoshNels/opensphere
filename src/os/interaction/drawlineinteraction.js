@@ -1,13 +1,12 @@
 goog.declareModuleId('os.interaction.DrawLine');
 
+import {squaredDistance} from 'ol/src/coordinate.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
+
 import {normalizeGeometryCoordinates} from '../geo/geo2.js';
 import DrawPolygon from './drawpolygoninteraction.js';
 
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-const {squaredDistance} = goog.require('ol.coordinate');
-const LineString = goog.require('ol.geom.LineString');
-
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
 
 
 /**

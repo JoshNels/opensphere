@@ -1,18 +1,15 @@
 goog.declareModuleId('os.ui.ol.interaction.AreaHover');
 
+import {pointerMove} from 'ol/src/events/condition.js';
+import Select from 'ol/src/interaction/Select.js';
+import OLVectorLayer from 'ol/src/layer/Vector.js';
+import ViewHint from 'ol/src/ViewHint.js';
+
 import {getAreaManager} from '../../../query/queryinstance.js';
 import * as area from '../../../style/areastyle.js';
 import TimelineController from '../../../time/timelinecontroller.js';
 import OLMap from '../olmap.js';
 import {getEventFeature, getFirstPolygon} from './interaction.js';
-
-const ViewHint = goog.require('ol.ViewHint');
-const {pointerMove} = goog.require('ol.events.condition');
-const Select = goog.require('ol.interaction.Select');
-const OLVectorLayer = goog.require('ol.layer.Vector');
-
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-
 
 /**
  * Handles hover/highlight of areas
@@ -24,7 +21,7 @@ export default class AreaHover extends Select {
    */
   constructor(opt_options) {
     super(opt_options);
-    this.handleEvent = AreaHover.handleEvent_;
+    this.handleEvent = this.handleEvent_;
 
     var options = opt_options || {};
     this.condition = options.condition || pointerMove;
@@ -36,7 +33,7 @@ export default class AreaHover extends Select {
    * @this AreaHover
    * @private
    */
-  static handleEvent_(event) {
+  handleEvent_(event) {
     if (!this.condition(event)) {
       return true;
     }

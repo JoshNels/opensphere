@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.arc.query.ArcQueryHandler');
 
+import Feature from 'ol/src/Feature.js';
 import * as jsts from '../../../os/geo/jsts.js';
 import QueryHandler from '../../../os/query/queryhandler.js';
 import * as osUiFilter from '../../../os/ui/filter/filter.js';
@@ -11,9 +12,6 @@ const googArray = goog.require('goog.array');
 const dispose = goog.require('goog.dispose');
 const log = goog.require('goog.log');
 const googObject = goog.require('goog.object');
-const Feature = goog.require('ol.Feature');
-
-const {default: ActiveEntries} = goog.requireType('os.ui.query.ActiveEntries');
 
 
 /**

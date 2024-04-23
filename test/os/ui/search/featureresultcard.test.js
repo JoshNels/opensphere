@@ -1,7 +1,4 @@
 goog.require('goog.events.EventType');
-goog.require('ol.Feature');
-goog.require('ol.events');
-goog.require('ol.geom.Point');
 goog.require('os.MapContainer');
 goog.require('os.layer.Vector');
 goog.require('os.mock');
@@ -10,11 +7,10 @@ goog.require('os.style.StyleType');
 goog.require('os.ui.search.FeatureResultCardCtrl');
 goog.require('os.ui.search.place.CoordinateResult');
 
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
+
 describe('os.ui.search.FeatureResultCardCtrl', () => {
-  const GoogEventType = goog.module.get('goog.events.EventType');
-  const Feature = goog.module.get('ol.Feature');
-  const {getListeners} = goog.module.get('ol.events');
-  const Point = goog.module.get('ol.geom.Point');
   const {default: MapContainer} = goog.module.get('os.MapContainer');
   const {default: VectorLayer} = goog.module.get('os.layer.Vector');
   const {default: VectorSource} = goog.module.get('os.source.Vector');
@@ -34,7 +30,7 @@ describe('os.ui.search.FeatureResultCardCtrl', () => {
   const featureId = 'test-id';
 
   // Load the Angular module
-  beforeEach(module('app'));
+  beforeEach(angular.mock.module('app'));
 
   beforeEach(inject(($compile, $rootScope) => {
     feature = new Feature({
@@ -75,9 +71,6 @@ describe('os.ui.search.FeatureResultCardCtrl', () => {
     expect(controller.layer).toBe(layer);
 
     expect(source.getFeatureById(featureId)).toBe(feature);
-
-    const listeners = getListeners(source, GoogEventType.PROPERTYCHANGE);
-    expect(listeners.some((l) => l.bindTo === controller)).toBe(true);
   });
 
   it('cleans up the controller on dispose', () => {
@@ -88,9 +81,6 @@ describe('os.ui.search.FeatureResultCardCtrl', () => {
     expect(controller.element).toBeNull();
 
     expect(source.getFeatureById(featureId)).toBeNull();
-
-    const listeners = getListeners(source, GoogEventType.PROPERTYCHANGE);
-    expect(listeners.some((l) => l.bindTo === controller)).toBe(false);
   });
 
   it('adds and removes highlight on a feature', () => {

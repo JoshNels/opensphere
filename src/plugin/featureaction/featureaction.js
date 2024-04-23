@@ -8,9 +8,6 @@ import {getFilterColumns} from '../../os/source/source.js';
 import * as filterAction from '../../os/ui/im/action/filteraction.js';
 import {launchEditFeatureAction} from './ui/index.js';
 
-const {default: FilterActionEntry} = goog.requireType('os.im.action.FilterActionEntry');
-
-
 /**
  * Identifier for import action plugin components.
  * @type {string}

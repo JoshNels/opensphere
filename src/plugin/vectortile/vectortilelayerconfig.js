@@ -1,5 +1,11 @@
 goog.declareModuleId('plugin.vectortile.VectorTileLayerConfig');
 
+import {fromString} from 'ol/src/color.js';
+import {getWidth} from 'ol/src/extent.js';
+import VectorTileRenderType from 'ol/src/layer/VectorTileRenderType.js';
+import {transformExtent} from 'ol/src/proj.js';
+import Style from 'ol/src/style/Style.js';
+import {DEFAULT_MAX_ZOOM} from 'ol/src/tilegrid/common.js';
 import * as osColor from '../../os/color.js';
 import DisplaySetting from '../../os/config/displaysetting.js';
 import Settings from '../../os/config/settings.js';
@@ -18,18 +24,8 @@ import StyleManager from '../../os/style/stylemanager_shim.js';
 import {VectorTileFormat, getVectorTileFormat} from './vectortileformat.js';
 
 const log = goog.require('goog.log');
-const {DEFAULT_MAX_ZOOM, DEFAULT_MIN_ZOOM} = goog.require('ol');
-const olColor = goog.require('ol.color');
-const olExtent = goog.require('ol.extent');
-const VectorTileRenderType = goog.require('ol.layer.VectorTileRenderType');
-const {transformExtent} = goog.require('ol.proj');
-const Style = goog.require('ol.style.Style');
 
-const Feature = goog.requireType('ol.Feature');
-const Projection = goog.requireType('ol.proj.Projection');
-const RenderFeature = goog.requireType('ol.render.Feature');
-const OLVectorTileSource = goog.requireType('ol.source.VectorTile');
-
+const DEFAULT_MIN_ZOOM = 0;
 
 /**
  * Logger
@@ -223,7 +219,7 @@ export default class VectorTileLayerConfig extends AbstractLayerConfig {
           .then((glStyle) => {
             const sources = /** @type {string|Array<string>} */ (options['sources']);
 
-            const mapWidth = olExtent.getWidth(osMap.PROJECTION.getExtent());
+            const mapWidth = getWidth(osMap.PROJECTION.getExtent());
             const maxZoom = /** @type {number} */ (options['maxZoom'] || osMap.MAX_ZOOM);
 
             const resolutions = [];
@@ -290,7 +286,7 @@ export default class VectorTileLayerConfig extends AbstractLayerConfig {
               if (bgLayer && bgLayer.paint) {
                 const bgColor = /** @type {string|undefined} */ (bgLayer.paint['background-color']);
                 if (bgColor) {
-                  const rgbaArray = olColor.fromString(bgColor);
+                  const rgbaArray = fromString(bgColor);
                   Settings.getInstance().set(DisplaySetting.BG_COLOR, osColor.toHexString(rgbaArray));
                 }
               }

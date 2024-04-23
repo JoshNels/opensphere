@@ -1,17 +1,15 @@
 /* FIXME add rotation */
 goog.declareModuleId('os.olm.render.Circle');
 
+import {circular} from 'ol/src/geom/Polygon.js';
+import {toLonLat} from 'ol/src/proj.js';
+import {DEFAULT_RADIUS} from 'ol/src/sphere.js';
+
 import {interpolateGeom} from '../../interpolate.js';
 import UnitManager from '../../unit/unitmanager.js';
 import BaseShape from './baseshape.js';
 
 const {assert} = goog.require('goog.asserts');
-const Sphere = goog.require('ol.Sphere');
-const Polygon = goog.require('ol.geom.Polygon');
-const {toLonLat} = goog.require('ol.proj');
-
-const Style = goog.requireType('ol.style.Style');
-
 
 /**
  */
@@ -71,7 +69,7 @@ export default class Circle extends BaseShape {
 
     this.distance_ = osasm.geodesicInverse(start, end).distance;
 
-    var poly = Polygon.circular(Circle.WGS84_SPHERE, start, this.distance_);
+    var poly = circular(start, this.distance_);
     poly.osTransform();
 
     return poly;
@@ -128,4 +126,4 @@ export default class Circle extends BaseShape {
  * @type {Sphere}
  * @const
  */
-Circle.WGS84_SPHERE = new Sphere(6378137);
+Circle.WGS84_SPHERE = DEFAULT_RADIUS;

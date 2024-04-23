@@ -5,10 +5,6 @@ import {beginTempInterpolation, endTempInterpolation, interpolateGeom} from '../
 import Method from '../../interpolatemethod.js';
 import BaseShape from './baseshape.js';
 
-const Polygon = goog.requireType('ol.geom.Polygon');
-const Style = goog.requireType('ol.style.Style');
-
-
 /**
  * OL changed their box renderer to use the DOM, but that doesn't jive well with how we're using it. This class is a
  * modified copy of the pre-DOM ol.render.Box circa OL commit 31a68e21a51ee378c3698354523d185eef52f543.

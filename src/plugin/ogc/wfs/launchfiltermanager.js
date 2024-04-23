@@ -2,9 +2,6 @@ goog.declareModuleId('plugin.ogc.wfs.launchFilterManager');
 
 import {launchForLayer} from '../../../os/ui/query/combinator.js';
 
-const {default: Vector} = goog.requireType('os.layer.Vector');
-
-
 /**
  * Launch the filter manager
  *

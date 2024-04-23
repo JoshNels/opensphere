@@ -7,6 +7,8 @@ goog.require('os.layer.config.MockVectorLayerConfig');
 goog.require('os.layer.folder');
 goog.require('os.mock');
 
+import MockTileLayerConfig from './config/tilelayerconfig.mock.js';
+import MockVectorLayerConfig from './config/vectorlayerconfig.mock.js';
 
 describe('os.layer.FolderManager', () => {
   const {default: FolderManager} = goog.module.get('os.layer.FolderManager');
@@ -14,8 +16,6 @@ describe('os.layer.FolderManager', () => {
   const {FolderEventType, SettingsKey} = goog.module.get('os.layer.folder');
   const {default: MapContainer} = goog.module.get('os.MapContainer');
   const {default: LayerConfigManager} = goog.module.get('os.layer.config.LayerConfigManager');
-  const MockTileLayerConfig = goog.module.get('os.layer.config.MockTileLayerConfig');
-  const MockVectorLayerConfig = goog.module.get('os.layer.config.MockVectorLayerConfig');
 
   let folder;
   let childFolder;
@@ -75,11 +75,13 @@ describe('os.layer.FolderManager', () => {
 
     const map = MapContainer.getInstance();
     const lcm = LayerConfigManager.getInstance();
+    LayerConfigManager.getInstance().registerLayerConfig(MockTileLayerConfig.TYPE, MockTileLayerConfig);
     const tlc = lcm.getLayerConfig(MockTileLayerConfig.TYPE);
     map.addLayer(tlc.createLayer({id: 'tileLayer1'}));
     map.addLayer(tlc.createLayer({id: 'tileLayer2'}));
     map.addLayer(tlc.createLayer({id: 'tileLayer3'}));
 
+    LayerConfigManager.getInstance().registerLayerConfig(MockVectorLayerConfig.TYPE, MockVectorLayerConfig);
     const vlc = lcm.getLayerConfig(MockVectorLayerConfig.TYPE);
     map.addLayer(vlc.createLayer({id: 'vectorLayer1'}));
     map.addLayer(vlc.createLayer({id: 'vectorLayer2'}));

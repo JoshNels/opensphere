@@ -12,13 +12,6 @@ import PlacesManager from '../places/placesmanager.js';
 
 const log = goog.require('goog.log');
 
-const Promise = goog.requireType('goog.Promise');
-const OlFeature = goog.requireType('ol.Feature');
-const OlGeometry = goog.requireType('ol.geom.Geometry');
-const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
-const {default: CreateOptions} = goog.requireType('os.track.CreateOptions');
-const {default: TrackFeatureLike} = goog.requireType('os.track.TrackFeatureLike');
-
 
 /**
  * Base logger for the track plugin.

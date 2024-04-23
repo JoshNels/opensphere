@@ -4,9 +4,6 @@ import ValueFacet from '../../../os/search/valuefacet.js';
 
 const googString = goog.require('goog.string');
 
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
-
 /**
  * @extends {ValueFacet<!IDataDescriptor>}
  */

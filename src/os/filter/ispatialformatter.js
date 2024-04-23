@@ -1,8 +1,5 @@
 goog.declareModuleId('os.filter.ISpatialFormatter');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * Interface for formatting spatial regions for a data source.
  *

@@ -1,9 +1,6 @@
 goog.declareModuleId('os.ol.events.condition');
 
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
 
 /**
  * If a map browser event is for a right click.
@@ -14,5 +11,5 @@ const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
 export const rightClick = function(mapBrowserEvent) {
   return !!mapBrowserEvent && (mapBrowserEvent.type === MapBrowserEventType.POINTERUP ||
       mapBrowserEvent.type === MapBrowserEventType.POINTERDOWN) &&
-      !!mapBrowserEvent.pointerEvent && mapBrowserEvent.pointerEvent.button === 2;
+      mapBrowserEvent.originalEvent instanceof PointerEvent && mapBrowserEvent.originalEvent.button === 2;
 };

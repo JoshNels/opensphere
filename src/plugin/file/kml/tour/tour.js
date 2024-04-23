@@ -5,9 +5,6 @@ import EventType from './eventtype.js';
 const nextTick = goog.require('goog.async.nextTick');
 const EventTarget = goog.require('goog.events.EventTarget');
 
-const Promise = goog.requireType('goog.Promise');
-const {default: AbstractTourPrimitive} = goog.requireType('plugin.file.kml.tour.AbstractTourPrimitive');
-
 
 /**
  * Represents a KML tour, from a `gx:Tour` (KML 2.2) or `Tour` (KML 2.3) element.

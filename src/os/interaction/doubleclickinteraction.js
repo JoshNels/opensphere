@@ -1,5 +1,10 @@
 goog.declareModuleId('os.interaction.DoubleClick');
 
+import Feature from 'ol/src/Feature.js';
+import Interaction from 'ol/src/interaction/Interaction.js';
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
+import ViewHint from 'ol/src/ViewHint.js';
+
 import {getLayer} from '../feature/feature.js';
 import I3DSupport from '../i3dsupport.js';
 import osImplements from '../implements.js';
@@ -7,10 +12,6 @@ import VectorLayer from '../layer/vector.js';
 import launchMultiFeatureInfo from '../ui/feature/launchmultifeatureinfo.js';
 
 const {insert} = goog.require('goog.array');
-const Feature = goog.require('ol.Feature');
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-const ViewHint = goog.require('ol.ViewHint');
-const Interaction = goog.require('ol.interaction.Interaction');
 
 
 /**

@@ -1,24 +1,25 @@
 goog.declareModuleId('os.mixin.geometry');
 
+import {returnOrUpdate, createEmpty, createOrUpdateEmpty, getWidth, extend} from 'ol/src/extent.js';
+import Circle from 'ol/src/geom/Circle.js';
+import Geometry from 'ol/src/geom/Geometry.js';
+import GeometryCollection from 'ol/src/geom/GeometryCollection.js';
+import LinearRing from 'ol/src/geom/LinearRing.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import SimpleGeometry from 'ol/src/geom/SimpleGeometry.js';
+import {get, equivalent} from 'ol/src/proj.js';
+
 import GeometryField from '../geom/geometryfield.js';
 import * as osMap from '../map/map.js';
 import {merge} from '../object/object.js';
 import {EPSG4326} from '../proj/proj.js';
 
 const log = goog.require('goog.log');
-const olExtent = goog.require('ol.extent');
-const Circle = goog.require('ol.geom.Circle');
-const Geometry = goog.require('ol.geom.Geometry');
-const GeometryCollection = goog.require('ol.geom.GeometryCollection');
-const LineString = goog.require('ol.geom.LineString');
-const LinearRing = goog.require('ol.geom.LinearRing');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const MultiPoint = goog.require('ol.geom.MultiPoint');
-const MultiPolygon = goog.require('ol.geom.MultiPolygon');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
-const SimpleGeometry = goog.require('ol.geom.SimpleGeometry');
-const olProj = goog.require('ol.proj');
 
 const Logger = goog.requireType('goog.log.Logger');
 
@@ -37,10 +38,10 @@ const geometryLogger = log.getLogger('ol.geom.Geometry');
 Geometry.prototype.getAntiExtent = function(opt_extent) {
   var rev = this.getRevision();
   if (this.antiExtentRevision_ != rev) {
-    this.antiExtent_ = this.computeAntiExtent(this.antiExtent_ || olExtent.createEmpty());
+    this.antiExtent_ = this.computeAntiExtent(this.antiExtent_ || createEmpty());
     this.antiExtentRevision_ = rev;
   }
-  return olExtent.returnOrUpdate(this.antiExtent_, opt_extent);
+  return returnOrUpdate(this.antiExtent_, opt_extent);
 };
 
 
@@ -71,12 +72,12 @@ Geometry.prototype.antiExtentRevision_ = NaN;
  * @inheritDoc
  */
 SimpleGeometry.prototype.computeAntiExtent = function(extent) {
-  olExtent.createOrUpdateEmpty(extent);
+  createOrUpdateEmpty(extent);
   var coords = this.getFlatCoordinates();
   var stride = this.getStride();
   var proj = osMap.PROJECTION;
   var projExtent = proj.getExtent();
-  var projWidth = olExtent.getWidth(projExtent);
+  var projWidth = getWidth(projExtent);
   var projCenter = projExtent[0] + projWidth / 2;
 
   for (var i = 0, n = coords.length; i < n; i += stride) {
@@ -99,10 +100,10 @@ SimpleGeometry.prototype.computeAntiExtent = function(extent) {
  * @suppress {accessControls}
  */
 GeometryCollection.prototype.computeAntiExtent = function(extent) {
-  olExtent.createOrUpdateEmpty(extent);
+  createOrUpdateEmpty(extent);
   var geometries = this.geometries_;
   for (var i = 0, n = geometries.length; i < n; i++) {
-    olExtent.extend(extent, geometries[i].getAntiExtent());
+    extend(extent, geometries[i].getAntiExtent());
   }
 
   return extent;
@@ -118,13 +119,13 @@ GeometryCollection.prototype.computeAntiExtent = function(extent) {
 Geometry.prototype.osTransform = function(opt_projection) {
   opt_projection = opt_projection || EPSG4326;
 
-  var pFrom = olProj.get(opt_projection);
+  var pFrom = get(opt_projection);
   var pTo = osMap.PROJECTION;
 
   if (!pFrom) {
     log.warning(geometryLogger,
         '"' + opt_projection + '" was not defined as a projection in the application!');
-  } else if (!olProj.equivalent(pFrom, pTo)) {
+  } else if (!equivalent(pFrom, pTo)) {
     return this.transform(pFrom, pTo);
   }
 
@@ -139,9 +140,9 @@ Geometry.prototype.osTransform = function(opt_projection) {
  */
 Geometry.prototype.toLonLat = function() {
   var pFrom = osMap.PROJECTION;
-  var pTo = olProj.get(EPSG4326);
+  var pTo = get(EPSG4326);
 
-  if (!olProj.equivalent(pFrom, pTo)) {
+  if (!equivalent(pFrom, pTo)) {
     return this.transform(pFrom, pTo);
   }
 
@@ -157,8 +158,13 @@ Geometry.prototype.toLonLat = function() {
    */
   MultiPoint.prototype.getPoints = function() {
     var points = oldPoints.call(this);
-    for (var i = 0, n = points.length; i < n; i++) {
-      Object.assign(points[i].values_, this.values_);
+    if (this.values_) {
+      for (var i = 0, n = points.length; i < n; i++) {
+        if (points[i].values_ == null) {
+          points[i].values_ = {};
+        }
+        Object.assign(points[i].values_, this.values_);
+      }
     }
     return points;
   };
@@ -171,8 +177,13 @@ Geometry.prototype.toLonLat = function() {
    */
   MultiLineString.prototype.getLineStrings = function() {
     var lines = oldLines.call(this);
-    for (var i = 0, n = lines.length; i < n; i++) {
-      Object.assign(lines[i].values_, this.values_);
+    if (this.values_) {
+      for (var i = 0, n = lines.length; i < n; i++) {
+        if (lines[i].values_ == null) {
+          lines[i].values_ = {};
+        }
+        Object.assign(lines[i].values_, this.values_);
+      }
     }
     return lines;
   };
@@ -186,8 +197,13 @@ Geometry.prototype.toLonLat = function() {
    */
   MultiPolygon.prototype.getPolygons = function() {
     var polys = oldPolys.call(this);
-    for (var i = 0, n = polys.length; i < n; i++) {
-      Object.assign(polys[i].values_, this.values_);
+    if (this.values_) {
+      for (var i = 0, n = polys.length; i < n; i++) {
+        if (polys[i].values_ == null) {
+          polys[i].values_ = {};
+        }
+        Object.assign(polys[i].values_, this.values_);
+      }
     }
     return polys;
   };
@@ -247,7 +263,12 @@ Geometry.prototype.toLonLat = function() {
        */
       cls.prototype.clone = function() {
         var geom = origClone.call(this);
-        merge(this.values_, geom.values_);
+        if (this.values_) {
+          if (!geom.values_) {
+            geom.values_ = {};
+          }
+          merge(this.values_, geom.values_);
+        }
         return geom;
       };
     }

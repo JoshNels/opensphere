@@ -2,9 +2,6 @@ goog.declareModuleId('plugin.capture.MapOverlayRenderer');
 
 import HtmlRenderer from '../../os/ui/capture/htmlrenderer.js';
 
-const Overlay = goog.requireType('ol.Overlay');
-
-
 /**
  * Renders a map overlay to a canvas.
  */

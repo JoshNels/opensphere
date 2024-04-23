@@ -1,10 +1,11 @@
 goog.declareModuleId('os.control.Rotate');
 
+import OLRotate from 'ol/src/control/Rotate.js';
+import {CLASS_HIDDEN} from 'ol/src/css.js';
+
 import {getMapContainer} from '../map/mapinstance.js';
 
 const classlist = goog.require('goog.dom.classlist');
-const OLRotate = goog.require('ol.control.Rotate');
-const css = goog.require('ol.css');
 
 
 /**
@@ -69,7 +70,7 @@ const render = function(mapEvent) {
     var transform = 'rotate(' + rotation + 'rad)';
     if (this.autoHide_) {
       classlist.enable(
-          this.element, css.CLASS_HIDDEN, rotation === 0);
+          this.element, CLASS_HIDDEN, rotation === 0);
     }
     this.label_.style.msTransform = transform;
     this.label_.style.webkitTransform = transform;

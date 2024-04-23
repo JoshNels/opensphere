@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.file.kml.AbstractKMLExporter');
 
+import {pushSerializeAndPop} from 'ol/src/xml.js';
+
 import JsonField from '../../../../plugin/file/kml/jsonfield.js';
 import {OS_NS} from '../../../../plugin/file/kml/kml.js';
 import ZipExporter from '../../../ex/zipexporter.js';
@@ -8,6 +10,7 @@ import {DESC_REGEXP} from '../../../fields/index.js';
 import OSFile from '../../../file/file.js';
 import instanceOf from '../../../instanceof.js';
 import {isPrimitive} from '../../../object/object.js';
+import {PLACEMARK_SERIALIZERS, GEOMETRY_NODE_FACTORY} from '../../../ol/format/KML.js';
 import * as osTime from '../../../time/time.js';
 import TimeInstant from '../../../time/timeinstant.js';
 import TimeRange from '../../../time/timerange.js';
@@ -18,8 +21,6 @@ const {getFirstElementChild, insertSiblingBefore} = goog.require('goog.dom');
 const {createDocument, serialize} = goog.require('goog.dom.xml');
 const log = goog.require('goog.log');
 const googString = goog.require('goog.string');
-const KML = goog.require('ol.format.KML');
-const olXml = goog.require('ol.xml');
 
 const {default: ITime} = goog.requireType('os.time.ITime');
 
@@ -407,8 +408,8 @@ export default class AbstractKMLExporter extends ZipExporter {
     var kmlEl = /** @type {!Element} */ (getFirstElementChild(this.doc));
 
     var xmlnsUri = 'http://www.w3.org/2000/xmlns/';
-    olXml.setAttributeNS(kmlEl, xmlnsUri, 'xmlns:gx', this.gxNS);
-    olXml.setAttributeNS(kmlEl, xmlnsUri, 'xmlns:os', this.osNS);
+    kmlEl.setAttributeNS(xmlnsUri, 'xmlns:gx', this.gxNS);
+    kmlEl.setAttributeNS(xmlnsUri, 'xmlns:os', this.osNS);
 
     // create the Document element
     this.kmlDoc = xml.appendElementNS('Document', this.kmlNS, kmlEl);
@@ -705,8 +706,8 @@ export default class AbstractKMLExporter extends ZipExporter {
     var geometry = this.getGeometry(item);
     if (geometry) {
       var /** @type {ol.XmlNodeStackItem} */ context = {node: node};
-      olXml.pushSerializeAndPop(context, KML.PLACEMARK_SERIALIZERS_,
-          KML.GEOMETRY_NODE_FACTORY_, [geometry], []);
+      pushSerializeAndPop(context, PLACEMARK_SERIALIZERS,
+          GEOMETRY_NODE_FACTORY, [geometry], []);
     }
   }
 

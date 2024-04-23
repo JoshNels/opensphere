@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.LegendUI');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import LegendSetting from '../config/legendsetting.js';
 import Settings from '../config/settings.js';
 import SourceManager from '../data/sourcemanager.js';
@@ -21,7 +23,6 @@ const Throttle = goog.require('goog.async.Throttle');
 const nextTick = goog.require('goog.async.nextTick');
 const dispose = goog.require('goog.dispose');
 const GoogEventType = goog.require('goog.events.EventType');
-const events = goog.require('ol.events');
 
 const {default: LayerEvent} = goog.requireType('os.events.LayerEvent');
 const {default: PropertyChangeEvent} = goog.requireType('os.events.PropertyChangeEvent');
@@ -142,6 +143,8 @@ export class Controller extends SourceManager {
      */
     this.layerListeners_ = {};
 
+    this.mapChangeSizeListenKey = null;
+
     // register the legend as a window so it can be toggled by os.ui.menu.windows.toggleWindow
     osWindow.registerWindow('legend', this.element[0]);
 
@@ -164,7 +167,7 @@ export class Controller extends SourceManager {
     map.unlisten(LayerEventType.REMOVE, this.onLayerRemoved_, false, this);
 
     for (var key in this.layerListeners_) {
-      events.unlistenByKey(this.layerListeners_[key]);
+      unlistenByKey(this.layerListeners_[key]);
     }
 
     dispose(this.drawThrottle);
@@ -172,7 +175,7 @@ export class Controller extends SourceManager {
 
     var olMap = map.getMap();
     if (olMap) {
-      events.unlisten(olMap, 'change:size', this.onUpdateDelay, this);
+      unlistenByKey(this.mapChangeSizeListenKey);
     }
 
     this.canvas_ = null;
@@ -207,7 +210,7 @@ export class Controller extends SourceManager {
 
     var olMap = map.getMap();
     if (olMap) {
-      events.listen(olMap, 'change:size', this.onUpdateDelay, this);
+      this.mapChangeSizeListenKey = listen(olMap, 'change:size', this.onUpdateDelay, this);
     }
 
     // positioning off the screen will auto correct to the bottom/right
@@ -290,7 +293,7 @@ export class Controller extends SourceManager {
     this.removeLayerListener_(layer);
 
     var id = layer.getId();
-    this.layerListeners_[id] = events.listen(/** @type {ol.events.EventTarget} */ (layer),
+    this.layerListeners_[id] = listen(/** @type {ol.events.EventTarget} */ (layer),
         GoogEventType.PROPERTYCHANGE, this.onTilePropertyChange, this);
   }
 
@@ -303,7 +306,7 @@ export class Controller extends SourceManager {
   removeLayerListener_(layer) {
     var id = layer.getId();
     if (id in this.layerListeners_) {
-      events.unlistenByKey(this.layerListeners_[id]);
+      unlistenByKey(this.layerListeners_[id]);
       delete this.layerListeners_[id];
     }
   }

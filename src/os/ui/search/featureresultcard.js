@@ -1,5 +1,7 @@
 goog.declareModuleId('os.ui.search.FeatureResultCardCtrl');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+
 import EventType from '../../action/eventtype.js';
 import PropertyChangeEvent from '../../events/propertychangeevent.js';
 import SelectionType from '../../events/selectiontype.js';
@@ -18,9 +20,7 @@ import StyleType from '../../style/styletype.js';
 const Disposable = goog.require('goog.Disposable');
 const GoogEventType = goog.require('goog.events.EventType');
 const log = goog.require('goog.log');
-const {listen, unlisten} = goog.require('ol.events');
 
-const Feature = goog.requireType('ol.Feature');
 const {default: AbstractSearchResult} = goog.requireType('os.search.AbstractSearchResult');
 const {StyleConfigLike} = goog.requireType('os.style');
 
@@ -98,7 +98,7 @@ export default class Controller extends Disposable {
 
     this.addFeatureToLayer();
 
-    listen(this.layer.getSource(), GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
+    this.listenKey = listen(this.layer.getSource(), GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
     $scope.$on('$destroy', this.dispose.bind(this));
   }
 
@@ -110,7 +110,7 @@ export default class Controller extends Disposable {
 
     var mm = MapContainer.getInstance();
 
-    unlisten(this.layer.getSource(), GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
+    unlistenByKey(this.listenKey);
 
     this.removeFeatureFromLayer();
     this.feature = null;

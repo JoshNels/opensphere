@@ -3,10 +3,10 @@
  */
 goog.declareModuleId('os.mixin.object');
 
-const {getUid} = goog.require('ol');
-const OLObject = goog.require('ol.Object');
-const ObjectEventType = goog.require('ol.ObjectEventType');
-const EventTarget = goog.require('ol.events.EventTarget');
+import EventTarget from 'ol/src/events/Target.js';
+import OLObject, {ObjectEvent as ObjectEvent} from 'ol/src/Object.js';
+import ObjectEventType from 'ol/src/ObjectEventType.js';
+import {getUid} from 'ol/src/util.js';
 
 
 /**
@@ -84,11 +84,11 @@ export const init = () => {
    */
   OLObject.prototype.notify = function(key, oldValue) {
     if (this.eventsEnabled) {
-      var eventType;
-      eventType = OLObject.getChangeEventType(key);
-      this.dispatchEvent(new OLObject.Event(eventType, key, oldValue));
+      let eventType;
+      eventType = `change:${key}`;
+      this.dispatchEvent(new ObjectEvent(eventType, key, oldValue));
       eventType = ObjectEventType.PROPERTYCHANGE;
-      this.dispatchEvent(new OLObject.Event(eventType, key, oldValue));
+      this.dispatchEvent(new ObjectEvent(eventType, key, oldValue));
     }
   };
 };

@@ -12,9 +12,6 @@ import SearchResult from './nominatimsearchresult.js';
 
 const Promise = goog.require('goog.Promise');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * Search provider for the OSM Nominatim API.
  *

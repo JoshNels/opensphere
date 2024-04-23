@@ -12,11 +12,6 @@ import Module from '../../../../os/ui/module.js';
 import WindowEventType from '../../../../os/ui/windoweventtype.js';
 import ZIPParser from '../zipparser.js';
 
-const {default: OSFile} = goog.requireType('os.file.File');
-const {default: FileWrapper} = goog.requireType('os.file.FileWrapper');
-const {default: IImportUI} = goog.requireType('os.ui.im.IImportUI');
-const {default: ZIPParserConfig} = goog.requireType('plugin.file.zip.ZIPParserConfig');
-
 
 /**
  * @typedef {{

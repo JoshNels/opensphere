@@ -12,9 +12,6 @@ import * as osWindow from '../../../os/ui/window.js';
 import WindowEventType from '../../../os/ui/windoweventtype.js';
 import * as places from '../places.js';
 
-const {default: ColumnDefinition} = goog.requireType('os.data.ColumnDefinition');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-
 
 /**
  * Save places directive.

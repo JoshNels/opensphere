@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.cesium.sync.HeatmapSynchronizer');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {scaleFromCenter} from 'ol/src/extent.js';
+
 import * as dispatcher from '../../../os/dispatcher.js';
 import PropertyChangeEvent from '../../../os/events/propertychangeevent.js';
 import PropertyChange from '../../../os/layer/propertychange.js';
@@ -16,14 +19,6 @@ const asserts = goog.require('goog.asserts');
 const Delay = goog.require('goog.async.Delay');
 const dispose = goog.require('goog.dispose');
 const EventType = goog.require('goog.events.EventType');
-const olEvents = goog.require('ol.events');
-const {scaleFromCenter} = goog.require('ol.extent');
-
-const GoogEvent = goog.requireType('goog.events.Event');
-const OLObject = goog.requireType('ol.Object');
-const PluggableMap = goog.requireType('ol.PluggableMap');
-const MapCanvasRenderer = goog.requireType('ol.renderer.canvas.Map');
-const {default: Heatmap} = goog.requireType('plugin.heatmap.Heatmap');
 
 
 /**
@@ -73,8 +68,8 @@ export default class HeatmapSynchronizer extends CesiumSynchronizer {
      */
     this.syncDelay_ = new Delay(this.synchronizeInternal, 75, this);
 
-    olEvents.listen(this.layer, EventType.PROPERTYCHANGE, this.onLayerPropertyChange_, this);
-    events.listenEach(this.layer, HeatmapSynchronizer.STYLE_KEYS_, this.onStyleChange_, this);
+    this.listenKey = listen(this.layer, EventType.PROPERTYCHANGE, this.onLayerPropertyChange_, this);
+    this.styleKeys = events.listenEach(this.layer, HeatmapSynchronizer.STYLE_KEYS_, this.onStyleChange_, this);
   }
 
   /**
@@ -84,8 +79,8 @@ export default class HeatmapSynchronizer extends CesiumSynchronizer {
     dispose(this.syncDelay_);
     this.syncDelay_ = null;
 
-    olEvents.unlisten(this.layer, EventType.PROPERTYCHANGE, this.onLayerPropertyChange_, this);
-    events.unlistenEach(this.layer, HeatmapSynchronizer.STYLE_KEYS_, this.onStyleChange_, this);
+    unlistenByKey(this.listenKey);
+    unlistenEach(this.styleKeys);
 
     this.cesiumLayers_.remove(this.activeLayer_);
     this.activeLayer_ = null;

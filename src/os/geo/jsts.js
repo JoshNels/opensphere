@@ -7,6 +7,15 @@
  */
 goog.declareModuleId('os.geo.jsts');
 
+import * as olExtent from 'ol/src/extent.js';
+import Feature from 'ol/src/Feature.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Polygon, {fromCircle, fromExtent} from 'ol/src/geom/Polygon.js';
+import Projection from 'ol/src/proj/Projection.js';
+import {remove as removeTransform, get as getTransform} from 'ol/src/proj/transforms.js';
+import {get as getProjection, addProjection, createSafeCoordinateTransform, addCoordinateTransforms} from 'ol/src/proj.js';
+
 import AlertEventSeverity from '../alert/alerteventseverity.js';
 import AlertManager from '../alert/alertmanager.js';
 import {filterFalsey} from '../fn/fn.js';
@@ -21,21 +30,6 @@ import {normalizeGeometryCoordinates} from './geo2.js';
 import OLParser from './olparser.js';
 
 const log = goog.require('goog.log');
-const Feature = goog.require('ol.Feature');
-const olExtent = goog.require('ol.extent');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const MultiPolygon = goog.require('ol.geom.MultiPolygon');
-const Polygon = goog.require('ol.geom.Polygon');
-const {get: getProjection} = goog.require('ol.proj');
-const Projection = goog.require('ol.proj.Projection');
-const {remove: removeTransform} = goog.require('ol.proj.transforms');
-
-const Circle = goog.requireType('ol.geom.Circle');
-const Geometry = goog.requireType('ol.geom.Geometry');
-const GeometryCollection = goog.requireType('ol.geom.GeometryCollection');
-const LineString = goog.requireType('ol.geom.LineString');
-const MultiLineString = goog.requireType('ol.geom.MultiLineString');
-const Point = goog.requireType('ol.geom.Point');
 
 
 // Initialize the JSTS mixin on module load.
@@ -145,7 +139,7 @@ export const toPolygon = function(geometry) {
         break;
       case GeometryType.CIRCLE:
         // OL3 has a direct conversion - woo!
-        polygon = Polygon.fromCircle(/** @type {!Circle} */ (geometry), 64);
+        polygon = fromCircle(/** @type {!Circle} */ (geometry), 64);
         break;
       case GeometryType.GEOMETRY_COLLECTION:
         // convert each internal geometry and merge the results
@@ -169,8 +163,10 @@ export const toPolygon = function(geometry) {
           if (polygons.length == 1) {
             polygon = polygons[0];
           } else if (polygons.length > 1) {
-            polygon = new MultiPolygon(null);
-            polygon.setPolygons(polygons);
+            polygon = new MultiPolygon([]);
+            for (var i = 0; i < polygons.length; i++) {
+              polygon.appendPolygon(polygons[i]);
+            }
           }
         }
         break;
@@ -337,7 +333,7 @@ export const splitWithinWorldExtent = function(geometry, opt_proj) {
 
     var projection = getProjection(opt_proj || osMap.PROJECTION);
     var projExtent = projection.getExtent();
-    var extentPoly = Polygon.fromExtent(projExtent);
+    var extentPoly = fromExtent(projExtent);
     var jstsExtentPoly = olp.read(extentPoly);
 
     if (!jstsExtentPoly.contains(jstsGeometry)) {
@@ -658,7 +654,7 @@ const getBoxesForExtent_ = function(geometry, distance) {
     if (offset > 0) {
       var olp = OLParser.getInstance();
       for (var i = extent[0]; i < extent[2]; i += offset) {
-        var box = Polygon.fromExtent([i, extent[1], i + UTM_WIDTH_DEGREES, extent[3]]);
+        var box = fromExtent([i, extent[1], i + UTM_WIDTH_DEGREES, extent[3]]);
         boxes.push(olp.read(box));
       }
     }
@@ -737,8 +733,12 @@ const tmercBuffer_ = function(geometry, distance, opt_normalizeLon) {
 
     // clear the transform functions from the cache, since we're using a custom projection with a shared code
     var epsg4326 = getProjection(EPSG4326);
-    removeTransform(epsg4326, projection);
-    removeTransform(projection, epsg4326);
+    if (getTransform(epsg4326, projection)) {
+      removeTransform(epsg4326, projection);
+    }
+    if (getTransform(projection, epsg4326)) {
+      removeTransform(projection, epsg4326);
+    }
   }
 
   return buffer;
@@ -813,6 +813,19 @@ const createTMercProjection_ = function(geometry) {
   var origin = olExtent.getCenter(geometry.getExtent());
   proj4.defs('bufferCRS', '+ellps=WGS84 +proj=tmerc +lat_0=' + origin[1] + ' +lon_0=' + origin[0] +
       ' +k=1 +x_0=0 +y_0=0');
+
+  var def = proj4.defs('bufferCRS');
+  const code1 = EPSG4326;
+  const code2 = 'bufferCRS';
+  const units = def.units;
+  const bufferProj = new Projection({code: code2, axisOrientation: def.axis, metersPerUnit: def.to_meter, units});
+  addProjection(bufferProj);
+  const transform = proj4(code1, code2);
+  const proj1 = getProjection(code1);
+  const proj2 = getProjection(code2);
+  const safeTransform1 = createSafeCoordinateTransform(proj1, proj2, transform.forward);
+  const safeTransform2 = createSafeCoordinateTransform(proj2, proj1, transform.inverse);
+  addCoordinateTransforms(proj1, proj2, safeTransform1, safeTransform2);
 
   var projection = new Projection({code: 'bufferCRS'});
   geometry.transform(EPSG4326, projection);

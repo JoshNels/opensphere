@@ -1,10 +1,9 @@
-goog.require('ol.extent');
 goog.require('os.command.FlyToExtent');
 goog.require('os.map');
 
+import {createEmpty} from 'ol/src/extent.js';
 
 describe('os.command.FlyToExtent', function() {
-  const olExtent = goog.module.get('ol.extent');
   const {default: FlyToExtent} = goog.module.get('os.command.FlyToExtent');
   const osMap = goog.module.get('os.map');
 
@@ -16,7 +15,7 @@ describe('os.command.FlyToExtent', function() {
     };
 
     // no optional parameters
-    var extent = olExtent.createEmpty();
+    var extent = createEmpty();
     var cmd = new FlyToExtent(extent);
     testParams(cmd, extent, FlyToExtent.DEFAULT_BUFFER, osMap.MAX_AUTO_ZOOM);
 

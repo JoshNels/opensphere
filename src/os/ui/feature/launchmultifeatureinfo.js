@@ -3,10 +3,6 @@ goog.declareModuleId('os.ui.feature.launchMultiFeatureInfo');
 import * as osWindow from '../window.js';
 import {directiveTag as multiFeatureInfoUi} from './multifeatureinfo.js';
 
-const Feature = goog.requireType('ol.Feature');
-const RenderFeature = goog.requireType('ol.render.Feature');
-
-
 /**
  * Launches a feature info window for the provided feature(s).
  *

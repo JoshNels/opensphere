@@ -14,9 +14,6 @@ import {ID} from './config.js';
 
 const log = goog.require('goog.log');
 
-const Logger = goog.requireType('goog.log.Logger');
-const {default: IDataDescriptor} = goog.requireType('os.data.IDataDescriptor');
-
 
 /**
  * The configuration provider provides access to configuration sources.

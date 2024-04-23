@@ -2,10 +2,6 @@ goog.declareModuleId('plugin.track.Event');
 
 const googEventsEvent = goog.require('goog.events.Event');
 
-const OlFeature = goog.requireType('ol.Feature');
-const {default: ColorBin} = goog.requireType('os.data.histo.ColorBin');
-const {default: FilterEntry} = goog.requireType('os.filter.FilterEntry');
-
 
 /**
  * Event for the track plugin.

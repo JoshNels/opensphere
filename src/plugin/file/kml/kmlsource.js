@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.file.kml.KMLSource');
 
+import {remove} from 'ol/src/array.js';
 import AlertEventSeverity from '../../../os/alert/alerteventseverity.js';
 import AlertManager from '../../../os/alert/alertmanager.js';
 import * as dispatcher from '../../../os/dispatcher.js';
@@ -23,12 +24,6 @@ const Timer = goog.require('goog.Timer');
 const Delay = goog.require('goog.async.Delay');
 const dispose = goog.require('goog.dispose');
 const log = goog.require('goog.log');
-const olArray = goog.require('ol.array');
-
-const Logger = goog.requireType('goog.log.Logger');
-const {default: OSFile} = goog.requireType('os.file.File');
-const {default: Image} = goog.requireType('os.layer.Image');
-const {default: UIEvent} = goog.requireType('os.ui.events.UIEvent');
 
 
 /**
@@ -259,7 +254,7 @@ export default class KMLSource extends RequestSource {
     for (var i = 0; i < images.length; i++) {
       var image = images[i];
       MapContainer.getInstance().removeLayer(image);
-      olArray.remove(this.images, image);
+      remove(this.images, image);
 
       if (removeNode) {
         this.removeNode(/** @type {string} */ (image.getId()));
@@ -281,7 +276,7 @@ export default class KMLSource extends RequestSource {
     for (var i = 0; i < overlays.length; i++) {
       var overlay = overlays[i];
       var id = osWindow.getById(overlay);
-      olArray.remove(this.overlays, overlay);
+      remove(this.overlays, overlay);
 
       if (removeNode) {
         osWindow.close(id);

@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.menu.spatial');
 
+import Feature from 'ol/src/Feature.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+
 import EventType from '../../action/eventtype.js';
 import AreaToggle from '../../command/areatogglecmd.js';
 import CommandProcessor from '../../command/commandprocessor.js';
@@ -37,10 +40,7 @@ import SpatialMenu from './spatialmenu.js';
 
 const googDispose = goog.require('goog.dispose');
 const {caseInsensitiveCompare, toTitleCase} = goog.require('goog.string');
-const Feature = goog.require('ol.Feature');
-const Polygon = goog.require('ol.geom.Polygon');
 
-const Geometry = goog.requireType('ol.geom.Geometry');
 const {default: ILayer} = goog.requireType('os.layer.ILayer');
 const {default: Menu} = goog.requireType('os.ui.menu.Menu');
 const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
@@ -414,17 +414,7 @@ export const isPolygonal = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfHasMultiple = function(context) {
-  this.visible = hasMultiple(context);
-};
-
-/**
- * Shows a menu item if the context has multiple items.
- *
- * @param {Object|undefined} context The menu context.
- * @this {MenuItem}
- */
-export const visibleIfMultiplePolygonal = function(context) {
+const visibleIfMultiplePolygonal = function(context) {
   this.visible = hasMultiple(context) && isPolygonal(context);
 };
 
@@ -434,7 +424,7 @@ export const visibleIfMultiplePolygonal = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfPolygonal = function(context) {
+const visibleIfPolygonal = function(context) {
   this.visible = isPolygonal(context);
 };
 
@@ -444,7 +434,7 @@ export const visibleIfPolygonal = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfInLayer = function(context) {
+const visibleIfInLayer = function(context) {
   this.visible = isInLayer(context);
 };
 
@@ -491,7 +481,7 @@ export const removeItems = function(evt) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfInAreaManager = function(context) {
+const visibleIfInAreaManager = function(context) {
   this.visible = inAreaManager(context);
 };
 
@@ -501,17 +491,7 @@ export const visibleIfInAreaManager = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const notVisibleIfInAreaManager = function(context) {
-  this.visible = !inAreaManager(context);
-};
-
-/**
- * Shows a menu item if the context is in the area manager.
- *
- * @param {Object|undefined} context The menu context.
- * @this {MenuItem}
- */
-export const visibleIfCanModifyGeometry = function(context) {
+const visibleIfCanModifyGeometry = function(context) {
   let supportsModify = false;
   const features = getFeaturesFromContext(context);
   const am = getAreaManager();
@@ -549,7 +529,7 @@ export const visibleIfCanModifyGeometry = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfCanSave = function(context) {
+const visibleIfCanSave = function(context) {
   this.visible = isPolygonal(context) && !inAreaManager(context);
 };
 
@@ -559,7 +539,7 @@ export const visibleIfCanSave = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfShown = function(context) {
+const visibleIfShown = function(context) {
   var features = getFeaturesFromContext(context);
   if (!features.length) {
     this.visible = false;
@@ -584,7 +564,7 @@ export const visibleIfShown = function(context) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfNotShown = function(context) {
+const visibleIfNotShown = function(context) {
   var features = getFeaturesFromContext(context);
   if (!features.length) {
     this.visible = false;
@@ -890,7 +870,7 @@ export const addLayerSubMenu = function(group, eventType, types) {
  * @param {Object|undefined} context The menu context.
  * @this {MenuItem}
  */
-export const visibleIfSearchable = function(context) {
+const visibleIfSearchable = function(context) {
   // check if there are any registered geosearches
   var searches = SearchManager.getInstance().getRegisteredSearches();
   var some = searches.some((s) => s && supportsGeoSearch(s));

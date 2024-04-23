@@ -1,5 +1,6 @@
 goog.declareModuleId('plugin.file.kml.ui.KMLNetworkLinkNode');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
 import AlertEventSeverity from '../../../../os/alert/alerteventseverity.js';
 import AlertManager from '../../../../os/alert/alertmanager.js';
 import osEventsEventType from '../../../../os/events/eventtype.js';
@@ -22,11 +23,6 @@ const log = goog.require('goog.log');
 const EventType = goog.require('goog.net.EventType');
 const ResponseType = goog.require('goog.net.XhrIo.ResponseType');
 const userAgent = goog.require('goog.userAgent');
-const events = goog.require('ol.events');
-
-const Logger = goog.requireType('goog.log.Logger');
-const {default: KMLImporter} = goog.requireType('plugin.file.kml.KMLImporter');
-
 
 /**
  * Tree node for KML network links
@@ -134,6 +130,8 @@ export default class KMLNetworkLinkNode extends KMLNode {
      * @private
      */
     this.uri_ = uri;
+
+    this.sourceListenKey;
 
     this.updateRefreshTimer_();
   }
@@ -395,13 +393,13 @@ export default class KMLNetworkLinkNode extends KMLNode {
    */
   setSource(source) {
     if (this.source) {
-      events.unlisten(this.source, KMLSourceEvent.REFRESH, this.onSourceRefresh_, this);
+      unlistenByKey(this.sourceListenKey);
     }
 
     super.setSource(source);
 
     if (this.source) {
-      events.listen(this.source, KMLSourceEvent.REFRESH, this.onSourceRefresh_, this);
+      this.sourceListenKey = listen(this.source, KMLSourceEvent.REFRESH, this.onSourceRefresh_, this);
     }
   }
 

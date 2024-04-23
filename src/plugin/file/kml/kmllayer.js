@@ -3,8 +3,6 @@ goog.declareModuleId('plugin.file.kml.KMLLayer');
 import VectorLayer from '../../../os/layer/vector.js';
 import KMLLayerNode from './ui/kmllayernode.js';
 
-const {default: ITreeNodeSupplier} = goog.requireType('os.structs.ITreeNodeSupplier');
-
 
 /**
  * @implements {ITreeNodeSupplier}

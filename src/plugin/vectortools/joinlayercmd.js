@@ -10,11 +10,6 @@ import * as vectortools from './vectortools.js';
 
 const asserts = goog.require('goog.asserts');
 
-const Feature = goog.requireType('ol.Feature');
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: VectorSource} = goog.requireType('os.source.Vector');
-const {default: Options} = goog.requireType('plugin.vectortools.Options');
-
 
 /**
  * Command for copying a vector layer

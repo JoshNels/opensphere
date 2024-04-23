@@ -1,8 +1,5 @@
 goog.declareModuleId('os.track.SplitOptions');
 
-const Feature = goog.requireType('ol.Feature');
-
-
 /**
  * @typedef {{
  *   features: Array<Feature>,

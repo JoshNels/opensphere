@@ -1,5 +1,8 @@
 goog.declareModuleId('os.ui.menu.layer');
 
+import {createEmpty, isEmpty} from 'ol/src/extent.js';
+import OLVectorSource from 'ol/src/source/Vector.js';
+
 import EventType from '../../action/eventtype.js';
 import AlertEventSeverity from '../../alert/alerteventseverity.js';
 import AlertManager from '../../alert/alertmanager.js';
@@ -28,8 +31,6 @@ import MenuItemType from './menuitemtype.js';
 
 const Timer = goog.require('goog.Timer');
 const googDispose = goog.require('goog.dispose');
-const {createEmpty, isEmpty} = goog.require('ol.extent');
-const OLVectorSource = goog.require('ol.source.Vector');
 
 const {default: ExportOptions} = goog.requireType('os.ex.ExportOptions');
 const {default: ILayer} = goog.requireType('os.layer.ILayer');

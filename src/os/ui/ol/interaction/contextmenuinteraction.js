@@ -1,17 +1,15 @@
 goog.declareModuleId('os.ui.ol.interaction.ContextMenu');
 
+import Interaction from 'ol/src/interaction/Interaction.js';
+import MapBrowserEventType from 'ol/src/MapBrowserEventType.js';
+
 import '../../../ol/mixin/rendermixin.js';
 import {rightClick} from '../../../ol/events/condition.js';
 import {getAreaManager} from '../../../query/queryinstance.js';
 import {getEventFeature, getFirstPolygon} from './interaction.js';
 
 const Line = goog.require('goog.math.Line');
-const MapBrowserEventType = goog.require('ol.MapBrowserEventType');
-const Interaction = goog.require('ol.interaction.Interaction');
 
-const Feature = goog.requireType('ol.Feature');
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const Layer = goog.requireType('ol.layer.Layer');
 const {default: Menu} = goog.requireType('os.ui.menu.Menu');
 const {default: ContextMenuOptions} = goog.requireType('os.ui.ol.interaction.ContextMenuOptions');
 
@@ -26,9 +24,9 @@ export default class ContextMenu extends Interaction {
    */
   constructor(opt_options) {
     var options = opt_options || {};
-    super({
-      handleEvent: ContextMenu.handleEvent
-    });
+    super({});
+
+    this.handleEvent = this.handleEvent_;
 
     /**
      * The required map event condition to handle the event.
@@ -69,7 +67,7 @@ export default class ContextMenu extends Interaction {
    * @return {boolean}
    * @this ContextMenu
    */
-  static handleEvent(event) {
+  handleEvent_(event) {
     // save the right-down info...
     if (event.type === MapBrowserEventType.POINTERDOWN) {
       this.downTime = Date.now();

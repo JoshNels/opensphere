@@ -1,6 +1,9 @@
 goog.declareModuleId('plugin.track.TrackManager');
 
 import './confirmtrack.js';
+import {includes} from 'ol/src/array.js';
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {equals, isEmpty, containsExtent, buffer, boundingExtent} from 'ol/src/extent.js';
 import AlertEventSeverity from '../../os/alert/alerteventseverity.js';
 import AlertManager from '../../os/alert/alertmanager.js';
 import * as osColor from '../../os/color.js';
@@ -32,17 +35,6 @@ const Throttle = goog.require('goog.async.Throttle');
 const dispose = goog.require('goog.dispose');
 const EventTarget = goog.require('goog.events.EventTarget');
 const log = goog.require('goog.log');
-
-const array = goog.require('ol.array');
-const events = goog.require('ol.events');
-const olExtent = goog.require('ol.extent');
-
-const Logger = goog.requireType('goog.log.Logger');
-const OlFeature = goog.requireType('ol.Feature');
-const OlMapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const {default: OsInterpolateConfig} = goog.requireType('os.interpolate.Config');
-const {default: AddOptions} = goog.requireType('os.track.AddOptions');
-const {default: CreateOptions} = goog.requireType('os.track.CreateOptions');
 
 
 /**
@@ -108,6 +100,8 @@ export default class TrackManager extends EventTarget {
      * @protected
      */
     this.nextPredictedTrack = 0;
+
+    this.followingListenKeys = [];
   }
 
   /**
@@ -120,9 +114,10 @@ export default class TrackManager extends EventTarget {
     dispose(this.trackThrottle_);
     this.trackThrottle_ = undefined;
 
-    this.following_.forEach(function(track) {
-      events.unlisten(track, events.EventType.CHANGE, this.onFeatureValueChange_, this);
+    this.followingListenKeys.forEach(function(key) {
+      unlistenByKey(key);
     }, this);
+    this.followingListenKeys = [];
 
     this.following_.length = 0;
     this.activeTracks_.length = 0;
@@ -140,9 +135,9 @@ export default class TrackManager extends EventTarget {
    */
   followTracks(tracks) {
     tracks.forEach(function(track) {
-      if (track && !array.includes(this.following_, track)) {
+      if (track && !includes(this.following_, track)) {
         this.following_.push(track);
-        events.listen(track, events.EventType.CHANGE, this.onFeatureValueChange_, this);
+        this.followingListenKeys.push(listen(track, events.EventType.CHANGE, this.onFeatureValueChange_, this));
       }
     }, this);
   }
@@ -183,7 +178,7 @@ export default class TrackManager extends EventTarget {
    */
   isFollowed(tracks) {
     for (let j = 0; j < tracks.length; j++) {
-      if (!array.includes(this.following_, tracks[j])) {
+      if (!includes(this.following_, tracks[j])) {
         return false;
       }
     }
@@ -232,15 +227,15 @@ export default class TrackManager extends EventTarget {
       const resolution = view.getResolution();
 
       const viewExtent = this.mc_.getViewExtent();
-      if (olExtent.equals(viewExtent, osMap.ZERO_EXTENT)) {
+      if (equals(viewExtent, osMap.ZERO_EXTENT)) {
         return false;
       }
 
       if (this.mc_.getMap().isRendered()) {
         const extent = this.getActiveExtent(this.activeTracks_);
 
-        if (!olExtent.isEmpty(extent) &&
-            !olExtent.containsExtent(olExtent.buffer(viewExtent, -2), extent)) {
+        if (!isEmpty(extent) &&
+            !containsExtent(buffer(viewExtent, -2), extent)) {
           asserts.assert(resolution != null, 'resolution should be defined');
           this.mc_.flyToExtent(extent, 5, this.mc_.resolutionToZoom(resolution));
         }
@@ -270,7 +265,7 @@ export default class TrackManager extends EventTarget {
 
       // check which of the active tracks are to be followed
       for (let i = 0; i < this.activeTracks_.length; i++) {
-        if (!array.includes(this.following_, this.activeTracks_[i])) {
+        if (!includes(this.following_, this.activeTracks_[i])) {
           googArray.removeAt(this.activeTracks_, i);
         }
       }
@@ -296,7 +291,7 @@ export default class TrackManager extends EventTarget {
       }
     }
 
-    return olExtent.boundingExtent(coordinates);
+    return boundingExtent(coordinates);
   }
 
   /**

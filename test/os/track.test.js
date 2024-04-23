@@ -1,6 +1,4 @@
 goog.require('goog.object');
-goog.require('ol.Feature');
-goog.require('ol.geom.Point');
 goog.require('os.Fields');
 goog.require('os.data.RecordField');
 goog.require('os.feature.DynamicFeature');
@@ -12,11 +10,11 @@ goog.require('os.time.TimeRange');
 goog.require('os.track');
 goog.require('os.track.TrackField');
 
+import Feature from 'ol/src/Feature.js';
+import Point from 'ol/src/geom/Point.js';
 
 describe('os.track', function() {
   const object = goog.module.get('goog.object');
-  const Feature = goog.module.get('ol.Feature');
-  const Point = goog.module.get('ol.geom.Point');
   const {default: Fields} = goog.module.get('os.Fields');
   const {default: RecordField} = goog.module.get('os.data.RecordField');
   const {default: DynamicFeature} = goog.module.get('os.feature.DynamicFeature');

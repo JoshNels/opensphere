@@ -1,7 +1,3 @@
-goog.require('ol.geom.MultiPolygon');
-goog.require('ol.proj');
-goog.require('ol.style.Stroke');
-goog.require('ol.style.Style');
 goog.require('os.feature.DynamicFeature');
 goog.require('os.layer.Vector');
 goog.require('os.map');
@@ -10,13 +6,12 @@ goog.require('plugin.cesium.VectorContext');
 goog.require('plugin.cesium.sync.DynamicMultiPolygonConverter');
 goog.require('test.plugin.cesium.scene');
 
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import {get} from 'ol/src/proj.js';
+import Stroke from 'ol/src/style/Stroke.js';
+import Style from 'ol/src/style/Style.js';
 
 describe('plugin.cesium.sync.DynamicMultiPolygonConverter', () => {
-  const MultiPolygon = goog.module.get('ol.geom.MultiPolygon');
-  const Stroke = goog.module.get('ol.style.Stroke');
-  const Style = goog.module.get('ol.style.Style');
-  const olProj = goog.module.get('ol.proj');
-
   const {default: DynamicFeature} = goog.module.get('os.feature.DynamicFeature');
   const {default: Vector} = goog.module.get('os.layer.Vector');
   const osMap = goog.module.get('os.map');
@@ -32,6 +27,8 @@ describe('plugin.cesium.sync.DynamicMultiPolygonConverter', () => {
   let geometry;
   let style;
   let context;
+  let layer;
+  let scene;
 
   beforeEach(() => {
     const coords = [
@@ -47,7 +44,7 @@ describe('plugin.cesium.sync.DynamicMultiPolygonConverter', () => {
     style = new Style();
     layer = new Vector();
     scene = getFakeScene();
-    context = new VectorContext(scene, layer, olProj.get(EPSG4326));
+    context = new VectorContext(scene, layer, get(EPSG4326));
   });
 
   const originalProjection = osMap.PROJECTION;

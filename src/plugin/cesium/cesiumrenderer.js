@@ -1,5 +1,8 @@
 goog.declareModuleId('plugin.cesium.CesiumRenderer');
 
+import ViewHint from 'ol/src/ViewHint.js';
+import OLCesium from 'ol-cesium/src/olcs/OLCesium.js';
+
 import CommandProcessor from '../../os/command/commandprocessor.js';
 import DisplaySetting from '../../os/config/displaysetting.js';
 import settings from '../../os/config/settings.js';
@@ -48,12 +51,6 @@ const classlist = goog.require('goog.dom.classlist');
 const log = goog.require('goog.log');
 const {clamp} = goog.require('goog.math');
 const userAgent = goog.require('goog.userAgent');
-const ViewHint = goog.require('ol.ViewHint');
-const OLCesium = goog.require('olcs.OLCesium');
-
-const OLMap = goog.requireType('ol.Map');
-const AbstractSynchronizer = goog.requireType('olcs.AbstractSynchronizer');
-const {TerrainProviderFn} = goog.requireType('plugin.cesium');
 
 
 /**
@@ -177,12 +174,21 @@ export default class CesiumRenderer extends AbstractWebGLRenderer {
             this.registerTerrainProviderType(terrain.TerrainType.ION, createWorldTerrain);
             this.registerTerrainProviderType(terrain.TerrainType.WMS, WMSTerrainProvider.create);
 
+            // OLCesium just appends the globe to the end of the viewport child list, causing zoom controls to be
+            // hidden by globe when globe is visible.
+            const globeContainer = document.createElement('DIV');
+            globeContainer.id = 'globe-container';
+            const targetElement = mapInstance.getViewport();
+            targetElement.insertBefore(globeContainer, targetElement.children[1]);
+
             this.olCesium_ = new OLCesium({
               cameraClass: Camera,
               createSynchronizers: this.createCesiumSynchronizers_.bind(this),
               map: mapInstance,
-              time: getJulianDate
+              time: getJulianDate,
+              target: globeContainer.id
             });
+            this.olCesium_.getCesiumScene()._creditContainer.style.display = 'none';
 
             classlist.add(this.olCesium_.canvas_, WEBGL_CANVAS_CLASS);
 

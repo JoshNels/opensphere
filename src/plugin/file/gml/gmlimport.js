@@ -7,8 +7,6 @@ import Module from '../../../os/ui/module.js';
 import GMLDescriptor from './gmldescriptor.js';
 import GMLProvider from './gmlprovider.js';
 
-const {default: GMLParserConfig} = goog.requireType('plugin.file.gml.GMLParserConfig');
-
 
 /**
  * The GML import directive

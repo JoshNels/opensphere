@@ -5,8 +5,8 @@
  */
 goog.declareModuleId('os.mixin.layerbase');
 
-const Base = goog.require('ol.layer.Base');
-const Property = goog.require('ol.layer.Property');
+import Base from 'ol/src/layer/Base.js';
+import Property from 'ol/src/layer/Property.js';
 
 
 /**

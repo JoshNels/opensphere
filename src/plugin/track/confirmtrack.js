@@ -6,9 +6,6 @@ import WindowEventType from '../../os/ui/windoweventtype.js';
 import KMLField from '../file/kml/kmlfield.js';
 import PlacesManager from '../places/placesmanager.js';
 
-const OlFeature = goog.requireType('ol.Feature');
-
-
 /**
  * Dialog that prompts the user to pick a track.
  *

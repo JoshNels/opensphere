@@ -6,17 +6,15 @@
  */
 goog.declareModuleId('os.mixin.zoomscale');
 
+import {listen} from 'ol/src/events.js';
+import ImageReplay from 'ol/src/render/canvas/ImageBuilder.js';
+import EventType from 'ol/src/render/EventType.js';
+
 import * as osMap from '../map/map.js';
 import MapEvent from '../map/mapevent.js';
 import MapContainer from '../mapcontainer.js';
 
 const {lerp} = goog.require('goog.math');
-const events = goog.require('ol.events');
-const EventType = goog.require('ol.render.EventType');
-const ImageReplay = goog.require('ol.render.canvas.ImageReplay');
-
-const Icon = goog.requireType('ol.style.Icon');
-
 
 // cache values to reduce how often the zoom scale is computed
 let zoomScale;
@@ -49,7 +47,7 @@ const updateZoomScale = function() {
 mapContainer.listenOnce(MapEvent.MAP_READY, function() {
   const map = mapContainer.getMap();
   if (map) {
-    events.listen(map, EventType.PRECOMPOSE, updateZoomScale);
+    listen(map, EventType.PRECOMPOSE, updateZoomScale);
   }
 });
 
@@ -67,6 +65,18 @@ ImageReplay.prototype.setImageStyle = function(imageStyle, declutterGroup) {
   }
 
   if (zoomScale != null) {
-    this.scale_ *= zoomScale;
+    if (Array.isArray(this.scale_)) {
+      for (let i = 0; i < this.scale_.length; i++) {
+        this.scale_[i] = imageStyle.getScale() * zoomScale;
+      }
+    } else {
+      this.scale_ = imageStyle.getScale() * zoomScale;
+    }
+  } else if (Array.isArray(this.scale_)) {
+    for (let i = 0; i < this.scale_.length; i++) {
+      this.scale_[i] = imageStyle.getScale();
+    }
+  } else {
+    this.scale_ = imageStyle.getScale();
   }
 };

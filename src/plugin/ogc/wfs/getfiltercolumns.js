@@ -1,9 +1,5 @@
 goog.declareModuleId('plugin.ogc.wfs.getFilterColumns');
 
-const {default: Vector} = goog.requireType('os.layer.Vector');
-const {default: FeatureTypeColumn} = goog.requireType('os.ogc.FeatureTypeColumn');
-const {default: IFeatureType} = goog.requireType('os.ogc.IFeatureType');
-
 
 /**
  * Get the filterable columns

@@ -1,17 +1,13 @@
 goog.declareModuleId('plugin.file.gml.GMLParser');
 
+import {getUid} from 'ol/src/util.js';
+
 import ColumnDefinition from '../../../os/data/columndefinition.js';
 import RecordField from '../../../os/data/recordfield.js';
 import * as osFeature from '../../../os/feature/feature.js';
 import Fields from '../../../os/fields/fields.js';
 import * as osMap from '../../../os/map/map.js';
 import BaseGMLParser from '../../../os/ui/file/gml/gmlparser.js';
-
-const ol = goog.require('ol');
-
-const Feature = goog.requireType('ol.Feature');
-const Projection = goog.requireType('ol.proj.Projection');
-const {default: IMapping} = goog.requireType('os.im.mapping.IMapping');
 
 
 /**
@@ -78,7 +74,7 @@ export default class GMLParser extends BaseGMLParser {
       if (Array.isArray(featureSet)) {
         for (var i = 0, n = featureSet.length; i < n; i++) {
           var feature = featureSet[i];
-          feature.setId(String(ol.getUid(feature)));
+          feature.setId(String(getUid(feature)));
           features.push(feature);
         }
       }

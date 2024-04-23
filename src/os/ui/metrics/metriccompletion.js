@@ -1,13 +1,13 @@
 goog.declareModuleId('os.ui.metrics.MetricCompletionUI');
 
+import {toString} from 'ol/src/color.js';
+
 import {instanceOf} from '../../classregistry.js';
 import {getGradientColor} from '../../color.js';
 import {METRIC_GRADIENT} from '../../metrics/index.js';
 import {getLeafNodes} from '../../structs/structs.js';
 import Module from '../module.js';
 import {ClassName} from './metricsui.js';
-
-const {toString} = goog.require('ol.color');
 
 const {default: MetricNode} = goog.requireType('os.ui.metrics.MetricNode');
 

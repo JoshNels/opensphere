@@ -1,5 +1,13 @@
 goog.declareModuleId('plugin.file.shp.SHPParser');
 
+import Feature from 'ol/src/Feature.js';
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
+import {getUid} from 'ol/src/util.js';
 import ColumnDefinition from '../../../os/data/columndefinition.js';
 import Fields from '../../../os/fields/fields.js';
 import * as text from '../../../os/file/mime/text.js';
@@ -11,19 +19,10 @@ import SHPHeader from './data/shpheader.js';
 import {DBF_EXT_REGEXP, SHP_EXT_REGEXP} from './mime.js';
 import * as shp from './shp.js';
 
+
 const log = goog.require('goog.log');
 const googString = goog.require('goog.string');
-const ol = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const LineString = goog.require('ol.geom.LineString');
-const MultiLineString = goog.require('ol.geom.MultiLineString');
-const MultiPoint = goog.require('ol.geom.MultiPoint');
-const MultiPolygon = goog.require('ol.geom.MultiPolygon');
-const Point = goog.require('ol.geom.Point');
-const Polygon = goog.require('ol.geom.Polygon');
 
-const Logger = goog.requireType('goog.log.Logger');
-const {default: SHPParserConfig} = goog.requireType('plugin.file.shp.SHPParserConfig');
 
 
 /**
@@ -351,7 +350,7 @@ export default class SHPParser extends AsyncZipParser {
     }
 
     if (feature) {
-      feature.setId(String(ol.getUid(feature)));
+      feature.setId(String(getUid(feature)));
     }
 
     if (!this.hasNext()) {

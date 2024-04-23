@@ -1,19 +1,12 @@
 goog.declareModuleId('plugin.arc.query.ArcSpatialFormatter');
 
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Polygon from 'ol/src/geom/Polygon.js';
 import * as geo from '../../../os/geo/geo.js';
 import * as interpolate from '../../../os/interpolate.js';
 import * as osProj from '../../../os/proj/proj.js';
 
 const googString = goog.require('goog.string');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Polygon = goog.require('ol.geom.Polygon');
-
-const Circle = goog.requireType('ol.geom.Circle');
-const LineString = goog.requireType('ol.geom.LineString');
-const MultiPolygon = goog.requireType('ol.geom.MultiPolygon');
-const {default: ISpatialFormatter} = goog.requireType('os.filter.ISpatialFormatter');
-const {default: Method} = goog.requireType('os.interpolate.Method');
-
 
 /**
  * Formats a spatial query for use in an Arc Filter.

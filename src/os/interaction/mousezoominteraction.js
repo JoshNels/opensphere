@@ -1,5 +1,8 @@
 goog.declareModuleId('os.interaction.MouseZoom');
 
+import {platformModifierKeyOnly} from 'ol/src/events/condition.js';
+import Interaction, {zoomByDelta} from 'ol/src/interaction/Interaction.js';
+
 import I3DSupport from '../i3dsupport.js';
 import osImplements from '../implements.js';
 import {getMapContainer} from '../map/mapinstance.js';
@@ -7,12 +10,8 @@ import {getMapContainer} from '../map/mapinstance.js';
 const {assert} = goog.require('goog.asserts');
 const BrowserEvent = goog.require('goog.events.BrowserEvent');
 const {clamp} = goog.require('goog.math');
-const {MOUSEWHEELZOOM_MAXDELTA} = goog.require('ol');
-const {platformModifierKeyOnly} = goog.require('ol.events.condition');
-const Interaction = goog.require('ol.interaction.Interaction');
 
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-
+const MOUSEWHEELZOOM_MAXDELTA = 1;
 
 /**
  * Allows the user to pan the map by dragging the map.
@@ -89,7 +88,7 @@ export default class MouseZoom extends Interaction {
         }
       } else {
         map.render();
-        Interaction.zoomByDelta(view, -delta, coordinate);
+        zoomByDelta(view, -delta, coordinate, 0);
       }
     }
   }
@@ -101,8 +100,8 @@ export default class MouseZoom extends Interaction {
    */
   static handleEvent(mapBrowserEvent) {
     var stopEvent = false;
-    if (mapBrowserEvent.pointerEvent &&
-        mapBrowserEvent.pointerEvent.buttons == 2 &&
+    if (mapBrowserEvent.originalEvent instanceof PointerEvent &&
+        mapBrowserEvent.originalEvent.buttons == 2 &&
         mapBrowserEvent.dragging &&
         platformModifierKeyOnly(mapBrowserEvent)) {
       this.zoom(mapBrowserEvent);

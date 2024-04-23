@@ -21,14 +21,6 @@ import {launchJoinWindow, launchMergeWindow} from './vectortoolsui.js';
 
 const asserts = goog.require('goog.asserts');
 
-const {default: ICommand} = goog.requireType('os.command.ICommand');
-const {default: ISource} = goog.requireType('os.source.ISource');
-const {default: ITreeNode} = goog.requireType('os.structs.ITreeNode');
-const {default: MenuEvent} = goog.requireType('os.ui.menu.MenuEvent');
-const {default: MenuItem} = goog.requireType('os.ui.menu.MenuItem');
-const {default: Options} = goog.requireType('plugin.vectortools.Options');
-
-
 /**
  */
 export default class VectorToolsPlugin extends AbstractPlugin {

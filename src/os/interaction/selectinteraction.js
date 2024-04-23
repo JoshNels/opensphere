@@ -1,21 +1,17 @@
 goog.declareModuleId('os.interaction.Select');
 
+import {singleClick} from 'ol/src/events/condition.js';
+import Feature from 'ol/src/Feature.js';
+import GeometryType from 'ol/src/geom/GeometryType.js';
+import Interaction from 'ol/src/interaction/Interaction.js';
+import ViewHint from 'ol/src/ViewHint.js';
+
 import Settings from '../config/settings.js';
 import {getSource} from '../feature/feature.js';
 import I3DSupport from '../i3dsupport.js';
 import osImplements from '../implements.js';
 import VectorSource from '../source/vectorsource.js';
 import {defaultLayerFilter} from './interaction.js';
-
-const Feature = goog.require('ol.Feature');
-const ViewHint = goog.require('ol.ViewHint');
-const {singleClick} = goog.require('ol.events.condition');
-const GeometryType = goog.require('ol.geom.GeometryType');
-const Interaction = goog.require('ol.interaction.Interaction');
-
-const MapBrowserEvent = goog.requireType('ol.MapBrowserEvent');
-const Layer = goog.requireType('ol.layer.Layer');
-const RenderFeature = goog.requireType('ol.render.Feature');
 
 
 /**

@@ -1,19 +1,13 @@
-goog.require('ol.geom.LineString');
-goog.require('ol.geom.MultiLineString');
-goog.require('ol.geom.MultiPoint');
-goog.require('ol.geom.MultiPolygon');
-goog.require('ol.geom.Point');
-goog.require('ol.geom.Polygon');
 goog.require('plugin.file.shp');
 
-describe('plugin.file.shp', () => {
-  const LineString = goog.module.get('ol.geom.LineString');
-  const MultiLineString = goog.module.get('ol.geom.MultiLineString');
-  const MultiPoint = goog.module.get('ol.geom.MultiPoint');
-  const MultiPolygon = goog.module.get('ol.geom.MultiPolygon');
-  const Point = goog.module.get('ol.geom.Point');
-  const Polygon = goog.module.get('ol.geom.Polygon');
+import LineString from 'ol/src/geom/LineString.js';
+import MultiLineString from 'ol/src/geom/MultiLineString.js';
+import MultiPoint from 'ol/src/geom/MultiPoint.js';
+import MultiPolygon from 'ol/src/geom/MultiPolygon.js';
+import Point from 'ol/src/geom/Point.js';
+import Polygon from 'ol/src/geom/Polygon.js';
 
+describe('plugin.file.shp', () => {
   const {
     TYPE,
     getFlatGroupCoordinates,

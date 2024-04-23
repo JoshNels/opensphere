@@ -1,14 +1,13 @@
 goog.declareModuleId('plugin.osm.nom.NominatimParser');
 
+import Feature from 'ol/src/Feature.js';
+import GeoJSON from 'ol/src/format/GeoJSON.js';
+import Point from 'ol/src/geom/Point.js';
+import {getUid} from 'ol/src/util.js';
 import * as text from '../../../os/file/mime/text.js';
 import * as nom from './nominatim.js';
 
 const log = goog.require('goog.log');
-const {getUid} = goog.require('ol');
-const Feature = goog.require('ol.Feature');
-const GeoJSON = goog.require('ol.format.GeoJSON');
-const Point = goog.require('ol.geom.Point');
-const {default: IParser} = goog.requireType('os.parse.IParser');
 
 
 /**

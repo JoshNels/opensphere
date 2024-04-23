@@ -1,5 +1,7 @@
 goog.declareModuleId('plugin.file.kml.ui.KMLLayerNode');
 
+import {listen, unlistenByKey} from 'ol/src/events.js';
+import {extend} from 'ol/src/extent.js';
 import LayerNode from '../../../../os/data/layernode.js';
 import PropertyChangeEvent from '../../../../os/events/propertychangeevent.js';
 import PropertyChange from '../../../../os/source/propertychange.js';
@@ -7,12 +9,6 @@ import KMLSource from '../kmlsource.js';
 
 const googEvents = goog.require('goog.events');
 const GoogEventType = goog.require('goog.events.EventType');
-const events = goog.require('ol.events');
-const olExtent = goog.require('ol.extent');
-
-const {default: VectorLayer} = goog.requireType('os.layer.Vector');
-const {default: KMLLayer} = goog.requireType('plugin.file.kml.KMLLayer');
-const {default: KMLNode} = goog.requireType('plugin.file.kml.ui.KMLNode');
 
 
 /**
@@ -49,6 +45,8 @@ export default class KMLLayerNode extends LayerNode {
      * @private
      */
     this.rootListenKey_ = undefined;
+
+    this.sourceListenKey = null;
 
     this.setLayer(layer);
   }
@@ -124,13 +122,13 @@ export default class KMLLayerNode extends LayerNode {
    */
   setSource_(source) {
     if (this.source_) {
-      events.unlisten(this.source_, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
+      unlistenByKey(this.sourceListenKey);
     }
 
     this.source_ = source;
 
     if (source) {
-      events.listen(source, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
+      this.sourceListenKey = listen(source, GoogEventType.PROPERTYCHANGE, this.onSourceChange_, this);
       this.updateFromSource_();
     }
   }
@@ -263,7 +261,7 @@ export default class KMLLayerNode extends LayerNode {
           if (!extent) {
             extent = cExtent;
           } else {
-            olExtent.extend(extent, cExtent);
+            extend(extent, cExtent);
           }
         }
       }
