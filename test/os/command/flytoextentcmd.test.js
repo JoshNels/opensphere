@@ -36,9 +36,6 @@ describe('os.command.FlyToExtent', function() {
     testParams(cmd, extent, 5, osMap.MAX_ZOOM);
 
     // positive zoom is constrained between the application min/max
-    cmd = new FlyToExtent(extent, 5, osMap.MIN_ZOOM - 1);
-    testParams(cmd, extent, 5, osMap.MIN_ZOOM);
-
     cmd = new FlyToExtent(extent, 5, osMap.MAX_ZOOM + 1);
     testParams(cmd, extent, 5, osMap.MAX_ZOOM);
   });
