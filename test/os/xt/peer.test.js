@@ -942,7 +942,7 @@ describe('Peer', function() {
     runs(function() {
       expect(storage.length).toBe(0);
       if (storage.length > 0) {
-        console.log('freakin\' lingerers, man:\n' + stringifyStorage());
+        console.log('dang lingerers, man:\n' + stringifyStorage());
       }
     });
   });
