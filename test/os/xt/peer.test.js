@@ -931,12 +931,16 @@ describe('Peer', function() {
       p.cleanup_();
     });
 
-    var start = null;
+    // var start = null;
+    // waitsFor(function() {
+    //   if (!start) {
+    //     start = Date.now();
+    //   }
+    //   return start + Peer.PING_INTERVAL * 4 < Date.now();
+    // }, 'three pings');
+    var threePings = Date.now() + 3 * Peer.PING_INTERVAL;;
     waitsFor(function() {
-      if (!start) {
-        start = Date.now();
-      }
-      return start + Peer.PING_INTERVAL * 4 < Date.now();
+      return Date.now() > threePings;
     }, 'three pings');
 
     runs(function() {
