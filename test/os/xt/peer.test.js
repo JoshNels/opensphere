@@ -11,114 +11,13 @@ describe('Peer', function() {
   const {DISPATCHER, EventType} = goog.module.get('os.xt.events');
 
   // mock storage
-  var storage = function() {
-    var storageImpl = Object.defineProperties({}, new (function() {
-      var keys = [];
-      var values = {};
-      var eventsSuspended = false;
-      var fireStorage = function(key, oldValue, newValue) {
-        if (eventsSuspended) {
-          return;
-        }
-        var event = new Event('storage');
-        event.key = key;
-        event.oldValue = oldValue;
-        event.newValue = newValue;
-        event.storageArea = storageImpl;
-        event.url = window.location.href;
-        window.dispatchEvent(event);
-      };
-      this.key = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function(index) {
-          return keys[index] || null;
-        }
-      };
-      this.setItem = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function(key, value) {
-          value = String(value);
-          var oldValue = values[key] || null;
-          var keyIndex = keys.indexOf(key);
-          if (keyIndex < 0) {
-            keys.push(key);
-          }
-          values[key] = value;
-          if (oldValue !== value) {
-            fireStorage(key, oldValue, value);
-          }
-        }
-      };
-      this.getItem = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function(key) {
-          return values[key];
-        }
-      };
-      this.removeItem = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function(key) {
-          var keyIndex = keys.indexOf(key);
-          if (keyIndex > -1) {
-            keys.splice(keyIndex, 1);
-          }
-          var oldValue = values[key] || null;
-          if (oldValue) {
-            delete values[key];
-            fireStorage(key, oldValue, null);
-          }
-        }
-      };
-      this.clear = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function() {
-          keys = [];
-          values = {};
-          fireStorage(null, null, null);
-        }
-      };
-      this.length = {
-        configurable: false,
-        enumerable: false,
-        get: function() {
-          return keys.length;
-        }
-      };
-      this.suspendEvents = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function() {
-          eventsSuspended = true;
-        }
-      };
-      this.resumeEvents = {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: function() {
-          eventsSuspended = false;
-        }
-      };
-    })());
-    return storageImpl;
-  }();
+  var storage;
 
-  var stringifyStorage = function() {
+  var stringifyStorage = function(stor) {
     var str = '';
-    for (var cursor = 0, len = storage.length; cursor < len; cursor++) {
-      var key = storage.key(cursor);
-      str += '\n  ' + key + ': ' + storage.getItem(key);
+    for (var cursor = 0, len = stor.length; cursor < len; cursor++) {
+      var key = stor.key(cursor);
+      str += '\n  ' + key + ': ' + stor.getItem(key);
     }
     return 'storage: {' + str + (str.length ? '\n' : '') + '}';
   };
@@ -132,6 +31,110 @@ describe('Peer', function() {
     }
   };
 
+  beforeEach(function() {
+    storage = function() {
+      var storageImpl = Object.defineProperties({}, new (function() {
+        var keys = [];
+        var values = {};
+        var eventsSuspended = false;
+        var fireStorage = function(key, oldValue, newValue) {
+          if (eventsSuspended) {
+            return;
+          }
+          var event = new Event('storage');
+          event.key = key;
+          event.oldValue = oldValue;
+          event.newValue = newValue;
+          event.storageArea = storageImpl;
+          event.url = window.location.href;
+          window.dispatchEvent(event);
+        };
+        this.key = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function(index) {
+            return keys[index] || null;
+          }
+        };
+        this.setItem = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function(key, value) {
+            value = String(value);
+            var oldValue = values[key] || null;
+            var keyIndex = keys.indexOf(key);
+            if (keyIndex < 0) {
+              keys.push(key);
+            }
+            values[key] = value;
+            if (oldValue !== value) {
+              fireStorage(key, oldValue, value);
+            }
+          }
+        };
+        this.getItem = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function(key) {
+            return values[key];
+          }
+        };
+        this.removeItem = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function(key) {
+            var keyIndex = keys.indexOf(key);
+            if (keyIndex > -1) {
+              keys.splice(keyIndex, 1);
+            }
+            var oldValue = values[key] || null;
+            if (oldValue) {
+              delete values[key];
+              fireStorage(key, oldValue, null);
+            }
+          }
+        };
+        this.clear = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function() {
+            keys = [];
+            values = {};
+            fireStorage(null, null, null);
+          }
+        };
+        this.length = {
+          configurable: false,
+          enumerable: false,
+          get: function() {
+            return keys.length;
+          }
+        };
+        this.suspendEvents = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function() {
+            eventsSuspended = true;
+          }
+        };
+        this.resumeEvents = {
+          configurable: false,
+          enumerable: false,
+          writable: false,
+          value: function() {
+            eventsSuspended = false;
+          }
+        };
+      })());
+      return storageImpl;
+    }();
+  });
 
   describe('mock storage', function() {
     it('adds a key and sets the value', function() {
@@ -939,21 +942,21 @@ describe('Peer', function() {
     //   return start + Peer.PING_INTERVAL * 4 < Date.now();
     // }, 'three pings');
     // var threePings = Date.now() + 3 * Peer.PING_INTERVAL;
-    var rng = Math.random();
+    // var rng = Math.random();
     var now = Date.now();
-    console.log(rng + ' now: ' + now);
+    // console.log(rng + ' now: ' + now);
     var threePings = new Date(now + 4 * 1000);
-    console.log(rng + ' 3pings: ' + threePings);
+    // console.log(rng + ' 3pings: ' + threePings.getTime());
     waitsFor(function() {
-      var time = Date.now();
-      console.log(rng + ' time: ' + time);
+      // var time = Date.now();
+      // console.log(rng + ' time: ' + time);
       return Date.now() > threePings;
-    }, rng + 'three pings');
+    }, 'three pings');
 
     runs(function() {
       expect(storage.length).toBe(0);
       if (storage.length > 0) {
-        console.log(rng + 'dang lingerers, man:\n' + stringifyStorage());
+        console.log('dang lingerers, man:\n' + stringifyStorage());
       }
     });
   });
