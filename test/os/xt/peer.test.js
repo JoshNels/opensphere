@@ -941,19 +941,19 @@ describe('Peer', function() {
     // var threePings = Date.now() + 3 * Peer.PING_INTERVAL;
     var rng = Math.random;
     var now = Date.now();
-    console.log(rng+ " now: "+now);
+    console.log(rng + ' now: ' + now);
     var threePings = new Date(now + 4 * 1000);
-    console.log(rng+ " 3pings: "+threePings)
+    console.log(rng + ' 3pings: ' + threePings);
     waitsFor(function() {
       var time = Date.now();
-      console.log(rng+ " time: "+time)
+      console.log(rng + ' time: ' + time);
       return Date.now() > threePings;
-    }, rng+ 'three pings');
+    }, rng + 'three pings');
 
     runs(function() {
       expect(storage.length).toBe(0);
       if (storage.length > 0) {
-        console.log(rng+ 'dang lingerers, man:\n' + stringifyStorage());
+        console.log(rng + 'dang lingerers, man:\n' + stringifyStorage());
       }
     });
   });
