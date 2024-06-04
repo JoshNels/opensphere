@@ -890,7 +890,7 @@ describe('Peer', function() {
 
     waitsFor(function() {
       return peerIsReady.calls.length === 1;
-    }, 'peer to become available', Peer.PING_INTERVAL);
+    }, 'peer b to become available', Peer.PING_INTERVAL);
 
     runs(function() {
       expect(peerIsReady.calls.length).toBe(1);
@@ -908,7 +908,7 @@ describe('Peer', function() {
 
     waitsFor(function() {
       return peerIsReady.calls.length === 2;
-    }, 'peer to become available');
+    }, 'peer c to become available');
 
     runs(function() {
       expect(peerIsReady.calls.length).toBe(2);
