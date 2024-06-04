@@ -939,7 +939,7 @@ describe('Peer', function() {
     //   return start + Peer.PING_INTERVAL * 4 < Date.now();
     // }, 'three pings');
     // var threePings = Date.now() + 3 * Peer.PING_INTERVAL;
-    var rng = Math.random;
+    var rng = Math.random();
     var now = Date.now();
     console.log(rng + ' now: ' + now);
     var threePings = new Date(now + 4 * 1000);
