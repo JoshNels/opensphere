@@ -938,7 +938,8 @@ describe('Peer', function() {
     //   }
     //   return start + Peer.PING_INTERVAL * 4 < Date.now();
     // }, 'three pings');
-    var threePings = Date.now() + 3 * Peer.PING_INTERVAL;
+    // var threePings = Date.now() + 3 * Peer.PING_INTERVAL;
+    var threePings = new Date(Date.now() + 4 * 1000);
     waitsFor(function() {
       return Date.now() > threePings;
     }, 'three pings');
