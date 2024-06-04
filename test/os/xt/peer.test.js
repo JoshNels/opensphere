@@ -893,7 +893,7 @@ describe('Peer', function() {
 
     waitsFor(function() {
       return peerIsReady.calls.length === 1;
-    }, 'peer b to become available', Peer.PING_INTERVAL);
+    }, 'peer b to become available, length=' + peerIsReady.calls.length, Peer.PING_INTERVAL);
 
     runs(function() {
       expect(peerIsReady.calls.length).toBe(1);
