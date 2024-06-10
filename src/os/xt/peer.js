@@ -839,6 +839,7 @@ export default class Peer {
         }
       }
       if (peerInfo) {
+        console.log('callback: ' + peerInfo.id);
         wait.deferred.callback(peerInfo);
       } else if (now > wait.expiration) {
         wait.deferred.errback();
