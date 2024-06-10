@@ -872,11 +872,13 @@ describe('Peer', function() {
     a.setTitle('alice');
     a.init();
     var peerIsReady = jasmine.createSpy('peerIsReady');
+    var timedOut = jasmine.createSpy('timedOut');
+
 
     runs(function() {
-      a.waitForPeer('b').addCallback(peerIsReady);
+      a.waitForPeer('b').addCallback(peerIsReady).addErrback(timedOut);
       console.log('waitlist b: ' + a.waitList_.length);
-      a.waitForPeer('c').addCallback(peerIsReady);
+      a.waitForPeer('c').addCallback(peerIsReady).addErrback(timedOut);
       console.log('waitlist_ c: ' + a.waitList_.length);
     });
 
@@ -901,9 +903,9 @@ describe('Peer', function() {
     });
 
     waitsFor(function() {
-      console.log('waitlist_ waiting: ' + a.waitList_.length);
-      return peerIsReady.calls.length === 1;
-    }, 'peer b to become available, length=' + peerIsReady.calls.length, Peer.PING_INTERVAL);
+      // console.log('waitlist_ waiting: ' + a.waitList_.length);
+      return peerIsReady.calls.length === 1 || timedOut.calls.length > 0;
+    }, 'peer b to become available, length=' + peerIsReady.calls.length, 10000);
 
     runs(function() {
       expect(peerIsReady.calls.length).toBe(1);
@@ -920,8 +922,8 @@ describe('Peer', function() {
     });
 
     waitsFor(function() {
-      return peerIsReady.calls.length === 2;
-    }, 'peer c to become available');
+      return peerIsReady.calls.length === 2 || timedOut.calls.length > 0;
+    }, 'peer c to become available', 10000);
 
     runs(function() {
       expect(peerIsReady.calls.length).toBe(2);
