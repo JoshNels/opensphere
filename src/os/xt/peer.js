@@ -832,7 +832,7 @@ export default class Peer {
       var messageType = wait.messageType;
       var peerInfo = PeerInfo.load(this.group_, wait.peerId, this.storage_);
       console.log('peerId: ' + wait.peerId);
-      console.log("peerInfo: " + peerInfo);
+      console.log('peerInfo: ' + peerInfo);
       if (peerInfo && messageType) {
         if (!includes(peerInfo.types, messageType)) {
           peerInfo = null;
