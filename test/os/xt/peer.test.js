@@ -873,7 +873,9 @@ describe('Peer', function() {
 
     runs(function() {
       a.waitForPeer('b').addCallback(peerIsReady);
+      console.log('waitlist b: ' + a.waitList.length);
       a.waitForPeer('c').addCallback(peerIsReady);
+      console.log('waitlist c: ' + a.waitList.length);
     });
 
     var b = new Peer(storage);
@@ -891,10 +893,13 @@ describe('Peer', function() {
     }, 'ping');
 
     runs(function() {
+      console.log('waitlist preinit: ' + a.waitList.length);
       b.init();
+      console.log('waitlist postinit: ' + a.waitList.length);
     });
 
     waitsFor(function() {
+      console.log('waitlist waiting: ' + a.waitList.length);
       return peerIsReady.calls.length === 1;
     }, 'peer b to become available, length=' + peerIsReady.calls.length, Peer.PING_INTERVAL);
 
