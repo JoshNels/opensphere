@@ -870,8 +870,11 @@ describe('Peer', function() {
     a.setTitle('alice');
     a.init();
     var peerIsReady = jasmine.createSpy('peerIsReady');
-    a.waitForPeer('b').addCallback(peerIsReady);
-    a.waitForPeer('c').addCallback(peerIsReady);
+
+    runs(function() {
+      a.waitForPeer('b').addCallback(peerIsReady);
+      a.waitForPeer('c').addCallback(peerIsReady);
+    });
 
     var b = new Peer(storage);
     b.setId('b');
