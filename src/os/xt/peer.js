@@ -824,14 +824,14 @@ export default class Peer {
    */
   processWaitList_() {
     var waitList = this.waitList_;
-    console.log("processWaitlist(): " + waitList.length);
+    console.log('processWaitlist(): ' + waitList.length);
     var now = Date.now();
     this.waitList_ = []; // re-initialize in case waiters add another wait record in the callback
     while (waitList.length > 0) {
       var wait = waitList.shift();
       var messageType = wait.messageType;
       var peerInfo = PeerInfo.load(this.group_, wait.peerId, this.storage_);
-      console.log("peerId: " + wait.peerId);
+      console.log('peerId: ' + wait.peerId);
       console.log("peerInfo: " + peerInfo);
       if (peerInfo && messageType) {
         if (!includes(peerInfo.types, messageType)) {
